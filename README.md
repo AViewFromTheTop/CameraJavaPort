@@ -1,0 +1,1 @@
+Ports Bedrock Edition's/Education Edition's Camera entity to Java Edition!

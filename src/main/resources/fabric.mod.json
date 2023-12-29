@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "cameraport",
+  "version": "r1.2",
+
+  "name": "Camera Java Port",
+  "description": "Ports Bedrock/Education Edition's Camera entity to Java Edition.",
+  "authors": [
+    "Luna",
+    "Merp"
+  ],
+  "contact": {
+  },
+
+  "license": "MIT",
+  "icon": "assets/camera/camera_icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.lunade.camera.Main"
+    ],
+    "client": [
+      "net.lunade.camera.MainClient"
+    ]
+  },
+  "mixins": [
+    "camera.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17"
+  },
+  "suggests": {
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "entity.camera.camera": "Camera",
+  "item.camera.camera": "Camera",
+  "entity.camera.small_camera": "Disc Camera",
+  "item.camera.disc_camera": "Disc Camera",
+
+  "subtitle.entity.camera.crack": "Camera Painfully Cracks",
+  "subtitle.entity.camera.adjust": "Tripod Legs Adjust",
+  "subtitle.entity.camera.snap": "Camera Shutter Closes",
+  "subtitle.entity.camera.prime": "Camera Primed",
+  "subtitle.entity.camera.place": "Tripod Setup",
+  "subtitle.entity.camera.hit": "Tripod Buckles",
+  "subtitle.entity.camera.fall": "Tripod Lands",
+  "subtitle.entity.camera.break": "Tripod Breaks"
+}
