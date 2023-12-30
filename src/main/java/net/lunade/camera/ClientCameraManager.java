@@ -38,7 +38,7 @@ public class ClientCameraManager {
         if (client.level != null) {
             Entity camEntity = client.getCameraEntity();
             if (camEntity != null) {
-                client.level.playLocalSound(client.player, CameraMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
+                client.level.playSound(client.player, client.player, CameraMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
             }
         }
     }
