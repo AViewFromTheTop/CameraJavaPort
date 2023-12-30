@@ -7,6 +7,7 @@ import net.minecraft.client.Screenshot;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
@@ -54,7 +55,8 @@ public class ClientCameraManager {
                 for (int i = 0; i < smokeCount; i++) {
                     client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
                 }
-                client.level.addParticle(ParticleTypes.FLASH, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0, 0);
+                Vec3 forward = camEntity.getForward();
+                client.level.addParticle(ParticleTypes.FLASH, camEntity.getX() + forward.z, camEntity.getEyeY() + forward.y, camEntity.getZ() + forward.z, 0, 0, 0);
             }
         }
 
