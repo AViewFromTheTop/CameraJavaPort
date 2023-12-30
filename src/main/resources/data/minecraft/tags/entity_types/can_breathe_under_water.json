@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "camera_port:camera",
+    "camera_port:disc_camera"
+  ]
+}

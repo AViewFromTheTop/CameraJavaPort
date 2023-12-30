@@ -2,8 +2,8 @@
 	"parent": "block/block",
 	"texture_size": [64, 32],
 	"textures": {
-		"0": "camera:entity/camera",
-		"particle": "camera:entity/camera"
+		"0": "camera_port:entity/camera",
+		"particle": "camera_port:entity/camera"
 	},
 	"elements": [
 		{

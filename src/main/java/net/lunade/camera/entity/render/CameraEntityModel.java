@@ -1,69 +1,66 @@
 package net.lunade.camera.entity.render;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.lunade.camera.entity.CameraEntity;
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import org.jetbrains.annotations.NotNull;
 
-public class CameraEntityModel<T extends CameraEntity> extends EntityModel<CameraEntity> {
-	private final ModelPart root;
-	private final ModelPart head;
-	private final ModelPart spyglass;
-	private final ModelPart leg1;
-	private final ModelPart leg2;
-	private final ModelPart leg3;
-	private final ModelPart leg4;
+public class CameraEntityModel<T extends CameraEntity> extends EntityModel<T> {
+    private static final float moveBy = 15F / 1.75F;
+    private static final float RAD = (float) (Math.PI / 180);
+    private final ModelPart root;
+    private final ModelPart head;
+    private final ModelPart leg1;
+    private final ModelPart leg2;
+    private final ModelPart leg3;
+    private final ModelPart leg4;
 
-	public CameraEntityModel(ModelPart root) {
-		this.root = root.getChild("root");
-		this.leg1 = this.root.getChild("leg1");
-		this.leg2 = this.root.getChild("leg2");
-		this.leg3 = this.root.getChild("leg3");
-		this.leg4 = this.root.getChild("leg4");
-		this.head = this.root.getChild("head");
-		this.spyglass = this.head.getChild("spyglass");
-	}
+    public CameraEntityModel(@NotNull ModelPart root) {
+        this.root = root.getChild("root");
+        this.leg1 = this.root.getChild("leg1");
+        this.leg2 = this.root.getChild("leg2");
+        this.leg3 = this.root.getChild("leg3");
+        this.leg4 = this.root.getChild("leg4");
+        this.head = this.root.getChild("head");
+    }
 
-	public static TexturedModelData getTexturedModelData() {
-		ModelData modelData = new ModelData();
-		ModelPartData modelPartData = modelData.getRoot();
+    @NotNull
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition partDefinition = modelData.getRoot();
 
-		ModelPartData modelPartData1 = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F,24.0F,0.0F));
-		ModelPartData modelPartData2 = modelPartData1.addChild("head", ModelPartBuilder.create().uv(0,0).cuboid(-4.0F, -8.0F, -5.0F, 8.0F, 8.0F, 10.0F), ModelTransform.pivot(0.0F,-22.0F,0.0F));
-		modelPartData2.addChild("spyglass", ModelPartBuilder.create().uv(40,0).cuboid(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 11.0F), ModelTransform.pivot(-1.0F,-5.0F,-16.0F));
-		modelPartData1.addChild("leg1", ModelPartBuilder.create().uv(36,0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), ModelTransform.pivot(0.0F,-24.0F,1.0F));
-		modelPartData1.addChild("leg2", ModelPartBuilder.create().uv(36,0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), ModelTransform.pivot(0.0F,-24.0F,-1.0F));
-		modelPartData1.addChild("leg3", ModelPartBuilder.create().uv(36,0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), ModelTransform.pivot(1.0F,-24.0F,0.0F));
-		modelPartData1.addChild("leg4", ModelPartBuilder.create().uv(36,0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), ModelTransform.pivot(-1.0F,-24.0F,0.0F));
+        PartDefinition rootA = partDefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition head = rootA.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -5.0F, 8.0F, 8.0F, 10.0F), PartPose.offset(0.0F, -22.0F, 0.0F));
+        rootA.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(36, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), PartPose.offset(0.0F, -24.0F, 1.0F));
+        rootA.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(36, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), PartPose.offset(0.0F, -24.0F, -1.0F));
+        rootA.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(36, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), PartPose.offset(1.0F, -24.0F, 0.0F));
+        rootA.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(36, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 25.0F, 1.0F), PartPose.offset(-1.0F, -24.0F, 0.0F));
 
-		return TexturedModelData.of(modelData,64,32);
-	}
+        return LayerDefinition.create(modelData, 64, 32);
+    }
 
-	private static final float moveBy = 15F / 1.75F;
-	private static final float r = (float)(Math.PI / 180);
+    @Override
+    public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float time, float netHeadYaw, float headPitch) {
+        float angle = (15 + (((1.75f - entity.getTrackedHeight()) * moveBy) * 6.7F));
 
-	@Override
-	public void setAngles(CameraEntity entity, float limbSwing, float limbSwingAmount, float time, float netHeadYaw, float headPitch) {
+        this.leg1.xRot = angle * RAD;
+        this.leg2.xRot = -angle * RAD;
+        this.leg3.zRot = -angle * RAD;
+        this.leg4.zRot = angle * RAD;
 
-		float angle = (15 + (((1.75f - entity.getTrackedHeight()) * moveBy) * 6.7F));
+        this.head.yRot = netHeadYaw * RAD;
+        this.head.xRot = headPitch * RAD;
+    }
 
-		this.leg1.pitch = angle * r;
-		this.leg2.pitch = -angle * r;
-		this.leg3.roll = -angle * r;
-		this.leg4.roll = angle * r;
-
-		this.head.yaw= netHeadYaw * r;
-		this.head.pitch= headPitch * r;
-
-		if (entity.hasSpyglass() != this.spyglass.visible) {
-			this.spyglass.visible = entity.hasSpyglass();
-		}
-
-	}
-
-	@Override
-	public void render(MatrixStack matrixStack, VertexConsumer	buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		root.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
+    @Override
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        this.root.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    }
 }

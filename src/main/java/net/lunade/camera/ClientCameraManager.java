@@ -2,28 +2,68 @@ package net.lunade.camera;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.ScreenshotRecorder;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Screenshot;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class ClientCameraManager {
+    public static boolean wasGuiHidden = false;
+    public static boolean possessingCamera = false;
+    public static boolean isCameraHandheld = false;
+    @Nullable
+    public static Entity previousCameraEntity = null;
 
-    public static void changeToCamera(Entity entity, int fov) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.setCameraEntity(entity);
-        client.inGameHud.vignetteDarkness = 0.0f;
-        client.options.hudHidden = true;
-        client.options.getFov().setValue(fov);
+    public static void tick() {
+        if (possessingCamera) {
+            changeFromCamera();
+        }
     }
 
-    public static void changeFromCamera(float prevVig, boolean prevHidden, int fov) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ScreenshotRecorder.saveScreenshot(client.runDirectory, client.getFramebuffer(), (text) -> client.execute(() -> client.inGameHud.getChatHud().addMessage(text)));
-        client.setCameraEntity(client.player);
-        client.inGameHud.vignetteDarkness = prevVig;
-        client.options.hudHidden = prevHidden;
-        client.options.getFov().setValue(fov);
+    public static void changeToCamera(@Nullable Entity entity, boolean handheld) {
+        Minecraft client = Minecraft.getInstance();
+        isCameraHandheld = handheld;
+        previousCameraEntity = client.getCameraEntity();
+        if (entity != null) {
+            client.setCameraEntity(entity);
+        }
+        wasGuiHidden = client.options.hideGui;
+        client.options.hideGui = true;
+        possessingCamera = true;
+
+        if (client.level != null) {
+            Entity camEntity = client.getCameraEntity();
+            if (camEntity != null) {
+                client.level.playLocalSound(client.player, CameraMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
+            }
+        }
+    }
+
+    public static void changeFromCamera() {
+        Minecraft client = Minecraft.getInstance();
+        isCameraHandheld = false;
+        Screenshot.grab(client.gameDirectory, client.getMainRenderTarget(), (text) -> client.execute(() -> client.gui.getChat().addMessage(text)));
+
+        if (client.level != null) {
+            Entity camEntity = client.getCameraEntity();
+            if (camEntity != null) {
+                int smokeCount = client.level.getRandom().nextInt(1, 5);
+                for (int i = 0; i < smokeCount; i++) {
+                    client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
+                }
+                client.level.addParticle(ParticleTypes.FLASH, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0, 0);
+            }
+        }
+
+        if (previousCameraEntity != null) {
+            client.setCameraEntity(previousCameraEntity);
+            previousCameraEntity = null;
+        }
+        client.options.hideGui = wasGuiHidden;
+        possessingCamera = false;
     }
 
 }

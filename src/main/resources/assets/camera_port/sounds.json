@@ -2,10 +2,10 @@
 	"entity.camera.break": {
 		"subtitle": "subtitle.entity.camera.break",
 		"sounds": [
-			"camera:camera/break1",
-			"camera:camera/break2",
-			"camera:camera/break3",
-			"camera:camera/break4"
+			"camera_port:camera/break1",
+			"camera_port:camera/break2",
+			"camera_port:camera/break3",
+			"camera_port:camera/break4"
 		]
 	},
 	"entity.camera.fall": {
@@ -22,30 +22,30 @@
 	"entity.camera.hit": {
 		"subtitle": "subtitle.entity.camera.hit",
 		"sounds": [
-			"camera:camera/hit1",
-			"camera:camera/hit2",
-			"camera:camera/hit3",
-			"camera:camera/hit4"
+			"camera_port:camera/hit1",
+			"camera_port:camera/hit2",
+			"camera_port:camera/hit3",
+			"camera_port:camera/hit4"
 		]
 	},
 	"entity.camera.place": {
 		"subtitle": "subtitle.entity.camera.place",
 		"sounds": [
-			"camera:camera/place"
+			"camera_port:camera/place"
 		]
 	},
 	"entity.camera.prime": {
 		"subtitle": "subtitle.entity.camera.prime",
 		"sounds": [
-			"camera:camera/prime"
+			"camera_port:camera/prime"
 		]
 	},
 	"entity.camera.snap": {
 		"subtitle": "subtitle.entity.camera.snap",
 		"sounds": [
-			"camera:camera/snap1",
-			"camera:camera/snap2",
-			"camera:camera/snap3"
+			"camera_port:camera/snap1",
+			"camera_port:camera/snap2",
+			"camera_port:camera/snap3"
 		]
 	},
 	"entity.camera.crack": {

@@ -2,12 +2,12 @@
   "required": false,
   "minVersion": "0.8.5",
   "package": "net.lunade.camera.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EntityMixin"
   ],
   "client": [
-    "WorldRendererMixin"
+    "CameraMixin",
+    "LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
