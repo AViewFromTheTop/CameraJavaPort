@@ -2,6 +2,7 @@ package net.lunade.camera;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.lunade.camera.entity.CameraEntity;
 import net.lunade.camera.entity.DiscCameraEntity;
@@ -12,6 +13,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 
 public class CameraMain implements ModInitializer {
     public static final String MOD_ID = "camera_port";
@@ -27,9 +33,9 @@ public class CameraMain implements ModInitializer {
                     .build()
     );
 
-    public static final EntityType<DiscCameraEntity> SMALL_CAMERA = Registry.register(
+    public static final EntityType<DiscCameraEntity> DISC_CAMERA = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
-            new ResourceLocation(MOD_ID, "small_camera"),
+            new ResourceLocation(MOD_ID, "disc_camera"),
             FabricEntityTypeBuilder.createMob()
                     .spawnGroup(MobCategory.MISC)
                     .entityFactory(DiscCameraEntity::new)
@@ -39,14 +45,13 @@ public class CameraMain implements ModInitializer {
     );
 
     public static final CameraItem CAMERA_ITEM = new CameraItem(CAMERA, 0, 0, new FabricItemSettings());
-    public static final CameraItem DISC_CAMERA_ITEM = new CameraItem(SMALL_CAMERA, 0, 0, new FabricItemSettings());
+    public static final CameraItem DISC_CAMERA_ITEM = new CameraItem(DISC_CAMERA, 0, 0, new FabricItemSettings());
     public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.break"));
     public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.fall"));
     public static final SoundEvent CAMERA_HIT = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.hit"));
     public static final SoundEvent CAMERA_PLACE = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.place"));
     public static final SoundEvent CAMERA_PRIME = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.prime"));
     public static final SoundEvent CAMERA_SNAP = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.snap"));
-    public static final SoundEvent CAMERA_CRACK = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.crack"));
     public static final SoundEvent CAMERA_ADJUST = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.adjust"));
 
     @Override
@@ -57,7 +62,13 @@ public class CameraMain implements ModInitializer {
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PRIME.getLocation(), CAMERA_PRIME);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_SNAP.getLocation(), CAMERA_SNAP);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.getLocation(), CAMERA_ADJUST);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, "camera"), CAMERA_ITEM);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, "disc_camera"), DISC_CAMERA_ITEM);
+        registerCamera(DISC_CAMERA_ITEM, new ResourceLocation(MOD_ID, "disc_camera"));
+        registerCamera(CAMERA_ITEM, new ResourceLocation(MOD_ID, "camera"));
+    }
+
+    public static CameraItem registerCamera(CameraItem cameraItem, ResourceLocation resourceLocation) {
+        Registry.register(BuiltInRegistries.ITEM, resourceLocation, cameraItem);
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, cameraItem));
+        return cameraItem;
     }
 }

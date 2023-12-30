@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "camera_port:entity/camera"
+    }
+  ]
+}

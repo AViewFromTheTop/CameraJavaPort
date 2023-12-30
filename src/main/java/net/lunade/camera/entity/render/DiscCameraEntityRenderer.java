@@ -14,12 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class DiscCameraEntityRenderer<T extends DiscCameraEntity> extends MobRenderer<T, DiscCameraEntityModel<T>> {
 
     public DiscCameraEntityRenderer(EntityRendererProvider.Context context) {
-        super(context, new DiscCameraEntityModel<>(context.bakeLayer(MainClient.SMALL_CAMERA_MODEL_LAYER)), 0.5f);
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(T entity) {
-        return new ResourceLocation(CameraMain.MOD_ID, "camera");
+        super(context, new DiscCameraEntityModel<>(context.bakeLayer(MainClient.DISC_CAMERA_MODEL_LAYER)), 0.5f);
     }
 
     @Override
@@ -30,4 +25,9 @@ public class DiscCameraEntityRenderer<T extends DiscCameraEntity> extends MobRen
         return sin;
     }
 
+    @NotNull
+    @Override
+    public ResourceLocation getTextureLocation(T entity) {
+        return new ResourceLocation(CameraMain.MOD_ID, "textures/entity/camera.png");
+    }
 }

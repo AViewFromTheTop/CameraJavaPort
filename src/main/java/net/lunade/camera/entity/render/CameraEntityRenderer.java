@@ -31,6 +31,7 @@ public class CameraEntityRenderer<T extends CameraEntity> extends MobRenderer<T,
         return sin;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getTextureLocation(T entity) {
         return new ResourceLocation(CameraMain.MOD_ID, "textures/entity/camera.png");

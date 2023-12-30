@@ -18,18 +18,16 @@ import net.minecraft.resources.ResourceLocation;
 public class MainClient implements ClientModInitializer {
 
     public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraMain.MOD_ID, "camera"), "main");
-    public static ModelLayerLocation SMALL_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraMain.MOD_ID, "disc_camera"), "main");
+    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraMain.MOD_ID, "disc_camera"), "main");
 
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(CameraMain.CAMERA, CameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(CAMERA_MODEL_LAYER, CameraEntityModel::createBodyLayer);
-        EntityRendererRegistry.register(CameraMain.SMALL_CAMERA, DiscCameraEntityRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(SMALL_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
+        EntityRendererRegistry.register(CameraMain.DISC_CAMERA, DiscCameraEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
         CameraPossessPacket.receive();
 
-        ClientTickEvents.START_CLIENT_TICK.register(client -> {
-            ClientCameraManager.tick();
-        });
+        ClientTickEvents.START_CLIENT_TICK.register(client -> ClientCameraManager.tick());
     }
 }
