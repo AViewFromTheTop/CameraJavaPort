@@ -55,10 +55,11 @@ public class CameraEntity extends Mob {
     @NotNull
     public static AttributeSupplier.Builder addAttributes() {
         return LivingEntity.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 8.0D)
-                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.MAX_HEALTH, 1D)
+                .add(Attributes.FOLLOW_RANGE, 48D)
                 .add(Attributes.ATTACK_KNOCKBACK)
-                .add(Attributes.MOVEMENT_SPEED, 0.0D);
+                .add(Attributes.MOVEMENT_SPEED, 0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 100D);
     }
 
     @Override
