@@ -2,7 +2,6 @@ package net.lunade.camera.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +10,6 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -45,8 +43,7 @@ public class LevelRendererMixin {
     public void cameraPort$renderPlayer(
             PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
             @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
-            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-            @Share("cameraPort$tickRate") LocalFloatRef tickRate
+            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered
     ) {
         if (ClientCameraManager.possessingCamera && !ClientCameraManager.isCameraHandheld && this.minecraft.player != null) {
             Player player = this.minecraft.player;
@@ -72,9 +69,7 @@ public class LevelRendererMixin {
                 playerRenderedSpecial.set(false);
                 multiBufferSource = bufferSource;
             }
-            TickRateManager tickRateManager = this.minecraft.level.tickRateManager();
-            tickRate.set(tickRateManager.isEntityFrozen(player) ? tickRateManager.runsNormally() ? f : 1.0f : f);
-            this.renderEntity(player, d, e, h, tickRate.get(), poseStack, (MultiBufferSource)multiBufferSource);
+            this.renderEntity(player, d, e, h, f, poseStack, (MultiBufferSource)multiBufferSource);
             alreadyRendered.set(false);
         }
     }
@@ -86,8 +81,7 @@ public class LevelRendererMixin {
     public void cameraPort$renderSpecialA(
             PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
             @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
-            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-            @Share("cameraPort$tickRate") LocalFloatRef tickRate
+            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered
     ) {
         alreadyRendered.set(true);
     }
@@ -100,11 +94,10 @@ public class LevelRendererMixin {
     public void cameraPort$renderSpecialB(
             PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
             @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
-            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-            @Share("cameraPort$tickRate") LocalFloatRef tickRate
+            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered
     ) {
         if (playerRenderedSpecial.get() && !alreadyRendered.get()) {
-            this.entityEffect.process(tickRate.get());
+            this.entityEffect.process(f);
             this.minecraft.getMainRenderTarget().bindWrite(false);
         }
     }
