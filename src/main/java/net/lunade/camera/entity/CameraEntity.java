@@ -1,6 +1,7 @@
 package net.lunade.camera.entity;
 
 import net.lunade.camera.CameraPortMain;
+import net.lunade.camera.networking.CameraPossessPacket;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -110,6 +111,10 @@ public class CameraEntity extends Mob {
                                             this.random.nextLong()
                                     )
                             );
+                        }
+
+                        for (ServerPlayer serverPlayer : queuedPlayers) {
+                            CameraPossessPacket.sendTo(serverPlayer, this);
                         }
                         this.queuedUUIDS.removeIf(uuid -> true);
                     }
