@@ -1,37 +1,44 @@
 {
   "schemaVersion": 1,
-  "id": "camera_port",
-  "version": "1.0",
-
+  "id": "${mod_id}",
+  "version": "${version}",
   "name": "Camera Java Port",
   "description": "Ports Bedrock/Education Edition's Camera entity to Java Edition.",
   "authors": [
     "Luna"
   ],
   "contact": {
+    "homepage": "https://modrinth.com/mod/camera-port"
   },
-
   "license": "MIT",
   "icon": "assets/camera_port/camera_icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.lunade.camera.CameraMain"
+      "net.lunade.camera.CamerPortMain"
     ],
     "client": [
-      "net.lunade.camera.MainClient"
+      "net.lunade.camera.CameraPortClient"
     ]
   },
   "mixins": [
     "camera_port.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.0",
-    "fabric": "*",
-    "minecraft": "*",
-    "java": ">=17"
+    "fabric-api": "${fabric_api_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=21"
   },
   "suggests": {
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/frozenblock-modding-oasis-780746010614956112",
+        "modmenu.modrinth": "https://modrinth.com/mod/camera-port",
+        "modmenu.twitter": "https://twitter.com/LunadeModding",
+        "modmenu.youtube": "https://www.youtube.com/@LunadeMusic"
+      }
+    }
   }
 }

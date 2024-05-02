@@ -1,12 +1,14 @@
 package net.lunade.camera.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.ClientCameraManager;
+import net.lunade.camera.impl.ClientCameraManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -24,29 +26,61 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Environment(EnvType.CLIENT)
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 
-    @Shadow @Final
+    @Shadow
+    @Final
     private Minecraft minecraft;
-    @Shadow @Final
+    @Shadow
+    @Final
     private RenderBuffers renderBuffers;
-    @Shadow @Nullable
+    @Shadow
+    @Nullable
     private PostChain entityEffect;
     @Shadow
     private int renderedEntities;
 
+    @ModifyExpressionValue(
+            method = "renderLevel",
+            at = @At(
+                    value = "NEW",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;",
+                    ordinal = 0
+            )
+    )
+    public PoseStack cameraPort$capturePoseStack(PoseStack original, @Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef) {
+        poseStackRef.set(original);
+        return original;
+    }
+
     @Inject(
             method = "renderLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V", ordinal = 0, shift = At.Shift.BEFORE)
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",
+                    ordinal = 0,
+                    shift = At.Shift.BEFORE
+            ),
+            locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     public void cameraPort$renderPlayer(
-            PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
+            float tickDelta,
+            long limitTime,
+            boolean renderBlockOutline,
+            Camera camera,
+            GameRenderer gameRenderer,
+            LightTexture lightmapTextureManager,
+            Matrix4f projectionMatrix,
+            Matrix4f matrix4f,
+            CallbackInfo ci,
             @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
             @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-            @Share("cameraPort$tickRate") LocalFloatRef tickRate
+            @Share("cameraPort$tickRate") LocalFloatRef tickRate,
+            @Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef
     ) {
         if (ClientCameraManager.possessingCamera && !ClientCameraManager.isCameraHandheld && this.minecraft.player != null) {
             Player player = this.minecraft.player;
@@ -73,32 +107,41 @@ public class LevelRendererMixin {
                 multiBufferSource = bufferSource;
             }
             TickRateManager tickRateManager = this.minecraft.level.tickRateManager();
-            tickRate.set(tickRateManager.isEntityFrozen(player) ? tickRateManager.runsNormally() ? f : 1.0f : f);
-            this.renderEntity(player, d, e, h, tickRate.get(), poseStack, (MultiBufferSource)multiBufferSource);
+            tickRate.set(tickRateManager.isEntityFrozen(player) ? tickRateManager.runsNormally() ? tickDelta : 1F : tickDelta);
+            this.renderEntity(player, d, e, h, tickRate.get(), poseStackRef.get(), (MultiBufferSource) multiBufferSource);
             alreadyRendered.set(false);
         }
     }
 
     @Inject(
             method = "renderLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/PostChain;process(F)V", ordinal = 0)
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/PostChain;process(F)V",
+                    ordinal = 0
+            )
     )
-    public void cameraPort$renderSpecialA(
-            PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
-            @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
-            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-            @Share("cameraPort$tickRate") LocalFloatRef tickRate
-    ) {
+    public void cameraPort$renderSpecialA(CallbackInfo ci, @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered) {
         alreadyRendered.set(true);
     }
 
     @Inject(
             method = "renderLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0, shift = At.Shift.BEFORE),
-            slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=destroyProgress"))
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
+                    ordinal = 0,
+                    shift = At.Shift.BEFORE
+            ),
+            slice = @Slice(
+                    from = @At(
+                            value = "CONSTANT",
+                            args = "stringValue=destroyProgress"
+                    )
+            )
     )
     public void cameraPort$renderSpecialB(
-            PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo info,
+            CallbackInfo ci,
             @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
             @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
             @Share("cameraPort$tickRate") LocalFloatRef tickRate

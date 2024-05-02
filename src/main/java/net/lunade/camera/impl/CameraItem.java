@@ -1,4 +1,4 @@
-package net.lunade.camera;
+package net.lunade.camera.impl;
 
 import net.lunade.camera.entity.CameraEntity;
 import net.minecraft.world.InteractionHand;

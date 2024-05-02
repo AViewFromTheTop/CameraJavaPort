@@ -1,6 +1,6 @@
 package net.lunade.camera.entity;
 
-import net.lunade.camera.CameraMain;
+import net.lunade.camera.CamerPortMain;
 import net.lunade.camera.networking.CameraPossessPacket;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,21 +35,15 @@ public class CameraEntity extends Mob {
     private static final EntityDataAccessor<Float> TRACKED_HEIGHT = SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> TIMER = SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.INT);
     public ArrayList<UUID> queuedUUIDS = new ArrayList<>();
-    private boolean goingUp = false;
     //CLIENT VARIABLES
     public float prevTimer;
     public float timer;
+    private boolean goingUp = false;
 
     public CameraEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
-        this.setMaxUpStep(1.0F);
         this.setPersistenceRequired();
         this.getNavigation().setCanFloat(false);
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return new EntityDimensions(this.getBoundingBoxRadius() * 2F, this.getTrackedHeight(), true);
     }
 
     @NotNull
@@ -59,14 +53,20 @@ public class CameraEntity extends Mob {
                 .add(Attributes.FOLLOW_RANGE, 48D)
                 .add(Attributes.ATTACK_KNOCKBACK)
                 .add(Attributes.MOVEMENT_SPEED, 0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 100D);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 100D)
+                .add(Attributes.STEP_HEIGHT, 1D);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TRACKED_HEIGHT, 1.75F);
-        this.entityData.define(TIMER, 0);
+    protected @NotNull EntityDimensions getDefaultDimensions(Pose pose) {
+        return EntityDimensions.scalable(this.getBoundingBoxRadius() * 2F, this.getTrackedHeight()).scale(this.getAgeScale());
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TRACKED_HEIGHT, 1.75F);
+        builder.define(TIMER, 0);
     }
 
     @Override
@@ -114,18 +114,18 @@ public class CameraEntity extends Mob {
                     newHeight = this.getMinHeight();
                 }
                 this.setTrackedHeight(newHeight);
-                this.level().playSound(null, getX(), getEyeY(), getZ(), CameraMain.CAMERA_ADJUST, SoundSource.NEUTRAL, this.getSoundVolume(), this.getTrackedHeight());
+                this.level().playSound(null, getX(), getEyeY(), getZ(), CamerPortMain.CAMERA_ADJUST, SoundSource.NEUTRAL, this.getSoundVolume(), this.getTrackedHeight());
                 return InteractionResult.SUCCESS;
             }
         } else {
             if (this.getTimer() > 1) {
                 if (this.addPlayerToQueue(player)) {
-                    this.playSound(CameraMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(CamerPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
                 }
             } else {
                 if (this.addPlayerToQueue(player)) {
                     this.setTimer(60);
-                    this.playSound(CameraMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(CamerPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -220,22 +220,17 @@ public class CameraEntity extends Mob {
     @NotNull
     @Override
     public Fallsounds getFallSounds() {
-        return new Fallsounds(CameraMain.CAMERA_FALL, CameraMain.CAMERA_FALL);
+        return new Fallsounds(CamerPortMain.CAMERA_FALL, CamerPortMain.CAMERA_FALL);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource damageSource) {
-        return CameraMain.CAMERA_HIT;
+        return CamerPortMain.CAMERA_HIT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return CameraMain.CAMERA_BREAK;
-    }
-
-    @Override
-    protected float getStandingEyeHeight(Pose entityPose, @NotNull EntityDimensions entityDimensions) {
-        return entityDimensions.height * 0.9257142857142857F;
+        return CamerPortMain.CAMERA_BREAK;
     }
 
     @Override

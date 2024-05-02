@@ -3,7 +3,6 @@
   "item.camera_port.camera": "Camera",
   "entity.camera_port.small_camera": "Disc Camera",
   "item.camera_port.disc_camera": "Disc Camera",
-
   "subtitle.entity.camera.crack": "Camera cracks",
   "subtitle.entity.camera.adjust": "Tripod adjusts",
   "subtitle.entity.camera.snap": "Shutter clicks",

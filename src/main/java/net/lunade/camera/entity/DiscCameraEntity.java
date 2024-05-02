@@ -1,7 +1,6 @@
 package net.lunade.camera.entity;
 
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 
 public class DiscCameraEntity extends CameraEntity {
@@ -29,11 +28,6 @@ public class DiscCameraEntity extends CameraEntity {
     @Override
     public boolean canBeAdjusted() {
         return false;
-    }
-
-    @Override
-    public float getEyeHeight(Pose pose) {
-        return 0.81F;
     }
 
 }

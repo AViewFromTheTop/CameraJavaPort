@@ -1,57 +1,57 @@
 {
-	"entity.camera.break": {
-		"subtitle": "subtitle.entity.camera.break",
-		"sounds": [
-			"camera_port:camera/break1",
-			"camera_port:camera/break2",
-			"camera_port:camera/break3",
-			"camera_port:camera/break4"
-		]
-	},
-	"entity.camera.fall": {
-		"subtitle": "subtitle.entity.camera.fall",
-		"sounds": [
-			"minecraft:block/bamboo/place1",
-			"minecraft:block/bamboo/place2",
-			"minecraft:block/bamboo/place3",
-			"minecraft:block/bamboo/place4",
-			"minecraft:block/bamboo/place5",
-			"minecraft:block/bamboo/place6"
-		]
-	},
-	"entity.camera.hit": {
-		"subtitle": "subtitle.entity.camera.hit",
-		"sounds": [
-			"camera_port:camera/hit1",
-			"camera_port:camera/hit2",
-			"camera_port:camera/hit3",
-			"camera_port:camera/hit4"
-		]
-	},
-	"entity.camera.place": {
-		"subtitle": "subtitle.entity.camera.place",
-		"sounds": [
-			"camera_port:camera/place"
-		]
-	},
-	"entity.camera.prime": {
-		"subtitle": "subtitle.entity.camera.prime",
-		"sounds": [
-			"camera_port:camera/prime"
-		]
-	},
-	"entity.camera.snap": {
-		"subtitle": "subtitle.entity.camera.snap",
-		"sounds": [
-			"camera_port:camera/snap1",
-			"camera_port:camera/snap2",
-			"camera_port:camera/snap3"
-		]
-	},
-	"entity.camera.adjust": {
-		"subtitle": "subtitle.entity.camera.adjust",
-		"sounds": [
-			"minecraft:item/spyglass/use"
-		]
-	}
+  "entity.camera.break": {
+    "subtitle": "subtitle.entity.camera.break",
+    "sounds": [
+      "camera_port:camera/break1",
+      "camera_port:camera/break2",
+      "camera_port:camera/break3",
+      "camera_port:camera/break4"
+    ]
+  },
+  "entity.camera.fall": {
+    "subtitle": "subtitle.entity.camera.fall",
+    "sounds": [
+      "minecraft:block/bamboo/place1",
+      "minecraft:block/bamboo/place2",
+      "minecraft:block/bamboo/place3",
+      "minecraft:block/bamboo/place4",
+      "minecraft:block/bamboo/place5",
+      "minecraft:block/bamboo/place6"
+    ]
+  },
+  "entity.camera.hit": {
+    "subtitle": "subtitle.entity.camera.hit",
+    "sounds": [
+      "camera_port:camera/hit1",
+      "camera_port:camera/hit2",
+      "camera_port:camera/hit3",
+      "camera_port:camera/hit4"
+    ]
+  },
+  "entity.camera.place": {
+    "subtitle": "subtitle.entity.camera.place",
+    "sounds": [
+      "camera_port:camera/place"
+    ]
+  },
+  "entity.camera.prime": {
+    "subtitle": "subtitle.entity.camera.prime",
+    "sounds": [
+      "camera_port:camera/prime"
+    ]
+  },
+  "entity.camera.snap": {
+    "subtitle": "subtitle.entity.camera.snap",
+    "sounds": [
+      "camera_port:camera/snap1",
+      "camera_port:camera/snap2",
+      "camera_port:camera/snap3"
+    ]
+  },
+  "entity.camera.adjust": {
+    "subtitle": "subtitle.entity.camera.adjust",
+    "sounds": [
+      "minecraft:item/spyglass/use"
+    ]
+  }
 }

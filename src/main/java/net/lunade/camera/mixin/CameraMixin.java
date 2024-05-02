@@ -1,7 +1,7 @@
 package net.lunade.camera.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.lunade.camera.ClientCameraManager;
+import net.lunade.camera.impl.ClientCameraManager;
 import net.minecraft.client.Camera;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

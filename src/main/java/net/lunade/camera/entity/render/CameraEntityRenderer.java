@@ -2,8 +2,8 @@ package net.lunade.camera.entity.render;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraMain;
-import net.lunade.camera.MainClient;
+import net.lunade.camera.CamerPortMain;
+import net.lunade.camera.CameraPortClient;
 import net.lunade.camera.entity.CameraEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class CameraEntityRenderer<T extends CameraEntity> extends MobRenderer<T, CameraEntityModel<T>> {
 
     public CameraEntityRenderer(EntityRendererProvider.Context context) {
-        super(context, new CameraEntityModel<>(context.bakeLayer(MainClient.CAMERA_MODEL_LAYER)), 0.5f);
+        super(context, new CameraEntityModel<>(context.bakeLayer(CameraPortClient.CAMERA_MODEL_LAYER)), 0.5f);
     }
 
     @Override
@@ -34,6 +34,6 @@ public class CameraEntityRenderer<T extends CameraEntity> extends MobRenderer<T,
     @NotNull
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return new ResourceLocation(CameraMain.MOD_ID, "textures/entity/camera.png");
+        return new ResourceLocation(CamerPortMain.MOD_ID, "textures/entity/camera.png");
     }
 }

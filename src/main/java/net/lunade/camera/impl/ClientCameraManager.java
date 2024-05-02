@@ -1,7 +1,8 @@
-package net.lunade.camera;
+package net.lunade.camera.impl;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lunade.camera.CamerPortMain;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,7 +39,7 @@ public class ClientCameraManager {
         if (client.level != null) {
             Entity camEntity = client.getCameraEntity();
             if (camEntity != null) {
-                client.level.playLocalSound(client.player, CameraMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
+                client.level.playLocalSound(client.player, CamerPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
             }
         }
     }
