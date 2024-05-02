@@ -55,7 +55,7 @@ public class ClientCameraManager {
                 for (int i = 0; i < smokeCount; i++) {
                     client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
                 }
-                Vec3 forward = camEntity.getForward();
+                Vec3 forward = camEntity.getForward().scale(1.5D);
                 client.level.addParticle(ParticleTypes.FLASH, camEntity.getX() + forward.z, camEntity.getEyeY() + forward.y, camEntity.getZ() + forward.z, 0, 0, 0);
             }
         }
