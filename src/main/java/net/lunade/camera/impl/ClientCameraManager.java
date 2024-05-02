@@ -5,7 +5,7 @@ import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CamerPortMain;
+import net.lunade.camera.CameraPortMain;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
@@ -40,7 +40,7 @@ public class ClientCameraManager {
         if (client.level != null) {
             Entity camEntity = client.getCameraEntity();
             if (camEntity != null) {
-                client.level.playLocalSound(client.player, CamerPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
+                client.level.playLocalSound(client.player, CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
             }
         }
 

@@ -1,7 +1,8 @@
 package net.lunade.camera.entity;
 
-import net.lunade.camera.CamerPortMain;
+import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.networking.CameraPossessPacket;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,9 +26,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class CameraEntity extends Mob {
     private static final EntityDataAccessor<Float> TRACKED_HEIGHT = SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> TIMER = SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.INT);
     public ArrayList<UUID> queuedUUIDS = new ArrayList<>();
-    //CLIENT VARIABLES
+    public long lastHit;
     public float prevTimer;
     public float timer;
     private boolean goingUp = false;
@@ -49,12 +52,11 @@ public class CameraEntity extends Mob {
     @NotNull
     public static AttributeSupplier.Builder addAttributes() {
         return LivingEntity.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 1D)
-                .add(Attributes.FOLLOW_RANGE, 48D)
+                .add(Attributes.FOLLOW_RANGE, 80D)
                 .add(Attributes.ATTACK_KNOCKBACK)
                 .add(Attributes.MOVEMENT_SPEED, 0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 100D)
-                .add(Attributes.STEP_HEIGHT, 1D);
+                .add(Attributes.STEP_HEIGHT, 0D);
     }
 
     @Override
@@ -114,30 +116,23 @@ public class CameraEntity extends Mob {
                     newHeight = this.getMinHeight();
                 }
                 this.setTrackedHeight(newHeight);
-                this.level().playSound(null, getX(), getEyeY(), getZ(), CamerPortMain.CAMERA_ADJUST, SoundSource.NEUTRAL, this.getSoundVolume(), this.getTrackedHeight());
+                this.level().playSound(null, getX(), getEyeY(), getZ(), CameraPortMain.CAMERA_ADJUST, SoundSource.NEUTRAL, this.getSoundVolume(), this.getTrackedHeight());
                 return InteractionResult.SUCCESS;
             }
         } else {
             if (this.getTimer() > 1) {
                 if (this.addPlayerToQueue(player)) {
-                    this.playSound(CamerPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(CameraPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
                 }
             } else {
                 if (this.addPlayerToQueue(player)) {
                     this.setTimer(60);
-                    this.playSound(CamerPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(CameraPortMain.CAMERA_PRIME, this.getSoundVolume(), this.getVoicePitch());
                     return InteractionResult.SUCCESS;
                 }
             }
         }
         return InteractionResult.PASS;
-    }
-
-    @Override
-    protected void tickDeath() {
-        if (!this.level().isClientSide() && !this.isRemoved()) {
-            this.remove(Entity.RemovalReason.KILLED);
-        }
     }
 
     public float getMaxHeight() {
@@ -156,39 +151,62 @@ public class CameraEntity extends Mob {
         return true;
     }
 
-    public boolean addPlayerToQueue(@NotNull Player player) {
-        UUID playerUUID = player.getUUID();
-        if (!this.queuedUUIDS.contains(playerUUID)) {
-            this.queuedUUIDS.add(playerUUID);
-            return true;
-        }
-        return false;
-    }
-
     @Override
-    public void die(DamageSource damageSource) {
-        this.spawnBreakParticles();
-        super.die(damageSource);
-    }
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.level().isClientSide || this.isRemoved()) {
+            return false;
+        } else if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            this.kill();
+            return false;
+        } else if (this.isInvulnerableTo(source)) {
+            return false;
+        } else if (source.is(DamageTypeTags.IS_EXPLOSION)) {
+            this.brokenByAnything(source);
+            this.kill();
+            return false;
+        } else if (source.is(DamageTypeTags.IGNITES_ARMOR_STANDS)) {
+            if (this.isOnFire()) {
+                this.causeDamage(source, 0.15F);
+            } else {
+                this.igniteForSeconds(5);
+            }
 
-    @Override
-    protected void dropAllDeathLoot(DamageSource damageSource) {
-        super.dropAllDeathLoot(damageSource);
-        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            ItemStack itemStack = this.getPickResult();
-            if (itemStack != null && !itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
-                this.spawnAtLocation(itemStack, this.getEyeHeight());
+            return false;
+        } else if (source.is(DamageTypeTags.BURNS_ARMOR_STANDS) && this.getHealth() > 0.5F) {
+            this.causeDamage(source, 4F);
+            return false;
+        } else {
+            boolean bl = source.is(DamageTypeTags.CAN_BREAK_ARMOR_STAND);
+            boolean bl2 = source.is(DamageTypeTags.ALWAYS_KILLS_ARMOR_STANDS);
+            if (!bl && !bl2) {
+                return false;
+            } else {
+                if (source.getEntity() instanceof Player player && !player.getAbilities().mayBuild) {
+                    return false;
+                }
+
+                if (source.isCreativePlayer()) {
+                    this.playBrokenSound();
+                    this.showBreakingParticles();
+                    this.kill();
+                } else {
+                    long l = this.level().getGameTime();
+                    if (l - this.lastHit > 5L && !bl2) {
+                        this.level().broadcastEntityEvent(this, (byte)32);
+                        this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
+                        this.lastHit = l;
+                    } else {
+                        this.brokenByPlayer(source);
+                        this.showBreakingParticles();
+                        this.kill();
+                    }
+                }
+                return true;
             }
         }
     }
 
-    @Override
-    protected void actuallyHurt(DamageSource damageSource, float f) {
-        super.actuallyHurt(damageSource, f);
-        this.spawnBreakParticles();
-    }
-
-    public void spawnBreakParticles() {
+    private void showBreakingParticles() {
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.STICK)),
@@ -201,6 +219,70 @@ public class CameraEntity extends Mob {
                     this.getBbWidth() / 4.0F, 0.05D
             );
         }
+    }
+
+    private void causeDamage(DamageSource damageSource, float amount) {
+        float f = this.getHealth();
+        f -= amount;
+        if (f <= 0.5F) {
+            this.brokenByAnything(damageSource);
+            this.kill();
+        } else {
+            this.setHealth(f);
+            this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+        }
+    }
+
+    private void brokenByPlayer(DamageSource damageSource) {
+        ItemStack itemStack = this.getPickResult();
+        itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+        Block.popResource(this.level(), this.blockPosition(), itemStack);
+        this.brokenByAnything(damageSource);
+    }
+
+    private void brokenByAnything(DamageSource damageSource) {
+        this.playBrokenSound();
+        this.dropAllDeathLoot(damageSource);
+    }
+
+    private void playBrokenSound() {
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0F, 1.0F);
+    }
+
+    public boolean addPlayerToQueue(@NotNull Player player) {
+        UUID playerUUID = player.getUUID();
+        if (!this.queuedUUIDS.contains(playerUUID)) {
+            this.queuedUUIDS.add(playerUUID);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 32) {
+            if (this.level().isClientSide) {
+                this.level().playLocalSound(
+                        this.getX(),
+                        this.getY(),
+                        this.getZ(),
+                        CameraPortMain.CAMERA_HIT,
+                        this.getSoundSource(),
+                        0.3F,
+                        1F,
+                        false
+                );
+                this.lastHit = this.level().getGameTime();
+            }
+        } else {
+            super.handleEntityEvent(id);
+        }
+    }
+
+    @Override
+    public void kill() {
+        this.remove(Entity.RemovalReason.KILLED);
+        this.gameEvent(GameEvent.ENTITY_DIE);
     }
 
     @Override
@@ -220,17 +302,17 @@ public class CameraEntity extends Mob {
     @NotNull
     @Override
     public Fallsounds getFallSounds() {
-        return new Fallsounds(CamerPortMain.CAMERA_FALL, CamerPortMain.CAMERA_FALL);
+        return new Fallsounds(CameraPortMain.CAMERA_FALL, CameraPortMain.CAMERA_FALL);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource damageSource) {
-        return CamerPortMain.CAMERA_HIT;
+        return CameraPortMain.CAMERA_HIT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return CamerPortMain.CAMERA_BREAK;
+        return CameraPortMain.CAMERA_BREAK;
     }
 
     @Override

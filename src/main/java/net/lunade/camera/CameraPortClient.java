@@ -18,8 +18,8 @@ import net.minecraft.resources.ResourceLocation;
 @Environment(EnvType.CLIENT)
 public class CameraPortClient implements ClientModInitializer {
 
-    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CamerPortMain.MOD_ID, "camera"), "main");
-    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CamerPortMain.MOD_ID, "disc_camera"), "main");
+    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraPortMain.MOD_ID, "camera"), "main");
+    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraPortMain.MOD_ID, "disc_camera"), "main");
 
     public static void receiveCameraPossessPacket() {
         ClientPlayNetworking.registerGlobalReceiver(CameraPossessPacket.PACKET_TYPE, (packet, ctx) -> {
@@ -29,9 +29,9 @@ public class CameraPortClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.register(CamerPortMain.CAMERA, CameraEntityRenderer::new);
+        EntityRendererRegistry.register(CameraPortMain.CAMERA, CameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(CAMERA_MODEL_LAYER, CameraEntityModel::createBodyLayer);
-        EntityRendererRegistry.register(CamerPortMain.DISC_CAMERA, DiscCameraEntityRenderer::new);
+        EntityRendererRegistry.register(CameraPortMain.DISC_CAMERA, DiscCameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
         receiveCameraPossessPacket();
     }

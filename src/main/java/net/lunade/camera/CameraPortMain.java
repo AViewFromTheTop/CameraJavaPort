@@ -20,7 +20,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-public class CamerPortMain implements ModInitializer {
+public class CameraPortMain implements ModInitializer {
     public static final String MOD_ID = "camera_port";
 
     public static final EntityType<CameraEntity> CAMERA = Registry.register(

@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.lunade.camera.CamerPortMain"
+      "net.lunade.camera.CameraPortMain"
     ],
     "client": [
       "net.lunade.camera.CameraPortClient"
