@@ -30,7 +30,7 @@ public class CameraItem extends SpawnEggItem {
                     if (ClientCameraManager.possessingCamera) {
                         return InteractionResultHolder.fail(itemStack);
                     }
-                    ClientCameraManager.changeToCamera(null, true);
+                    ClientCameraManager.executeScreenshot(null, true);
                 }
                 return InteractionResultHolder.success(itemStack);
             } else return InteractionResultHolder.fail(itemStack);

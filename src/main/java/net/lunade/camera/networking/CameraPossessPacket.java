@@ -16,21 +16,16 @@ public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
     public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
             new ResourceLocation(CamerPortMain.MOD_ID, "camera_possess").toString()
     );
+    public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
+            .map(CameraPossessPacket::new, CameraPossessPacket::entityId)
+            .cast();
 
     public CameraPossessPacket(@NotNull FriendlyByteBuf buf) {
         this(buf.readVarInt());
     }
 
-    public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
-            .map(CameraPossessPacket::new, CameraPossessPacket::entityId)
-            .cast();
-
     public static void sendTo(ServerPlayer serverPlayer, int entityId) {
         ServerPlayNetworking.send(serverPlayer, new CameraPossessPacket(entityId));
-    }
-
-    public void write(@NotNull FriendlyByteBuf buf) {
-        buf.writeVarInt(this.entityId());
     }
 
     public static void sendTo(@NotNull ServerPlayer serverPlayer, @NotNull CameraEntity cameraEntity) {
@@ -38,6 +33,10 @@ public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
                 cameraEntity.getId()
         );
         ServerPlayNetworking.send(serverPlayer, cameraPossessPacket);
+    }
+
+    public void write(@NotNull FriendlyByteBuf buf) {
+        buf.writeVarInt(this.entityId());
     }
 
     @NotNull

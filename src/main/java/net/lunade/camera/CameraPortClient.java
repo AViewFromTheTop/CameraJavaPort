@@ -3,7 +3,6 @@ package net.lunade.camera;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -22,6 +21,12 @@ public class CameraPortClient implements ClientModInitializer {
     public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CamerPortMain.MOD_ID, "camera"), "main");
     public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CamerPortMain.MOD_ID, "disc_camera"), "main");
 
+    public static void receiveCameraPossessPacket() {
+        ClientPlayNetworking.registerGlobalReceiver(CameraPossessPacket.PACKET_TYPE, (packet, ctx) -> {
+            ClientCameraManager.executeScreenshot(ctx.player().level().getEntity(packet.entityId()), false);
+        });
+    }
+
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(CamerPortMain.CAMERA, CameraEntityRenderer::new);
@@ -29,13 +34,5 @@ public class CameraPortClient implements ClientModInitializer {
         EntityRendererRegistry.register(CamerPortMain.DISC_CAMERA, DiscCameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
         receiveCameraPossessPacket();
-
-        ClientTickEvents.START_CLIENT_TICK.register(client -> ClientCameraManager.tick());
-    }
-
-    public static void receiveCameraPossessPacket() {
-        ClientPlayNetworking.registerGlobalReceiver(CameraPossessPacket.PACKET_TYPE, (packet, ctx) -> {
-            ClientCameraManager.changeToCamera(ctx.player().level().getEntity(packet.entityId()), false);
-        });
     }
 }
