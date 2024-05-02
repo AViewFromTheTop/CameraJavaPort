@@ -1,18 +1,18 @@
 package net.lunade.camera.entity;
 
 import net.lunade.camera.CameraPortMain;
-import net.lunade.camera.networking.CameraPossessPacket;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -85,17 +85,38 @@ public class CameraEntity extends Mob {
                     }
                 }
                 if (this.getTimer() == 1) {
-                    for (UUID uuid : this.queuedUUIDS) {
-                        Player player = this.level().getPlayerByUUID(uuid);
-                        if (player instanceof ServerPlayer serverPlayer) {
-                            CameraPossessPacket.sendTo(serverPlayer, this);
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        ArrayList<ServerPlayer> queuedPlayers = new ArrayList<>();
+                        for (UUID uuid : this.queuedUUIDS) {
+                            Player player = this.level().getPlayerByUUID(uuid);
+                            if (player instanceof ServerPlayer serverPlayer) {
+                                queuedPlayers.add(serverPlayer);
+                            }
                         }
+                        ArrayList<ServerPlayer> nonQueuedPlayers = new ArrayList<>(serverLevel.getServer().getPlayerList().getPlayers());
+                        nonQueuedPlayers.remove(queuedPlayers);
+                        nonQueuedPlayers.removeIf(serverPlayer -> serverPlayer.level().dimension() != serverLevel.dimension());
+
+                        for (ServerPlayer player : nonQueuedPlayers) {
+                            player.connection.send(
+                                    new ClientboundSoundPacket(
+                                            BuiltInRegistries.SOUND_EVENT.wrapAsHolder(CameraPortMain.CAMERA_SNAP),
+                                            this.getSoundSource(),
+                                            this.getX(),
+                                            this.getY(),
+                                            this.getZ(),
+                                            0.5F,
+                                            1F,
+                                            this.random.nextLong()
+                                    )
+                            );
+                        }
+                        this.queuedUUIDS.removeIf(uuid -> true);
                     }
-                    this.queuedUUIDS.removeIf(uuid -> true);
                 }
             }
         }
-        this.timer = this.getTimer();
+        this.timer = Math.max(0, this.prevTimer -= 1);
         this.refreshDimensions();
     }
 
@@ -192,7 +213,7 @@ public class CameraEntity extends Mob {
                 } else {
                     long l = this.level().getGameTime();
                     if (l - this.lastHit > 5L && !bl2) {
-                        this.level().broadcastEntityEvent(this, (byte)32);
+                        this.level().broadcastEntityEvent(this, (byte) 32);
                         this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
                         this.lastHit = l;
                     } else {
@@ -246,7 +267,7 @@ public class CameraEntity extends Mob {
     }
 
     private void playBrokenSound() {
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0F, 1.0F);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), CameraPortMain.CAMERA_BREAK, this.getSoundSource(), 1.0F, 1.0F);
     }
 
     public boolean addPlayerToQueue(@NotNull Player player) {

@@ -1,6 +1,8 @@
 package net.lunade.camera.impl;
 
+import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.CameraEntity;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
@@ -32,8 +34,11 @@ public class CameraItem extends SpawnEggItem {
                     }
                     ClientCameraManager.executeScreenshot(null, true);
                 }
+                level.playSound(player, player.getX(), player.getEyeY(), player.getZ(), CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
                 return InteractionResultHolder.success(itemStack);
-            } else return InteractionResultHolder.fail(itemStack);
+            } else {
+                return InteractionResultHolder.fail(itemStack);
+            }
         }
         return super.use(level, player, interactionHand);
     }

@@ -50,13 +50,15 @@ public class ClientCameraManager {
 
         if (client.level != null) {
             Entity camEntity = client.getCameraEntity();
-            if (camEntity != null) {
-                int smokeCount = client.level.getRandom().nextInt(1, 5);
-                for (int i = 0; i < smokeCount; i++) {
-                    client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
+            if (!isCameraHandheld) {
+                if (camEntity != null) {
+                    int smokeCount = client.level.getRandom().nextInt(1, 5);
+                    for (int i = 0; i < smokeCount; i++) {
+                        client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
+                    }
+                    Vec3 forward = camEntity.getForward();
+                    client.level.addParticle(ParticleTypes.FLASH, camEntity.getX() + forward.z, camEntity.getEyeY() + forward.y, camEntity.getZ() + forward.z, 0, 0, 0);
                 }
-                Vec3 forward = camEntity.getForward().scale(1.5D);
-                client.level.addParticle(ParticleTypes.FLASH, camEntity.getX() + forward.z, camEntity.getEyeY() + forward.y, camEntity.getZ() + forward.z, 0, 0, 0);
             }
         }
 
