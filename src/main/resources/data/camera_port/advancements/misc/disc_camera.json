@@ -30,6 +30,5 @@
     "recipes": [
       "camera_port:disc_camera"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
