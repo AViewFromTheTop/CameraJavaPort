@@ -18,8 +18,8 @@ import net.minecraft.resources.ResourceLocation;
 @Environment(EnvType.CLIENT)
 public class CameraPortClient implements ClientModInitializer {
 
-    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraPortMain.MOD_ID, "camera"), "main");
-    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CameraPortMain.MOD_ID, "disc_camera"), "main");
+    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.tryBuild(CameraPortMain.MOD_ID, "camera"), "main");
+    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.tryBuild(CameraPortMain.MOD_ID, "disc_camera"), "main");
 
     public static void receiveCameraPossessPacket() {
         ClientPlayNetworking.registerGlobalReceiver(CameraPossessPacket.PACKET_TYPE, (packet, ctx) -> {

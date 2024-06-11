@@ -25,7 +25,7 @@ public class CameraPortMain implements ModInitializer {
 
     public static final EntityType<CameraEntity> CAMERA = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
-            new ResourceLocation(MOD_ID, "camera"),
+            ResourceLocation.tryBuild(MOD_ID, "camera"),
             FabricEntityTypeBuilder.createMob()
                     .spawnGroup(MobCategory.MISC)
                     .entityFactory(CameraEntity::new)
@@ -37,7 +37,7 @@ public class CameraPortMain implements ModInitializer {
     public static final CameraItem CAMERA_ITEM = new CameraItem(CAMERA, 0, 0, new Item.Properties());
     public static final EntityType<DiscCameraEntity> DISC_CAMERA = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
-            new ResourceLocation(MOD_ID, "disc_camera"),
+            ResourceLocation.tryBuild(MOD_ID, "disc_camera"),
             FabricEntityTypeBuilder.createMob()
                     .spawnGroup(MobCategory.MISC)
                     .entityFactory(DiscCameraEntity::new)
@@ -46,13 +46,13 @@ public class CameraPortMain implements ModInitializer {
                     .build()
     );
     public static final CameraItem DISC_CAMERA_ITEM = new CameraItem(DISC_CAMERA, 0, 0, new Item.Properties());
-    public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.break"));
-    public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.fall"));
-    public static final SoundEvent CAMERA_HIT = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.hit"));
-    public static final SoundEvent CAMERA_PLACE = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.place"));
-    public static final SoundEvent CAMERA_PRIME = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.prime"));
-    public static final SoundEvent CAMERA_SNAP = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.snap"));
-    public static final SoundEvent CAMERA_ADJUST = SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "entity.camera.adjust"));
+    public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.break"));
+    public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.fall"));
+    public static final SoundEvent CAMERA_HIT = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.hit"));
+    public static final SoundEvent CAMERA_PLACE = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.place"));
+    public static final SoundEvent CAMERA_PRIME = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.prime"));
+    public static final SoundEvent CAMERA_SNAP = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.snap"));
+    public static final SoundEvent CAMERA_ADJUST = SoundEvent.createVariableRangeEvent(ResourceLocation.tryBuild(MOD_ID, "entity.camera.adjust"));
 
     public static CameraItem registerCamera(CameraItem cameraItem, ResourceLocation resourceLocation) {
         Registry.register(BuiltInRegistries.ITEM, resourceLocation, cameraItem);
@@ -68,8 +68,8 @@ public class CameraPortMain implements ModInitializer {
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PRIME.getLocation(), CAMERA_PRIME);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_SNAP.getLocation(), CAMERA_SNAP);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.getLocation(), CAMERA_ADJUST);
-        registerCamera(DISC_CAMERA_ITEM, new ResourceLocation(MOD_ID, "disc_camera"));
-        registerCamera(CAMERA_ITEM, new ResourceLocation(MOD_ID, "camera"));
+        registerCamera(DISC_CAMERA_ITEM, ResourceLocation.tryBuild(MOD_ID, "disc_camera"));
+        registerCamera(CAMERA_ITEM, ResourceLocation.tryBuild(MOD_ID, "camera"));
 
         PayloadTypeRegistry<RegistryFriendlyByteBuf> registry = PayloadTypeRegistry.playS2C();
         registry.register(CameraPossessPacket.PACKET_TYPE, CameraPossessPacket.CODEC);

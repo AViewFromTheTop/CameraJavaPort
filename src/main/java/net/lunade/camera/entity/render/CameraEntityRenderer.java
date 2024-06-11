@@ -34,6 +34,6 @@ public class CameraEntityRenderer<T extends CameraEntity> extends MobRenderer<T,
     @NotNull
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return new ResourceLocation(CameraPortMain.MOD_ID, "textures/entity/camera.png");
+        return ResourceLocation.parse(CameraPortMain.MOD_ID + ":textures/entity/camera.png");
     }
 }

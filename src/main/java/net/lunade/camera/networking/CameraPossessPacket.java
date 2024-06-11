@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
 
     public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            new ResourceLocation(CameraPortMain.MOD_ID, "camera_possess").toString()
+            CameraPortMain.MOD_ID + "_camera_possess"
     );
     public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
             .map(CameraPossessPacket::new, CameraPossessPacket::entityId)

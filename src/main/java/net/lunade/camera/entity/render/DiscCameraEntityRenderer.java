@@ -28,6 +28,6 @@ public class DiscCameraEntityRenderer<T extends DiscCameraEntity> extends MobRen
     @NotNull
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return new ResourceLocation(CameraPortMain.MOD_ID, "textures/entity/camera.png");
+        return ResourceLocation.parse(CameraPortMain.MOD_ID + ":textures/entity/camera.png");
     }
 }

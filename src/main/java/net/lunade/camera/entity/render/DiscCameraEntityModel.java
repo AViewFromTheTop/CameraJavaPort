@@ -48,11 +48,11 @@ public class DiscCameraEntityModel<A extends DiscCameraEntity> extends EntityMod
         this.head.xRot = headPitch * RAD;
     }
 
-    @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        matrixStack.scale(1.3f, 0.9f, 1.3f);
-        disc.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        disc2.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-    }
+	@Override
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int i, int j, int k) {
+		head.render(matrices, vertexConsumer, i, j, k);
+		matrices.scale(1.3F, 0.9F, 1.3F);
+		disc.render(matrices, vertexConsumer, i, j, k);
+		disc2.render(matrices, vertexConsumer, i, j, k);
+	}
 }

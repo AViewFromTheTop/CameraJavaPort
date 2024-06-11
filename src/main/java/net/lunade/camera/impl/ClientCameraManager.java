@@ -86,7 +86,7 @@ public class ClientCameraManager {
             window.setWidth(width);
             window.setHeight(height);
             renderTarget.bindWrite(true);
-            gameRenderer.renderLevel(minecraft.getFrameTime(), 0L);
+            gameRenderer.renderLevel(minecraft.getTimer());
 
             try {
                 Thread.sleep(10L);

@@ -145,7 +145,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
 	// Mod Menu
-	modImplementation("com.terraformersmc:modmenu:$modmenu_version")
+	modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
 }
 
 tasks {
