@@ -59,8 +59,8 @@ public class CameraEntityModel<T extends CameraEntity> extends EntityModel<T> {
         this.head.xRot = headPitch * RAD;
     }
 
-	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int i, int j, int k) {
-		this.root.render(matrices, vertexConsumer, i, j, k);
-	}
+    @Override
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int i, int j, int k) {
+        this.root.render(matrices, vertexConsumer, i, j, k);
+    }
 }

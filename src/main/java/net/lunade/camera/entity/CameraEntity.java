@@ -268,9 +268,9 @@ public class CameraEntity extends Mob {
 
     private void brokenByAnything(DamageSource damageSource) {
         this.playBrokenSound();
-		if (this.level() instanceof ServerLevel serverLevel) {
-			this.dropAllDeathLoot(serverLevel, damageSource);
-		}
+        if (this.level() instanceof ServerLevel serverLevel) {
+            this.dropAllDeathLoot(serverLevel, damageSource);
+        }
     }
 
     private void playBrokenSound() {

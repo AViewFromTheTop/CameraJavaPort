@@ -46,6 +46,9 @@ val archives_base_name: String by project
 
 val fabric_api_version: String by project
 val modmenu_version: String by project
+val frozenlib_version: String by project
+
+val local_frozenlib = findProject(":FrozenLib") != null
 
 base {
 	archivesName = archives_base_name
@@ -118,11 +121,6 @@ repositories {
 	maven("https://maven.quiltmc.org/repository/release") {
 		name = "Quilt"
 	}
-	maven("https://maven.jamieswhiteshirt.com/libs-release") {
-		content {
-			includeGroup("com.jamieswhiteshirt")
-		}
-	}
 
 	flatDir {
 		dirs("libs")
@@ -136,7 +134,7 @@ dependencies {
 	mappings(loom.layered {
 		// please annoy treetrain if this doesnt work
 		mappings("org.quiltmc:quilt-mappings:$quilt_mappings:intermediary-v2")
-		parchment("org.parchmentmc.data:parchment-$parchment_mappings@zip")
+		//parchment("org.parchmentmc.data:parchment-$parchment_mappings@zip")
 		officialMojangMappings {
 			nameSyntheticMembers = false
 		}
@@ -146,6 +144,15 @@ dependencies {
 
 	// Mod Menu
 	modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
+
+	/*
+	// FrozenLib
+	if (local_frozenlib) {
+		api(project(":FrozenLib", configuration = "namedElements"))
+		modCompileOnly(project(":FrozenLib"))?.let { include(it) }
+	} else
+		modApi("maven.modrinth:frozenlib:$frozenlib_version")?.let { include(it) }
+	 */
 }
 
 tasks {
@@ -153,9 +160,10 @@ tasks {
 		val properties = mapOf(
 			"mod_id" to mod_id,
 			"version" to version,
-			"minecraft_version" to ">=$minecraft_version",
+			"minecraft_version" to "~1.21-",//>=minecraft_version,
 
 			"fabric_api_version" to ">=$fabric_api_version",
+			"frozenlib_version" to ">=${frozenlib_version.split('-').firstOrNull()}-"
 		)
 
 		properties.forEach { (a, b) -> inputs.property(a, b) }
@@ -233,116 +241,4 @@ fun getModVersion(): String {
 	}
 
 	return version
-}
-
-val env = System.getenv()
-
-publishing {
-	val mavenUrl = env["MAVEN_URL"]
-	val mavenUsername = env["MAVEN_USERNAME"]
-	val mavenPassword = env["MAVEN_PASSWORD"]
-
-	val release = mavenUrl?.contains("release")
-	val snapshot = mavenUrl?.contains("snapshot")
-
-	val publishingValid = rootProject == project && !mavenUrl.isNullOrEmpty() && !mavenUsername.isNullOrEmpty() && !mavenPassword.isNullOrEmpty()
-
-	val publishVersion = makeModrinthVersion(mod_version)
-	val snapshotPublishVersion = publishVersion + if (snapshot == true) "-SNAPSHOT" else ""
-
-	val publishGroup = rootProject.group.toString().trim(' ')
-
-	val hash = if (grgit.branch != null && grgit.branch.current() != null) grgit.branch.current().fullName else ""
-
-	publications {
-		var publish = true
-		try {
-			if (publishingValid) {
-				try {
-					val xml = ResourceGroovyMethods.getText(URL("$mavenUrl/${publishGroup.replace('.', '/')}/$snapshotPublishVersion/$publishVersion.pom"))
-					val metadata = XmlSlurper().parseText(xml)
-
-					if (metadata.getProperty("hash").equals(hash)) {
-						publish = false
-					}
-				} catch (ignored: FileNotFoundException) {
-					// No existing version was published, so we can publish
-				}
-			} else {
-				publish = false
-			}
-		} catch (e: Exception) {
-			publish = false
-			println("Unable to publish to maven. The maven server may be offline.")
-		}
-
-		if (publish) {
-			create<MavenPublication>("mavenJava") {
-				from(components["java"])
-
-				artifact(javadocJar)
-
-				pom {
-					groupId = publishGroup
-					artifactId = rootProject.base.archivesName.get().lowercase()
-					version = snapshotPublishVersion
-					withXml {
-						asNode().appendNode("properties").appendNode("hash", hash)
-					}
-				}
-			}
-		}
-	}
-	repositories {
-
-		if (publishingValid) {
-			maven {
-				url = uri(mavenUrl!!)
-
-				credentials {
-					username = mavenUsername
-					password = mavenPassword
-				}
-			}
-		} else {
-			mavenLocal()
-		}
-	}
-}
-
-val modrinth_id: String by extra
-val release_type: String by extra
-
-val modrinth_version = makeModrinthVersion(mod_version)
-val display_name = makeName(mod_version)
-
-fun makeName(version: String): String {
-	return "${version} (${minecraft_version})"
-}
-
-fun makeModrinthVersion(version: String): String {
-	return "$version-mc${minecraft_version}"
-}
-
-fun getChangelog(changelogFile: File): String {
-	val text = Files.readString(changelogFile.toPath())
-	val split = text.split("-----------------")
-	if (split.size != 2)
-		throw IllegalStateException("Malformed changelog")
-	return split[1].trim()
-}
-
-fun getBranch(): String {
-	val env = System.getenv()
-	var branch = env["GITHUB_REF"]
-	if (branch != null && branch != "") {
-		return branch.substring(branch.lastIndexOf("/") + 1)
-	}
-
-	if (grgit == null) {
-		return "unknown"
-	}
-
-	branch = grgit.branch.current().name
-	return branch.substring(branch.lastIndexOf("/") + 1)
 }

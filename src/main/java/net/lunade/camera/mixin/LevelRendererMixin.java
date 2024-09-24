@@ -69,18 +69,18 @@ public class LevelRendererMixin {
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     public void cameraPort$renderPlayer(
-		DeltaTracker deltaTracker,
-		boolean renderBlockOutline,
-		Camera camera,
-		GameRenderer gameRenderer,
-		LightTexture lightmapTextureManager,
-		Matrix4f projectionMatrix,
-		Matrix4f matrix4f,
-		CallbackInfo info,
-		@Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
-		@Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
-		@Share("cameraPort$tickRate") LocalFloatRef tickRate,
-		@Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef
+            DeltaTracker deltaTracker,
+            boolean renderBlockOutline,
+            Camera camera,
+            GameRenderer gameRenderer,
+            LightTexture lightmapTextureManager,
+            Matrix4f projectionMatrix,
+            Matrix4f matrix4f,
+            CallbackInfo info,
+            @Share("cameraPort$playerRenderedSpecial") LocalBooleanRef playerRenderedSpecial,
+            @Share("cameraPort$alreadyRendered") LocalBooleanRef alreadyRendered,
+            @Share("cameraPort$tickRate") LocalFloatRef tickRate,
+            @Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef
     ) {
         if (ClientCameraManager.possessingCamera && !ClientCameraManager.isCameraHandheld && this.minecraft.player != null) {
             Player player = this.minecraft.player;

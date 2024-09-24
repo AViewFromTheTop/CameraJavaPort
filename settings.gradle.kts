@@ -27,7 +27,11 @@ pluginManagement {
 
 rootProject.name = "Camera Java Port"
 
-fun localRepository(repo: String, dependencySub: String, kotlin: Boolean) {
+// localRepository("FrozenLib", "maven.modrinth:frozenlib", true, true)
+
+
+fun localRepository(repo: String, dependencySub: String, kotlin: Boolean, enabled: Boolean) {
+    if (!enabled) return
     println("Attempting to include local repo $repo")
 
     val github = System.getenv("GITHUB_ACTIONS") == "true"

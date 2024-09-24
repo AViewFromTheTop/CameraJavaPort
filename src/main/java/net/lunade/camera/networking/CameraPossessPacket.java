@@ -1,20 +1,18 @@
 package net.lunade.camera.networking;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lunade.camera.CameraPortMain;
+import net.lunade.camera.CameraConstants;
 import net.lunade.camera.entity.CameraEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
-
     public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            CameraPortMain.MOD_ID + "_camera_possess"
+            CameraConstants.safeString("camera_possess")
     );
     public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
             .map(CameraPossessPacket::new, CameraPossessPacket::entityId)
