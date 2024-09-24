@@ -82,6 +82,10 @@ public class PrinterMenu extends AbstractContainerMenu {
         return this.inputSlot.hasItem() && pictureSlotsSize.get() != 0;
     }
 
+    public boolean hasResultItem() {
+        return this.resultSlot.hasItem() && pictureSlotsSize.get() != 0;
+    }
+
     @Override
     public boolean stillValid(Player player) {
         return stillValid(this.access, player, RegisterBlocks.PRINTER);

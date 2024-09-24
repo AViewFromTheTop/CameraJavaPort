@@ -90,7 +90,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     }
 
     private void containerChanged() {
-        this.displayRecipes = this.menu.hasInputItem();
+        this.displayRecipes = this.menu.hasInputItem() && this.menu.hasResultItem();
         if (!this.displayRecipes) {
             this.index = 0;
         }
