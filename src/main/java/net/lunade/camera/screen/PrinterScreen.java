@@ -21,7 +21,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         final int size = PhotographLoader.load();
-        final String selected = PhotographLoader.get(0).toString();
+        final String selected = PhotographLoader.get(0).getPath();
         send(size, selected);
         menu.registerUpdateListener(this::containerChanged);
         --this.titleLabelY;
@@ -74,12 +74,12 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         if(isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if(index == PhotographLoader.getSize() - 1) index = 0;
             else index++;
-            send(PhotographLoader.getSize(), PhotographLoader.get(index).toString());
+            send(PhotographLoader.getSize(), PhotographLoader.get(index).getPath());
             return true;
         } else if(isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if(index == 0) index = PhotographLoader.getSize() - 1;
             else index--;
-            send(PhotographLoader.getSize(), PhotographLoader.get(index).toString());
+            send(PhotographLoader.getSize(), PhotographLoader.get(index).getPath());
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

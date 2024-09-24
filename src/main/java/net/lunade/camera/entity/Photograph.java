@@ -1,9 +1,12 @@
 package net.lunade.camera.entity;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraEntityTypes;
 import net.lunade.camera.image_transfer.ServerTexture;
+import net.lunade.camera.registry.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +34,11 @@ import org.jetbrains.annotations.Nullable;
 public class Photograph extends HangingEntity {
     private static final EntityDataAccessor<String> DATA_PHOTOGRAPH = SynchedEntityData.defineId(Photograph.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(Photograph.class, EntityDataSerializers.INT);
+    public static final MapCodec<String> ID_MAP_CODEC;
+    public static final Codec<String> ID_CODEC;
+
+    public static final String PICTURE_NAME_KEY = "PhotographName";
+    public static final String PICTURE_SIZE_KEY = "PhotographSize";
 
     @Environment(EnvType.CLIENT)
     public ServerTexture serverTexture;
@@ -81,8 +89,8 @@ public class Photograph extends HangingEntity {
     public void addAdditionalSaveData(@NotNull CompoundTag nbt) {
         nbt.putByte("facing", (byte) this.direction.get2DDataValue());
         super.addAdditionalSaveData(nbt);
-        nbt.putString("PhotographName", this.getPhotographName());
-        nbt.putInt("PhotographSize", this.getSize());
+        nbt.putString(PICTURE_NAME_KEY, this.getPhotographName());
+        nbt.putInt(PICTURE_SIZE_KEY, this.getSize());
     }
 
     @Override
@@ -90,8 +98,8 @@ public class Photograph extends HangingEntity {
         this.direction = Direction.from2DDataValue(nbt.getByte("facing"));
         super.readAdditionalSaveData(nbt);
         this.setDirection(this.direction);
-        if (nbt.contains("PhotographName")) this.setPhotographName(nbt.getString("PhotographName"));
-        if (nbt.contains("PhotographSize")) this.setSize(nbt.getInt("PhotographSize"));
+        if (nbt.contains(PICTURE_NAME_KEY)) this.setPhotographName(nbt.getString(PICTURE_NAME_KEY));
+        if (nbt.contains(PICTURE_SIZE_KEY)) this.setSize(nbt.getInt(PICTURE_SIZE_KEY));
     }
 
     @Override
@@ -117,8 +125,7 @@ public class Photograph extends HangingEntity {
             if (breaker instanceof Player player && player.hasInfiniteMaterials()) {
                 return;
             }
-
-            this.spawnAtLocation(Items.PAINTING);
+            this.spawnAtLocation(RegisterItems.PICTURE);
         }
     }
 
@@ -156,5 +163,10 @@ public class Photograph extends HangingEntity {
     @Override
     public ItemStack getPickResult() {
         return new ItemStack(Items.PAINTING);
+    }
+
+    static {
+        ID_MAP_CODEC = Codec.STRING.fieldOf(PICTURE_NAME_KEY);
+        ID_CODEC = ID_MAP_CODEC.codec();
     }
 }

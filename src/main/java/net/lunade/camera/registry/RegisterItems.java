@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 public class RegisterItems {
-    public static final PictureItem PHOTO_ITEM = new PictureItem(new Item.Properties().stacksTo(1));
+    public static final PictureItem PICTURE = new PictureItem(new Item.Properties().stacksTo(1));
 
     public static final DataComponentType<String> PHOTO_COMPONENT = DataComponentType.<String>builder()
             .persistent(PictureComponent.CODEC)
@@ -20,8 +20,8 @@ public class RegisterItems {
             .build();
 
     public static void register() {
-        Registry.register(BuiltInRegistries.ITEM, CameraConstants.id("picture"), PHOTO_ITEM);
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PHOTO_ITEM));
+        Registry.register(BuiltInRegistries.ITEM, CameraConstants.id("picture"), PICTURE);
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PICTURE));
 
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, CameraConstants.id("picture_component"), PHOTO_COMPONENT);
     }
