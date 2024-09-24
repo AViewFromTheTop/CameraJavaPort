@@ -122,19 +122,6 @@ public class ServerTexture extends SimpleTexture {
         try {
             nativeImage = NativeImage.read(stream);
         } catch (Exception e) {
-            LOGGER.warn("Error while loading the skin texture", e);
-        }
-
-        return nativeImage;
-    }
-
-    @Nullable
-    private NativeImage load(byte[] bytes) {
-        NativeImage nativeImage = null;
-
-        try {
-            nativeImage = NativeImage.read(bytes);
-        } catch (Exception e) {
             LOGGER.warn("Error while loading server texture", e);
         }
 
