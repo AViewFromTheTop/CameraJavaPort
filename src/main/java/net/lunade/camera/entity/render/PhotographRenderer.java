@@ -32,13 +32,13 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
     public void render(Photograph photograph, float f, float g, @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, int i) {
         if (photograph.serverTexture == null) {
             photograph.serverTexture = new ServerTexture(
-                    "photograph",
+                    "photographs",
                     photograph.getPhotographName() + ".png",
-                    CameraConstants.id("photograph/empty"),
+                    CameraConstants.id("photographs/empty"),
                     () -> {
                     }
             );
-            Minecraft.getInstance().getTextureManager().register(CameraConstants.id("photograph/" + photograph.getPhotographName()), photograph.serverTexture);
+            Minecraft.getInstance().getTextureManager().register(CameraConstants.id("photographs/" + photograph.getPhotographName()), photograph.serverTexture);
         }
         matrices.pushPose();
         matrices.mulPose(Axis.YP.rotationDegrees(180F - f));
@@ -57,12 +57,12 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
         return Minecraft.getInstance().getPaintingTextures().getBackSprite().atlasLocation();
     }
 
-    public ResourceLocation getPhotographLocation(Photograph photograph) {
-        return CameraConstants.id("photograph/" + photograph.getPhotographName());
+    public ResourceLocation getPhotographLocation(@NotNull Photograph photograph) {
+        return CameraConstants.id("photographs/" + photograph.getPhotographName());
     }
 
     private void renderPhotograph(
-            PoseStack matrices, VertexConsumer photoConsumer, Photograph entity
+            @NotNull PoseStack matrices, VertexConsumer photoConsumer, Photograph entity
     ) {
         PoseStack.Pose pose = matrices.last();
         float f = (float) (-2D) / 2.0F;
@@ -98,10 +98,11 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
 
                 int ad = LevelRenderer.getLightColor(entity.level(), new BlockPos(aa, ab, ac));
 
-                float ae = (float)(d * (2D - u));
-                float af = (float)(d * (2D - (u + 1)));
-                float ag = (float)(e * (2D - v));
-                float ah = (float)(e * (2D - (v + 1)));
+                float size = entity.getSize();
+                float ae = (float)(d * (size - u));
+                float af = (float)(d * (size - (u + 1F)));
+                float ag = (float)(e * (size - v));
+                float ah = (float)(e * (size - (v + 1F)));
                 this.vertex(pose, photoConsumer, w, z, af, ag, -0.03125F, 0, 0, -1, ad);
                 this.vertex(pose, photoConsumer, x, z, ae, ag, -0.03125F, 0, 0, -1, ad);
                 this.vertex(pose, photoConsumer, x, y, ae, ah, -0.03125F, 0, 0, -1, ad);

@@ -30,9 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Photograph extends HangingEntity {
-    private static final EntityDataAccessor<String> DATA_PHOTOGRAPH = SynchedEntityData.defineId(
-            Photograph.class, EntityDataSerializers.STRING
-    );
+    private static final EntityDataAccessor<String> DATA_PHOTOGRAPH = SynchedEntityData.defineId(Photograph.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(Photograph.class, EntityDataSerializers.INT);
 
     @Environment(EnvType.CLIENT)
     public ServerTexture serverTexture;
@@ -57,6 +56,7 @@ public class Photograph extends HangingEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         builder.define(DATA_PHOTOGRAPH, "test");
+        builder.define(DATA_SIZE, 2);
     }
 
     public String getPhotographName() {
@@ -67,16 +67,26 @@ public class Photograph extends HangingEntity {
         this.entityData.set(DATA_PHOTOGRAPH, string);
     }
 
+    public int getSize() {
+        return this.entityData.get(DATA_SIZE);
+    }
+
+    public void setSize(int size) {
+        this.entityData.set(DATA_SIZE, size);
+    }
+
     @Override
-    public void addAdditionalSaveData(CompoundTag nbt) {
+    public void addAdditionalSaveData(@NotNull CompoundTag nbt) {
         nbt.putString("photograph", getPhotographName());
+        nbt.putInt("size", this.getSize());
         nbt.putByte("facing", (byte) this.direction.get2DDataValue());
         super.addAdditionalSaveData(nbt);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbt) {
+    public void readAdditionalSaveData(@NotNull CompoundTag nbt) {
         this.setPhotographName(nbt.getString("photograph"));
+        this.setSize(nbt.getInt("size"));
         this.direction = Direction.from2DDataValue(nbt.getByte("facing"));
         super.readAdditionalSaveData(nbt);
         this.setDirection(this.direction);

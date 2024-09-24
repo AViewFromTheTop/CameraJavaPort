@@ -7,7 +7,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortMain;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -93,7 +92,7 @@ public class ClientCameraManager {
             } catch (InterruptedException ignored) {
             }
 
-            Screenshot.grab(gameDirectory, renderTarget, (text) -> minecraft.execute(() -> minecraft.gui.getChat().addMessage(text)));
+            PhotographScreenshot.grab(gameDirectory, renderTarget, (text) -> minecraft.execute(() -> minecraft.gui.getChat().addMessage(text)));
         } catch (Exception ignored) {
         } finally {
             gameRenderer.setRenderBlockOutline(true);
