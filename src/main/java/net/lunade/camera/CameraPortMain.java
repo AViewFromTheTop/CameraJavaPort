@@ -4,6 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lunade.camera.impl.CameraItem;
 import net.lunade.camera.networking.CameraNetworking;
+import net.lunade.camera.registry.RegisterBlocks;
+import net.lunade.camera.registry.RegisterItems;
+import net.lunade.camera.registry.RegisterMenuTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +17,7 @@ import net.minecraft.world.item.Items;
 
 public class CameraPortMain implements ModInitializer {
     public static final CameraItem CAMERA_ITEM = new CameraItem(CameraEntityTypes.CAMERA, 0, 0, new Item.Properties());
+
     public static final CameraItem DISC_CAMERA_ITEM = new CameraItem(CameraEntityTypes.DISC_CAMERA, 0, 0, new Item.Properties());
     public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.break"));
     public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.fall"));
@@ -40,6 +44,9 @@ public class CameraPortMain implements ModInitializer {
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.getLocation(), CAMERA_ADJUST);
         registerCamera(DISC_CAMERA_ITEM, CameraConstants.id("disc_camera"));
         registerCamera(CAMERA_ITEM, CameraConstants.id("camera"));
+        RegisterBlocks.register();
+        RegisterItems.register();
+        RegisterMenuTypes.register();
 
         CameraNetworking.init();
     }

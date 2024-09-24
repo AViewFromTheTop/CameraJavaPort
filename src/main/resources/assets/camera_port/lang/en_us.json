@@ -1,8 +1,10 @@
 {
   "entity.camera_port.camera": "Camera",
   "item.camera_port.camera": "Camera",
+  "item.camera_port.picture": "Picture",
   "entity.camera_port.small_camera": "Disc Camera",
   "item.camera_port.disc_camera": "Disc Camera",
+  "item.camera_port.picture_tooltip": "Picture ID: %s",
   "subtitle.entity.camera.crack": "Camera cracks",
   "subtitle.entity.camera.adjust": "Tripod adjusts",
   "subtitle.entity.camera.snap": "Shutter clicks",
@@ -10,5 +12,7 @@
   "subtitle.entity.camera.place": "Camera placed",
   "subtitle.entity.camera.hit": "Tripod buckles",
   "subtitle.entity.camera.fall": "Tripod lands",
-  "subtitle.entity.camera.break": "Tripod breaks"
+  "subtitle.entity.camera.break": "Tripod breaks",
+  "container.printer": "Printer",
+  "block.camera_port.printer": "Printer"
 }

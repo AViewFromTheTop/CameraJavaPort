@@ -21,6 +21,10 @@ public class CameraNetworking {
         registry.register(FileTransferPacket.PACKET_TYPE, FileTransferPacket.STREAM_CODEC);
         c2sRegistry.register(FileTransferPacket.PACKET_TYPE, FileTransferPacket.STREAM_CODEC);
 
+        c2sRegistry.register(PrinterAskForSlotsPacket.PACKET_TYPE, PrinterAskForSlotsPacket.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(PrinterAskForSlotsPacket.PACKET_TYPE, PrinterAskForSlotsPacket::handle);
+
         ServerPlayNetworking.registerGlobalReceiver(FileTransferPacket.PACKET_TYPE,
                 (packet, ctx) -> {
                     if (packet.request()) {
