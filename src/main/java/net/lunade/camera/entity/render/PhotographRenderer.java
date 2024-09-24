@@ -30,19 +30,20 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
 
     @Override
     public void render(Photograph photograph, float f, float g, @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, int i) {
-        if (photograph.serverTexture == null) {
+        String photographName = photograph.getPhotographName();
+        ResourceLocation photoLocation = this.getPhotographLocation(photograph);
+        if (photograph.serverTexture == null && !photographName.isEmpty()) {
             photograph.serverTexture = new ServerTexture(
                     "photographs",
                     photograph.getPhotographName() + ".png",
                     CameraConstants.id("photographs/empty"),
-                    () -> {
-                    }
+                    () -> {}
             );
-            Minecraft.getInstance().getTextureManager().register(CameraConstants.id("photographs/" + photograph.getPhotographName()), photograph.serverTexture);
+            Minecraft.getInstance().getTextureManager().register(photoLocation, photograph.serverTexture);
         }
         matrices.pushPose();
         matrices.mulPose(Axis.YP.rotationDegrees(180F - f));
-        VertexConsumer photoConsumer = vertexConsumers.getBuffer(RenderType.entitySolid(this.getPhotographLocation(photograph)));
+        VertexConsumer photoConsumer = vertexConsumers.getBuffer(RenderType.entitySolid(photoLocation));
         this.renderPhotograph(
                 matrices,
                 photoConsumer,

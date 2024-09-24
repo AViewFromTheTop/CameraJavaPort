@@ -35,7 +35,7 @@ public class CameraEntityTypes {
             EntityType.Builder.<Photograph>of(Photograph::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .eyeHeight(0.81F)
-                    .clientTrackingRange(8)
+                    .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(CameraConstants.string("photograph"))
     );

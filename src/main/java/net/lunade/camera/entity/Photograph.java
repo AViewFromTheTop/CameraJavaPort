@@ -2,6 +2,7 @@ package net.lunade.camera.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lunade.camera.CameraEntityTypes;
 import net.lunade.camera.image_transfer.ServerTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,7 +40,7 @@ public class Photograph extends HangingEntity {
     }
 
     private Photograph(Level world, BlockPos pos) {
-        super(EntityType.PAINTING, world, pos);
+        super(CameraEntityTypes.PHOTOGRAPH, world, pos);
     }
 
     public Photograph(Level world, BlockPos pos, Direction direction) {
@@ -51,6 +52,13 @@ public class Photograph extends HangingEntity {
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         builder.define(DATA_PHOTOGRAPH, "test");
         builder.define(DATA_SIZE, 2);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+        if (DATA_SIZE.equals(data)) {
+            this.recalculateBoundingBox();
+        }
     }
 
     public String getPhotographName() {
@@ -71,33 +79,35 @@ public class Photograph extends HangingEntity {
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag nbt) {
-        nbt.putString("photograph", getPhotographName());
-        nbt.putInt("size", this.getSize());
         nbt.putByte("facing", (byte) this.direction.get2DDataValue());
         super.addAdditionalSaveData(nbt);
+        nbt.putString("PhotographName", this.getPhotographName());
+        nbt.putInt("PhotographSize", this.getSize());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag nbt) {
-        this.setPhotographName(nbt.getString("photograph"));
-        this.setSize(nbt.getInt("size"));
         this.direction = Direction.from2DDataValue(nbt.getByte("facing"));
         super.readAdditionalSaveData(nbt);
         this.setDirection(this.direction);
+        if (nbt.contains("PhotographName")) this.setPhotographName(nbt.getString("PhotographName"));
+        if (nbt.contains("PhotographSize")) this.setSize(nbt.getInt("PhotographSize"));
     }
 
     @Override
     protected @NotNull AABB calculateBoundingBox(BlockPos pos, Direction direction) {
+        int size = this.getSize();
         Vec3 vec3 = Vec3.atCenterOf(pos).relative(direction, -0.46875);
-        double d = 0.5D;
-        double e = 0.5D;
-        Direction direction2 = direction.getCounterClockWise();
-        Vec3 vec32 = vec3.relative(direction2, d).relative(Direction.UP, e);
+        double sizeOffset = this.offsetForSize(size);
+        Vec3 vec32 = vec3.relative(direction.getCounterClockWise(), sizeOffset).relative(Direction.UP, sizeOffset);
         Direction.Axis axis = direction.getAxis();
-        double g = axis == Direction.Axis.X ? 0.0625 : 2D;
-        double h = 2D;
-        double i = axis == Direction.Axis.Z ? 0.0625 : 2D;
-        return AABB.ofSize(vec32, g, h, i);
+        double g = axis == Direction.Axis.X ? 0.0625 : (double)size;
+        double i = axis == Direction.Axis.Z ? 0.0625 : (double)size;
+        return AABB.ofSize(vec32, g, size, i);
+    }
+
+    private double offsetForSize(int width) {
+        return width % 2 == 0 ? 0.5 : 0.0;
     }
 
     @Override

@@ -43,7 +43,6 @@ public class ServerTexture extends SimpleTexture {
         this.destPath = destPath;
         this.fileName = fileName;
         this.onDownloaded = callback;
-        ClientPlayNetworking.send(FileTransferPacket.createRequest(this.destPath, this.fileName));
         WAITING_TEXTURES.put(this.destPath + "/" + this.fileName, this);
     }
 
@@ -107,6 +106,7 @@ public class ServerTexture extends SimpleTexture {
             nativeImage = this.load(fileInputStream);
             fileInputStream.close();
         } else {
+			ClientPlayNetworking.send(FileTransferPacket.createRequest(this.destPath, this.fileName));
             nativeImage = null;
         }
 
