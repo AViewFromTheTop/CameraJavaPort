@@ -23,7 +23,7 @@ public class PhotographLoader {
         return LOADING_PICTURES.get(index);
     }
 
-    private static ResourceLocation get(String pictureName) {
+    public static ResourceLocation get(String pictureName) {
         final var location = getPhotographLocation(pictureName);
         if(!LOADED_TEXTURES.contains(location)) {
             final var serverTexture = new ServerTexture(

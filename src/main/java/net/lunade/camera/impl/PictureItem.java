@@ -1,14 +1,11 @@
 package net.lunade.camera.impl;
 
+import net.lunade.camera.CameraConstants;
 import net.lunade.camera.CameraEntityTypes;
 import net.lunade.camera.entity.Photograph;
-import net.lunade.camera.registry.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -17,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -25,7 +21,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -72,16 +67,15 @@ public class PictureItem extends Item {
         final var a = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         AtomicReference<ResourceLocation> re = new AtomicReference<>();
         if(!a.isEmpty()) {
-            a.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(ResourceLocation.parse(value)), () -> {});
+            a.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(CameraConstants.id("photographs/" + value)), () -> {});
         }
         return re.get();
     }
 
-    /*
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         final var a = getPhoto(stack);
-        if(a != null) return Optional.of(new PictureTooltip(a));
+        if(a != null) return Optional.of(new PictureTooltipComponent(a));
         return Optional.empty();
-    }*/
+    }
 }
