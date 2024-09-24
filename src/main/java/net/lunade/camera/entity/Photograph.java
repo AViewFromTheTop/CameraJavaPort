@@ -49,10 +49,6 @@ public class Photograph extends HangingEntity {
         this.setDirection(direction);
     }
 
-    private static int variantArea(Holder<PaintingVariant> holder) {
-        return holder.value().area();
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         builder.define(DATA_PHOTOGRAPH, "test");
