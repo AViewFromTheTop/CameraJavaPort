@@ -82,8 +82,8 @@ public class PrinterMenu extends AbstractContainerMenu {
         return this.inputSlot.hasItem() && pictureSlotsSize.get() != 0;
     }
 
-    public boolean hasResultItem() {
-        return this.resultSlot.hasItem() && pictureSlotsSize.get() != 0;
+    public ItemStack getInputItem() {
+        return this.inputSlot.getItem();
     }
 
     @Override
