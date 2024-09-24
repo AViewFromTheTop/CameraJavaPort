@@ -33,12 +33,12 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
         if (photograph.serverTexture == null) {
             photograph.serverTexture = new ServerTexture(
                     "photograph",
-                    photograph.getPhotographFile() + ".png",
+                    photograph.getPhotographName() + ".png",
                     CameraConstants.id("photograph/empty"),
                     () -> {
                     }
             );
-            Minecraft.getInstance().getTextureManager().register(CameraConstants.id("photograph/" + photograph.getPhotographFile()), photograph.serverTexture);
+            Minecraft.getInstance().getTextureManager().register(CameraConstants.id("photograph/" + photograph.getPhotographName()), photograph.serverTexture);
         }
         matrices.pushPose();
         matrices.mulPose(Axis.YP.rotationDegrees(180F - f));
@@ -58,7 +58,7 @@ public class PhotographRenderer extends EntityRenderer<Photograph> {
     }
 
     public ResourceLocation getPhotographLocation(Photograph photograph) {
-        return CameraConstants.id("photograph/" + photograph.getPhotographFile());
+        return CameraConstants.id("photograph/" + photograph.getPhotographName());
     }
 
     private void renderPhotograph(

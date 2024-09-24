@@ -59,22 +59,24 @@ public class Photograph extends HangingEntity {
         builder.define(DATA_PHOTOGRAPH, "test");
     }
 
-    public String getPhotographFile() {
+    public String getPhotographName() {
         return this.entityData.get(DATA_PHOTOGRAPH);
     }
 
-    public void setPhotographFile(String string) {
+    public void setPhotographName(String string) {
         this.entityData.set(DATA_PHOTOGRAPH, string);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {
+        nbt.putString("photograph", getPhotographName());
         nbt.putByte("facing", (byte) this.direction.get2DDataValue());
         super.addAdditionalSaveData(nbt);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
+        this.setPhotographName(nbt.getString("photograph"));
         this.direction = Direction.from2DDataValue(nbt.getByte("facing"));
         super.readAdditionalSaveData(nbt);
         this.setDirection(this.direction);
