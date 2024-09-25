@@ -1,9 +1,10 @@
 package net.lunade.camera.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lunade.camera.CameraConstants;
 import net.lunade.camera.impl.client.PhotographLoader;
-import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.menu.PrinterMenu;
 import net.lunade.camera.networking.PrinterAskForSlotsPacket;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
+@Environment(EnvType.CLIENT)
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
     private boolean displayRecipes = false;
@@ -21,12 +23,16 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        final int size = PhotographLoader.load();
-        final String selected = PhotographLoader.get(0).getPath();
-        send(size, selected);
+        final int size = PhotographLoader.loadLocalPhotographs();
+        if (PhotographLoader.hasAnyLocalPhotographs()) {
+            final String selected = PhotographLoader.getLocalPhotograph(0).getPath();
+            send(size, selected);
+        } else {
+            send(0, "");
+        }
         menu.registerUpdateListener(this::containerChanged);
         --this.titleLabelY;
-        this.inventoryLabelY+=56;
+        this.inventoryLabelY += 56;
         this.imageHeight = 222;
     }
 
@@ -42,17 +48,17 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         graphics.blit(TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
         if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
-            final var middle = PhotographLoader.getInfinite(index);
+            final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
             if (middle != null)
                 graphics.blit(middle, i + 64, j + 53, 0, 0, 48, 48, 48, 48);
             if (size != 1) {
-                final var right = PhotographLoader.getInfinite(index + 1);
+                final var right = PhotographLoader.getInfiniteLocalPhotograph(index + 1);
                 if (right != null) {
                     graphics.blit(right, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
                     boolean next = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
                     graphics.blit(TEXTURE, i + 119, j + 61, 208, next ? 32 : 0, 32, 32);
                 }
-                final var left = PhotographLoader.getInfinite(index - 1);
+                final var left = PhotographLoader.getInfiniteLocalPhotograph(index - 1);
                 if (left != null) {
                     graphics.blit(left, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
                     boolean next = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
@@ -75,12 +81,12 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         if (isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if (this.index == PhotographLoader.getSize() - 1) this.index = 0;
             else this.index++;
-            send(PhotographLoader.getSize(), PhotographLoader.get(this.index).getPath());
+            send(PhotographLoader.getSize(), PhotographLoader.getLocalPhotograph(this.index).getPath());
             return true;
         } else if (isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if (this.index == 0) this.index = PhotographLoader.getSize() - 1;
             else this.index--;
-            send(PhotographLoader.getSize(), PhotographLoader.get(this.index).getPath());
+            send(PhotographLoader.getSize(), PhotographLoader.getLocalPhotograph(this.index).getPath());
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

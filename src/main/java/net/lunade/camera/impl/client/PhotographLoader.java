@@ -15,19 +15,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 @Environment(EnvType.CLIENT)
 public class PhotographLoader {
     private static final TextureManager TEXTURE_MANAGER = Minecraft.getInstance().getTextureManager();
     private static final ArrayList<ResourceLocation> LOADED_TEXTURES = new ArrayList<>();
-    private static final ArrayList<ResourceLocation> LOADING_TEXTURES = new ArrayList<>();
+    private static final ArrayList<ResourceLocation> LOCAL_PHOTOGRAPHS = new ArrayList<>();
 
-    public static ResourceLocation get(int index) {
-        return LOADING_TEXTURES.get(index);
+    public static boolean hasAnyLocalPhotographs() {
+        return !LOCAL_PHOTOGRAPHS.isEmpty();
     }
 
-    public static @NotNull ResourceLocation get(String pictureName) {
+    public static ResourceLocation getLocalPhotograph(int index) {
+        return LOCAL_PHOTOGRAPHS.get(index);
+    }
+
+    public static @NotNull ResourceLocation getLocalPhotograph(String pictureName) {
         final var location = getPhotographLocation(pictureName);
         if (!LOADED_TEXTURES.contains(location)) {
             final var serverTexture = new ServerTexture(
@@ -43,33 +47,33 @@ public class PhotographLoader {
     }
 
     public static int getSize() {
-        return LOADING_TEXTURES.size();
+        return LOCAL_PHOTOGRAPHS.size();
     }
 
-    public static @Nullable ResourceLocation getInfinite(int index) {
-        if (LOADING_TEXTURES.isEmpty()) return null;
-        int size = LOADING_TEXTURES.size();
+    public static @Nullable ResourceLocation getInfiniteLocalPhotograph(int index) {
+        if (LOCAL_PHOTOGRAPHS.isEmpty()) return null;
+        int size = LOCAL_PHOTOGRAPHS.size();
         int adjustedIndex = ((index % size) + size) % size;
-        return get(adjustedIndex);
+        return getLocalPhotograph(adjustedIndex);
     }
 
     private static @NotNull ResourceLocation getPhotographLocation(@NotNull String name) {
         return CameraConstants.id("photographs/" + name);
     }
 
-    public static int load() {
+    public static int loadLocalPhotographs() {
         final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").toFile();
-        final var list = file.listFiles();
-        LOADING_TEXTURES.clear();
-        if (list != null) {
-            for (String name : Stream.of(list).map(File::getName).toList()) {
-                name = name.replace(".png", "");
-                LOADING_TEXTURES.add(PhotographLoader.get(name));
-            }
-        } else {
-            //TODO: Something if the photograph folder does not exist
+        File[] fileList = file.listFiles();
+        if (fileList == null) return 0;
+        final var fileStream = Arrays.stream(fileList)
+                .filter(File::isFile)
+                .filter(file1 -> file1.getName().endsWith(".png"));
+        LOCAL_PHOTOGRAPHS.clear();
+        for (String name : fileStream.map(File::getName).toList()) {
+            name = name.replace(".png", "");
+            LOCAL_PHOTOGRAPHS.add(PhotographLoader.getLocalPhotograph(name));
         }
-        return LOADING_TEXTURES.size();
+        return LOCAL_PHOTOGRAPHS.size();
     }
 
     /**

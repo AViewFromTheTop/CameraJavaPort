@@ -1,5 +1,7 @@
 package net.lunade.camera.networking;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lunade.camera.CameraConstants;
 import net.lunade.camera.menu.PrinterMenu;
@@ -29,6 +31,7 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
         return PACKET_TYPE;
     }
 
+    @Environment(EnvType.CLIENT)
     public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
         ServerPlayer player = context.player();
         if (player != null) {

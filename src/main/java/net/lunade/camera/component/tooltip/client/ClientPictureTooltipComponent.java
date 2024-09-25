@@ -33,7 +33,7 @@ public class ClientPictureTooltipComponent implements ClientTooltipComponent {
     @Override
     public void renderImage(Font textRenderer, int x, int y, @NotNull GuiGraphics graphics) {
         ResourceLocation photoLocation = this.component.id();
-        PhotographLoader.get(photoLocation.getPath().replace("photographs/", ""));
+        PhotographLoader.getLocalPhotograph(photoLocation.getPath().replace("photographs/", ""));
         graphics.blit(
                 photoLocation,
                 x + PHOTOGRAPH_RENDER_OFFSET_X,
