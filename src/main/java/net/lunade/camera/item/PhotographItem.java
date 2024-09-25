@@ -61,14 +61,14 @@ public class PhotographItem extends Item {
     }
 
     protected boolean mayPlace(@NotNull Player player, @NotNull Direction side, ItemStack stack, BlockPos pos) {
-        return player.mayUseItemAt(pos, side, stack);
+        return !side.getAxis().isVertical() && player.mayUseItemAt(pos, side, stack);
     }
 
     public static @Nullable ResourceLocation getPhoto(@NotNull ItemStack stack) {
-        final var a = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
+        final var entityDataComponent = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         AtomicReference<ResourceLocation> re = new AtomicReference<>();
-        if(!a.isEmpty()) {
-            a.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(CameraConstants.id("photographs/" + value)), () -> {});
+        if (!entityDataComponent.isEmpty()) {
+            entityDataComponent.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(CameraConstants.id("photographs/" + value)), () -> {});
         }
         return re.get();
     }

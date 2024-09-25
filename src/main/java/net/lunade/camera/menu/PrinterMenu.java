@@ -11,7 +11,6 @@ import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.registry.CameraBlocks;
 import net.lunade.camera.registry.CameraItems;
 import net.lunade.camera.registry.CameraMenuTypes;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;

@@ -19,7 +19,7 @@ import java.util.List;
 
 @SuppressWarnings("all")
 @Environment(EnvType.CLIENT)
-public class PhotoScreen extends Screen {
+public class PhotographScreen extends Screen {
     private final ResourceLocation BASE_IMAGE = CameraConstants.id("textures/gui/picture_screen.png");
     private final List<ResourceLocation> IMAGES = new ArrayList<>();
 
@@ -32,15 +32,15 @@ public class PhotoScreen extends Screen {
     private Button confirm;
     private final int rows = 3;
 
-    public PhotoScreen() {
+    public PhotographScreen() {
         super(GameNarrator.NO_TITLE); //Add a title to the screen if you want idfk if it renders or whatever
     }
 
     @Override
     protected void init() {
         super.init();
-        this.leftPos = (this.width - 176)/2;
-        this.topPos = (this.height - 166)/2;
+        this.leftPos = (this.width - 176) / 2;
+        this.topPos = (this.height - 166) / 2;
     }
 
     @Override

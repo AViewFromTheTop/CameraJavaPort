@@ -20,15 +20,16 @@ import java.util.stream.Stream;
 @Environment(EnvType.CLIENT)
 public class PhotographLoader {
     private static final TextureManager TEXTURE_MANAGER = Minecraft.getInstance().getTextureManager();
-    private static final ArrayList<ResourceLocation> LOADING_PICTURES = new ArrayList<>();
+    private static final ArrayList<ResourceLocation> LOADED_TEXTURES = new ArrayList<>();
+    private static final ArrayList<ResourceLocation> LOADING_TEXTURES = new ArrayList<>();
 
     public static ResourceLocation get(int index) {
-        return LOADING_PICTURES.get(index);
+        return LOADING_TEXTURES.get(index);
     }
 
     public static @NotNull ResourceLocation get(String pictureName) {
         final var location = getPhotographLocation(pictureName);
-        if (!(TEXTURE_MANAGER.getTexture(location, null) instanceof ServerTexture serverTexture)) {
+        if (!LOADED_TEXTURES.contains(location)) {
             final var serverTexture = new ServerTexture(
                     "photographs",
                     pictureName + ".png",
@@ -36,19 +37,18 @@ public class PhotographLoader {
                     () -> {}
             );
             TEXTURE_MANAGER.register(location, serverTexture);
-        } else {
-            serverTexture.updateReferenceTime();
+            LOADED_TEXTURES.add(location);
         }
         return location;
     }
 
     public static int getSize() {
-        return LOADING_PICTURES.size();
+        return LOADING_TEXTURES.size();
     }
 
     public static @Nullable ResourceLocation getInfinite(int index) {
-        if (LOADING_PICTURES.isEmpty()) return null;
-        int size = LOADING_PICTURES.size();
+        if (LOADING_TEXTURES.isEmpty()) return null;
+        int size = LOADING_TEXTURES.size();
         int adjustedIndex = ((index % size) + size) % size;
         return get(adjustedIndex);
     }
@@ -60,16 +60,16 @@ public class PhotographLoader {
     public static int load() {
         final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").toFile();
         final var list = file.listFiles();
-        LOADING_PICTURES.clear();
+        LOADING_TEXTURES.clear();
         if (list != null) {
             for (String name : Stream.of(list).map(File::getName).toList()) {
                 name = name.replace(".png", "");
-                LOADING_PICTURES.add(PhotographLoader.get(name));
+                LOADING_TEXTURES.add(PhotographLoader.get(name));
             }
         } else {
             //TODO: Something if the photograph folder does not exist
         }
-        return LOADING_PICTURES.size();
+        return LOADING_TEXTURES.size();
     }
 
     /**
