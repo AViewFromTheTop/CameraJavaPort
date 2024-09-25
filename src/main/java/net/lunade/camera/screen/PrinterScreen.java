@@ -3,7 +3,7 @@ package net.lunade.camera.screen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lunade.camera.CameraConstants;
 import net.lunade.camera.impl.client.PhotographLoader;
-import net.lunade.camera.item.PictureItem;
+import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.menu.PrinterMenu;
 import net.lunade.camera.networking.PrinterAskForSlotsPacket;
 import net.minecraft.client.gui.GuiGraphics;
@@ -91,7 +91,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     }
 
     private void containerChanged() {
-        this.displayRecipes = this.menu.hasInputItem() && this.menu.getInputItem().getItem() instanceof PictureItem;
+        this.displayRecipes = this.menu.hasInputItem() && this.menu.getInputItem().getItem() instanceof PhotographItem;
         if (!this.displayRecipes) {
             this.index = 0;
         }

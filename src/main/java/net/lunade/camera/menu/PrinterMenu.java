@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.impl.client.PhotographLoader;
-import net.lunade.camera.item.PictureItem;
+import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.registry.CameraBlocks;
 import net.lunade.camera.registry.CameraItems;
 import net.lunade.camera.registry.CameraMenuTypes;
@@ -110,11 +110,11 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     void setupResultSlot() {
-        if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().getItem() instanceof PictureItem) {
-            ItemStack stack = new ItemStack(CameraItems.PICTURE);
+        if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().getItem() instanceof PhotographItem) {
+            ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
             final CompoundTag tag = new CompoundTag();
             tag.putString(Photograph.PICTURE_NAME_KEY, this.temp.replace("photographs/", ""));
-            tag.putString("id", "picture");
+            tag.putString("id", "photograph");
             stack.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
             this.resultSlot.set(stack);
         } else {
@@ -146,7 +146,7 @@ public class PrinterMenu extends AbstractContainerMenu {
                 slot.onQuickCraft(itemStack1, itemStack);
             } else if (fromIndex == 0) {
                 if (!this.moveItemStackTo(itemStack1, 2, 38, true)) return ItemStack.EMPTY;
-            } else if (itemStack1.getItem() instanceof PictureItem) {
+            } else if (itemStack1.getItem() instanceof PhotographItem) {
                 if (!this.moveItemStackTo(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
             } else if(fromIndex >= 2 && fromIndex < 29) {
                 if (!this.moveItemStackTo(itemStack1, 29, 38, false)) return ItemStack.EMPTY;

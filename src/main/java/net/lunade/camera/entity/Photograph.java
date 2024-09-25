@@ -28,6 +28,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +68,23 @@ public class Photograph extends HangingEntity {
         if (DATA_SIZE.equals(data)) {
             this.recalculateBoundingBox();
         }
+    }
+
+    @Override
+    protected void setDirection(Direction facing) {
+        Validate.notNull(facing);
+        this.direction = facing;
+        if (facing.getAxis().isHorizontal()) {
+            this.setXRot(0F);
+            this.setYRot(this.direction.get2DDataValue() * 90F);
+        } else {
+            this.setXRot(-90F * facing.getAxisDirection().getStep());
+            this.setYRot(0F);
+        }
+
+        this.xRotO = this.getXRot();
+        this.yRotO = this.getYRot();
+        this.recalculateBoundingBox();
     }
 
     public String getPhotographName() {
@@ -121,11 +139,11 @@ public class Photograph extends HangingEntity {
     @Override
     public void dropItem(@Nullable Entity breaker) {
         if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
+            this.playSound(SoundEvents.PAINTING_BREAK, 1F, 1F);
             if (breaker instanceof Player player && player.hasInfiniteMaterials()) {
                 return;
             }
-            this.spawnAtLocation(CameraItems.PICTURE);
+            this.spawnAtLocation(CameraItems.PHOTOGRAPH);
         }
     }
 

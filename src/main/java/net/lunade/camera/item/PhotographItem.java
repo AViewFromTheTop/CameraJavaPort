@@ -25,30 +25,30 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PictureItem extends Item {
+public class PhotographItem extends Item {
     private final EntityType<? extends HangingEntity> type;
 
-    public PictureItem(Properties settings) {
+    public PhotographItem(Properties settings) {
         super(settings);
         this.type = CameraEntityTypes.PHOTOGRAPH;
     }
 
     @Override
-    public @NotNull InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(@NotNull UseOnContext context) {
         BlockPos blockPos = context.getClickedPos();
         Direction direction = context.getClickedFace();
         BlockPos blockPos2 = blockPos.relative(direction);
         Player player = context.getPlayer();
         ItemStack itemStack = context.getItemInHand();
-        if(player != null && !this.mayPlace(player, direction, itemStack, blockPos2))
+        if (player != null && !this.mayPlace(player, direction, itemStack, blockPos2))
             return InteractionResult.FAIL;
         else {
             Level level = context.getLevel();
             Photograph hangingEntity = new Photograph(level,blockPos2, direction);
             CustomData customData = itemStack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
-            if(!customData.isEmpty())
+            if (!customData.isEmpty())
                 EntityType.updateCustomEntityTag(level, player, hangingEntity, customData);
-            if(hangingEntity.survives()) {
+            if (hangingEntity.survives()) {
                 if(!level.isClientSide) {
                     hangingEntity.playPlacementSound();
                     level.gameEvent(player, GameEvent.ENTITY_PLACE, hangingEntity.position());
@@ -60,11 +60,11 @@ public class PictureItem extends Item {
         }
     }
 
-    protected boolean mayPlace(Player player, Direction side, ItemStack stack, BlockPos pos) {
-        return !side.getAxis().isVertical() && player.mayUseItemAt(pos, side, stack);
+    protected boolean mayPlace(@NotNull Player player, @NotNull Direction side, ItemStack stack, BlockPos pos) {
+        return player.mayUseItemAt(pos, side, stack);
     }
 
-    public static @Nullable ResourceLocation getPhoto(ItemStack stack) {
+    public static @Nullable ResourceLocation getPhoto(@NotNull ItemStack stack) {
         final var a = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         AtomicReference<ResourceLocation> re = new AtomicReference<>();
         if(!a.isEmpty()) {
