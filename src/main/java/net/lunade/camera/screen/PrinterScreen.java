@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
@@ -91,7 +92,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     }
 
     private void containerChanged() {
-        this.displayRecipes = this.menu.hasInputItem() && this.menu.getInputItem().getItem() instanceof PhotographItem;
+        this.displayRecipes = this.menu.hasInputItem() && this.menu.getInputItem().is(Items.PAPER);
         if (!this.displayRecipes) {
             this.index = 0;
         }
