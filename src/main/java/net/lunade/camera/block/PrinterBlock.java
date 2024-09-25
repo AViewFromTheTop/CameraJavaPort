@@ -1,4 +1,4 @@
-package net.lunade.camera.impl;
+package net.lunade.camera.block;
 
 import com.mojang.serialization.MapCodec;
 import net.lunade.camera.menu.PrinterMenu;

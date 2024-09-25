@@ -16,11 +16,11 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
     );
     public static final StreamCodec<FriendlyByteBuf, PrinterAskForSlotsPacket> CODEC = StreamCodec.ofMember(PrinterAskForSlotsPacket::write, PrinterAskForSlotsPacket::new);
 
-    public PrinterAskForSlotsPacket(FriendlyByteBuf buf) {
+    public PrinterAskForSlotsPacket(@NotNull FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readUtf());
     }
 
-    public void write(FriendlyByteBuf buf) {
+    public void write(@NotNull FriendlyByteBuf buf) {
         buf.writeInt(count);
         buf.writeUtf(id);
     }
@@ -30,7 +30,7 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
         return PACKET_TYPE;
     }
 
-    public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.Context context) {
+    public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
         ServerPlayer player = context.player();
         if(player != null) {
             if(player.containerMenu instanceof PrinterMenu printer) {

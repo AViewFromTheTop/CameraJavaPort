@@ -2,13 +2,12 @@ package net.lunade.camera.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraConstants;
 import net.lunade.camera.entity.Photograph;
-import net.lunade.camera.image_transfer.ServerTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;

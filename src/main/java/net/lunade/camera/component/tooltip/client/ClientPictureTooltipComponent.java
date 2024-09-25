@@ -1,9 +1,11 @@
-package net.lunade.camera.impl;
+package net.lunade.camera.component.tooltip.client;
 
+import net.lunade.camera.component.tooltip.PictureTooltipComponent;
 import net.lunade.camera.image_transfer.PhotographLoader;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientPictureTooltipComponent implements ClientTooltipComponent {
     private final int size = 32;
@@ -24,7 +26,7 @@ public class ClientPictureTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font textRenderer, int x, int y, GuiGraphics graphics) {
+    public void renderImage(Font textRenderer, int x, int y, @NotNull GuiGraphics graphics) {
         PhotographLoader.get(id.id().getPath().replace("photographs/", ""));
         graphics.blit(id.id(), x, y, 0, 0, size, size, size, size);
     }

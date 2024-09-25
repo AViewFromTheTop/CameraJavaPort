@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraEntityTypes;
-import net.lunade.camera.image_transfer.ServerTexture;
-import net.lunade.camera.registry.RegisterItems;
+import net.frozenblock.lib.image_transfer.client.ServerTexture;
+import net.lunade.camera.registry.CameraEntityTypes;
+import net.lunade.camera.registry.CameraItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -125,7 +125,7 @@ public class Photograph extends HangingEntity {
             if (breaker instanceof Player player && player.hasInfiniteMaterials()) {
                 return;
             }
-            this.spawnAtLocation(RegisterItems.PICTURE);
+            this.spawnAtLocation(CameraItems.PICTURE);
         }
     }
 

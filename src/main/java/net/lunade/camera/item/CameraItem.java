@@ -1,7 +1,8 @@
-package net.lunade.camera.impl;
+package net.lunade.camera.item;
 
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.CameraEntity;
+import net.lunade.camera.impl.ClientCameraManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

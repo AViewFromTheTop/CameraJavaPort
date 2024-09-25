@@ -1,6 +1,7 @@
-package net.lunade.camera;
+package net.lunade.camera.registry;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.lunade.camera.CameraConstants;
 import net.lunade.camera.entity.CameraEntity;
 import net.lunade.camera.entity.DiscCameraEntity;
 import net.lunade.camera.entity.Photograph;

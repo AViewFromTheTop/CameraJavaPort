@@ -1,4 +1,4 @@
-package net.lunade.camera.impl;
+package net.lunade.camera.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

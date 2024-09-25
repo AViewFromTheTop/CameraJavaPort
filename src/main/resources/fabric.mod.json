@@ -5,7 +5,8 @@
   "name": "Camera Java Port",
   "description": "Ports Bedrock/Education Edition's Camera entity to Java Edition.",
   "authors": [
-    "Luna"
+    "Luna",
+    "Liukrast"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/camera-port"
@@ -25,6 +26,7 @@
     "camera_port.mixins.json"
   ],
   "depends": {
+    "frozenlib": "${frozenlib_version}",
     "fabric-api": "${fabric_api_version}",
     "minecraft": "${minecraft_version}",
     "java": ">=21"
@@ -39,6 +41,9 @@
         "modmenu.twitter": "https://twitter.com/LunadeModding",
         "modmenu.youtube": "https://www.youtube.com/@LunadeMusic"
       }
+    },
+    "frozenlib_registry": {
+      "mod_protocol": $protocol_version
     }
   }
 }

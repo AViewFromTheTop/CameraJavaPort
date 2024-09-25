@@ -2,9 +2,9 @@ package net.lunade.camera.screen;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lunade.camera.CameraConstants;
-import net.lunade.camera.image_transfer.PhotographLoader;
-import net.lunade.camera.impl.PictureItem;
 import net.lunade.camera.menu.PrinterMenu;
+import net.lunade.camera.image_transfer.PhotographLoader;
+import net.lunade.camera.item.PictureItem;
 import net.lunade.camera.networking.PrinterAskForSlotsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

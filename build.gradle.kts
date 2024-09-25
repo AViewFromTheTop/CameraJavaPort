@@ -145,14 +145,12 @@ dependencies {
 	// Mod Menu
 	modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
 
-	/*
 	// FrozenLib
 	if (local_frozenlib) {
 		api(project(":FrozenLib", configuration = "namedElements"))
 		modCompileOnly(project(":FrozenLib"))?.let { include(it) }
 	} else
 		modApi("maven.modrinth:frozenlib:$frozenlib_version")?.let { include(it) }
-	 */
 }
 
 tasks {
@@ -160,6 +158,7 @@ tasks {
 		val properties = mapOf(
 			"mod_id" to mod_id,
 			"version" to version,
+			"protocol_version" to protocol_version,
 			"minecraft_version" to "~1.21-",//>=minecraft_version,
 
 			"fabric_api_version" to ">=$fabric_api_version",

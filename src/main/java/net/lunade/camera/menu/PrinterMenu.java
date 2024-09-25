@@ -2,14 +2,13 @@ package net.lunade.camera.menu;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraConstants;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.image_transfer.PhotographLoader;
-import net.lunade.camera.impl.PictureItem;
-import net.lunade.camera.registry.RegisterBlocks;
-import net.lunade.camera.registry.RegisterItems;
-import net.lunade.camera.registry.RegisterMenuTypes;
+import net.lunade.camera.item.PictureItem;
+import net.lunade.camera.registry.CameraBlocks;
+import net.lunade.camera.registry.CameraItems;
+import net.lunade.camera.registry.CameraMenuTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
@@ -47,7 +46,7 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     public PrinterMenu(int id, Inventory playerInventory, ContainerLevelAccess context) {
-        super(RegisterMenuTypes.PRINTER, id);
+        super(CameraMenuTypes.PRINTER, id);
         access = context;
         this.inputSlot = addSlot(new Slot(this.container, 0, 8, 18));
         this.resultSlot = addSlot(new Slot(this.resultContainer, 1, 152, 18) {
@@ -93,7 +92,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, RegisterBlocks.PRINTER);
+        return stillValid(this.access, player, CameraBlocks.PRINTER);
     }
 
     @Override
@@ -107,7 +106,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 
     void setupResultSlot() {
         if (pictureSlotsSize.get() != 0 && inputSlot.getItem().getItem() instanceof PictureItem) {
-            ItemStack stack = new ItemStack(RegisterItems.PICTURE);
+            ItemStack stack = new ItemStack(CameraItems.PICTURE);
             final CompoundTag tag = new CompoundTag();
             tag.putString(Photograph.PICTURE_NAME_KEY, temp.replace("photographs/", ""));
             tag.putString("id", "picture");

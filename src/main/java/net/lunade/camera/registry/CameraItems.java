@@ -2,8 +2,8 @@ package net.lunade.camera.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lunade.camera.CameraConstants;
-import net.lunade.camera.impl.PictureComponent;
-import net.lunade.camera.impl.PictureItem;
+import net.lunade.camera.component.PictureComponent;
+import net.lunade.camera.item.PictureItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-public class RegisterItems {
+public class CameraItems {
     public static final PictureItem PICTURE = new PictureItem(new Item.Properties().stacksTo(1));
 
     public static final DataComponentType<String> PHOTO_COMPONENT = DataComponentType.<String>builder()

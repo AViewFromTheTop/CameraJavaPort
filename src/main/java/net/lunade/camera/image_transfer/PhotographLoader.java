@@ -3,6 +3,7 @@ package net.lunade.camera.image_transfer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;

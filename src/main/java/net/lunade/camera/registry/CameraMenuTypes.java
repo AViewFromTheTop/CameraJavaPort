@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 
-public class RegisterMenuTypes {
+public class CameraMenuTypes {
     public static final MenuType<PrinterMenu> PRINTER = new MenuType<>(PrinterMenu::new, FeatureFlags.DEFAULT_FLAGS);
     public static void register() {
         Registry.register(BuiltInRegistries.MENU, CameraConstants.id("printer"), PRINTER);

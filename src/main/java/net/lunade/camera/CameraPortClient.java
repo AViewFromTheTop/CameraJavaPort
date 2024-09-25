@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.lunade.camera.entity.render.*;
 import net.lunade.camera.networking.CameraClientNetworking;
+import net.lunade.camera.registry.CameraEntityTypes;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 
 @Environment(EnvType.CLIENT)
