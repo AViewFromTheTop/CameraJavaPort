@@ -52,14 +52,7 @@ public class PrinterMenu extends AbstractContainerMenu {
         super(CameraMenuTypes.PRINTER, id);
 
         this.access = context;
-        this.inputSlot = addSlot(
-                new Slot(this.container, 0, 8, 18) {
-                    @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
-                        return stack.is(Items.PAPER);
-                    }
-                }
-        );
+        this.inputSlot = addSlot(new Slot(this.container, 0, 8, 18));
         this.resultSlot = addSlot(
                 new Slot(this.resultContainer, 1, 152, 18) {
 
