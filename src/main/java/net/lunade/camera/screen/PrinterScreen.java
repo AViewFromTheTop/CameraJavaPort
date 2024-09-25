@@ -11,7 +11,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-
+import org.jetbrains.annotations.NotNull;
 
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
@@ -31,15 +31,15 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 
     private void send(int size, String selected) {
         ClientPlayNetworking.send(new PrinterAskForSlotsPacket(size, selected));
-        menu.onClient(selected);
+        this.menu.onClient(selected);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float delta, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float delta, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
         graphics.blit(TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
-        if(this.displayRecipes) {
+        if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
             final var middle = PhotographLoader.getInfinite(index);
             if (middle != null)
@@ -71,15 +71,15 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int i = this.leftPos;
         int j = this.topPos;
-        if(isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
-            if(index == PhotographLoader.getSize() - 1) index = 0;
-            else index++;
-            send(PhotographLoader.getSize(), PhotographLoader.get(index).getPath());
+        if (isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
+            if (this.index == PhotographLoader.getSize() - 1) this.index = 0;
+            else this.index++;
+            send(PhotographLoader.getSize(), PhotographLoader.get(this.index).getPath());
             return true;
-        } else if(isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
-            if(index == 0) index = PhotographLoader.getSize() - 1;
-            else index--;
-            send(PhotographLoader.getSize(), PhotographLoader.get(index).getPath());
+        } else if (isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
+            if (this.index == 0) this.index = PhotographLoader.getSize() - 1;
+            else this.index--;
+            send(PhotographLoader.getSize(), PhotographLoader.get(this.index).getPath());
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

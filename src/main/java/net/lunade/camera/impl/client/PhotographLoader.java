@@ -3,6 +3,7 @@ package net.lunade.camera.impl.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraConstants;
 import net.minecraft.client.Minecraft;
@@ -16,7 +17,6 @@ import java.util.stream.Stream;
 
 @Environment(EnvType.CLIENT)
 public class PhotographLoader {
-
     private static final ArrayList<ResourceLocation> LOADED_TEXTURES = new ArrayList<>();
     private static final ArrayList<ResourceLocation> LOADING_PICTURES = new ArrayList<>();
 
@@ -26,14 +26,14 @@ public class PhotographLoader {
 
     public static ResourceLocation get(String pictureName) {
         final var location = getPhotographLocation(pictureName);
-        if(!LOADED_TEXTURES.contains(location)) {
+        if (!LOADED_TEXTURES.contains(location)) {
             final var serverTexture = new ServerTexture(
                     "photographs",
                     pictureName + ".png",
                     CameraConstants.id("photographs/empty"),
                     () -> {}
             );
-            Minecraft.getInstance().getTextureManager().register(location, serverTexture);
+            Minecraft.getInstance().getTextureManager().getTexture(location, serverTexture);
             LOADED_TEXTURES.add(location);
         }
         return location;
@@ -75,6 +75,6 @@ public class PhotographLoader {
      * @param imageId The image is a string, I know, but that's how it's stored in the menu
      * */
     public static void onReceiveItem(String imageId, Player player) {
-
+        FileTransferPacket.createRequest("photgraphs/", imageId);
     }
 }

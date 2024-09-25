@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public record PrinterAskForSlotsPacket(int count, String id) implements CustomPacketPayload {
-
     public static final Type<PrinterAskForSlotsPacket> PACKET_TYPE = CustomPacketPayload.createType(
             CameraConstants.safeString("printer_ask_for_slots")
     );
@@ -32,8 +31,8 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
 
     public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
         ServerPlayer player = context.player();
-        if(player != null) {
-            if(player.containerMenu instanceof PrinterMenu printer) {
+        if (player != null) {
+            if (player.containerMenu instanceof PrinterMenu printer) {
                 printer.setupData(packet.count, packet.id);
             }
         }

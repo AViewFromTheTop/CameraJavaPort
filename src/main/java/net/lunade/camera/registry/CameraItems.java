@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 public class CameraItems {
     public static final PictureItem PICTURE = new PictureItem(new Item.Properties().stacksTo(1));
 
-    public static final DataComponentType<String> PHOTO_COMPONENT = DataComponentType.<String>builder()
+    public static final DataComponentType<PictureComponent> PHOTO_COMPONENT = DataComponentType.<PictureComponent>builder()
             .persistent(PictureComponent.CODEC)
             .networkSynchronized(PictureComponent.STREAM_CODEC)
             .build();

@@ -47,9 +47,11 @@ public class PrinterMenu extends AbstractContainerMenu {
 
     public PrinterMenu(int id, Inventory playerInventory, ContainerLevelAccess context) {
         super(CameraMenuTypes.PRINTER, id);
-        access = context;
+
+        this.access = context;
         this.inputSlot = addSlot(new Slot(this.container, 0, 8, 18));
         this.resultSlot = addSlot(new Slot(this.resultContainer, 1, 152, 18) {
+
             @Override
             public boolean mayPlace(ItemStack stack) {return false;}
 
@@ -57,17 +59,18 @@ public class PrinterMenu extends AbstractContainerMenu {
             public void onTake(Player player, ItemStack stack) {
                 stack.onCraftedBy(player.level(), player, stack.getCount());
                 ItemStack itemStack = PrinterMenu.this.inputSlot.remove(1);
-                if(!itemStack.isEmpty()) {
+                if (!itemStack.isEmpty()) {
                     PrinterMenu.this.setupResultSlot();
                 }
-                access.execute((level, blockPos) -> {
+
+                PrinterMenu.this.access.execute((level, blockPos) -> {
                     long l = level.getGameTime();
-                    if(PrinterMenu.this.lastSoundTime != l) {
-                        level.playSound(null, blockPos, CameraPortMain.CAMERA_SNAP, SoundSource.BLOCKS, 1.0f, 1.0F);
+                    if (PrinterMenu.this.lastSoundTime != l) {
+                        level.playSound(null, blockPos, CameraPortMain.CAMERA_SNAP, SoundSource.BLOCKS, 1F, 1F);
                         PrinterMenu.this.lastSoundTime = l;
                     }
                 });
-                PhotographLoader.onReceiveItem(temp, player);
+                PhotographLoader.onReceiveItem(PrinterMenu.this.temp, player);
                 super.onTake(player, stack);
             }
         });
@@ -80,8 +83,10 @@ public class PrinterMenu extends AbstractContainerMenu {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 198));
         }
+
         this.addDataSlot(this.pictureSlotsSize);
     }
+
     public boolean hasInputItem() {
         return this.inputSlot.hasItem() && pictureSlotsSize.get() != 0;
     }
@@ -105,12 +110,12 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     void setupResultSlot() {
-        if (pictureSlotsSize.get() != 0 && inputSlot.getItem().getItem() instanceof PictureItem) {
+        if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().getItem() instanceof PictureItem) {
             ItemStack stack = new ItemStack(CameraItems.PICTURE);
             final CompoundTag tag = new CompoundTag();
-            tag.putString(Photograph.PICTURE_NAME_KEY, temp.replace("photographs/", ""));
+            tag.putString(Photograph.PICTURE_NAME_KEY, this.temp.replace("photographs/", ""));
             tag.putString("id", "picture");
-            stack.set(DataComponents.ENTITY_DATA,  CustomData.of(tag));
+            stack.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
             this.resultSlot.set(stack);
         } else {
             this.resultSlot.set(ItemStack.EMPTY);
@@ -123,7 +128,7 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
+    public boolean canTakeItemForPickAll(ItemStack stack, @NotNull Slot slot) {
         return slot.container != this.resultContainer && super.canTakeItemForPickAll(stack, slot);
     }
 
@@ -169,8 +174,8 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     public void setupData(int size, String id) {
-        pictureSlotsSize.set(size);
-        temp = id;
+        this.pictureSlotsSize.set(size);
+        this.temp = id;
         this.setupResultSlot();
     }
 

@@ -128,7 +128,7 @@ public class CameraScreenshotManager {
 
     private static void _grab(File gameDirectory, @Nullable String fileName, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
         NativeImage nativeImage = takeScreenshot(framebuffer);
-        File file = new File(gameDirectory, "photographs");
+        File file = new File(gameDirectory, "photographs/.local");
         file.mkdir();
         File file2;
         if (fileName == null) {
