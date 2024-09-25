@@ -123,6 +123,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 
             final CompoundTag tag = new CompoundTag();
             tag.putString(Photograph.PICTURE_NAME_KEY, photographName);
+            tag.putString("id", "photograph");
             stack.set(
                     DataComponents.ENTITY_DATA,
                     CustomData.of(tag)
