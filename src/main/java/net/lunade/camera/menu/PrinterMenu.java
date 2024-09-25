@@ -124,7 +124,7 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     void setupResultSlot() {
-        if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().getItem() instanceof PhotographItem) {
+        if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().is(Items.PAPER)) {
             ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
             String photographName = this.temp.replace("photographs/", "");
             stack.set(
