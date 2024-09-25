@@ -35,7 +35,7 @@ public class PhotographLoader {
                     CameraConstants.id("photographs/empty"),
                     () -> {}
             );
-            TEXTURE_MANAGER.getTexture(location, serverTexture);
+            TEXTURE_MANAGER.register(location, serverTexture);
         } else {
             serverTexture.updateReferenceTime();
         }

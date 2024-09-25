@@ -5,10 +5,13 @@ import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
+import net.lunade.camera.CameraConstants;
+import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.registry.CameraEntityTypes;
 import net.lunade.camera.registry.CameraItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -23,12 +26,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,23 +71,6 @@ public class Photograph extends HangingEntity {
         }
     }
 
-    @Override
-    protected void setDirection(Direction facing) {
-        Validate.notNull(facing);
-        this.direction = facing;
-        if (facing.getAxis().isHorizontal()) {
-            this.setXRot(0F);
-            this.setYRot(this.direction.get2DDataValue() * 90F);
-        } else {
-            this.setXRot(-90F * facing.getAxisDirection().getStep());
-            this.setYRot(0F);
-        }
-
-        this.xRotO = this.getXRot();
-        this.yRotO = this.getYRot();
-        this.recalculateBoundingBox();
-    }
-
     public String getPhotographName() {
         return this.entityData.get(DATA_PHOTOGRAPH);
     }
@@ -122,18 +106,20 @@ public class Photograph extends HangingEntity {
 
     @Override
     protected @NotNull AABB calculateBoundingBox(BlockPos pos, Direction direction) {
-        int size = this.getSize();
         Vec3 vec3 = Vec3.atCenterOf(pos).relative(direction, -0.46875);
-        double sizeOffset = this.offsetForSize(size);
-        Vec3 vec32 = vec3.relative(direction.getCounterClockWise(), sizeOffset).relative(Direction.UP, sizeOffset);
+        int size = this.getSize();
+        double offsetForSize = offsetForSize(size);
+        Direction direction2 = direction.getCounterClockWise();
+        Vec3 vec32 = vec3.relative(direction2, offsetForSize).relative(Direction.UP, offsetForSize);
         Direction.Axis axis = direction.getAxis();
-        double g = axis == Direction.Axis.X ? 0.0625 : (double)size;
-        double i = axis == Direction.Axis.Z ? 0.0625 : (double)size;
-        return AABB.ofSize(vec32, g, size, i);
+        double xSize = axis == Direction.Axis.X ? 0.0625D : size;
+        double ySize = size;
+        double zSize = axis == Direction.Axis.Z ? 0.0625D : size;
+        return AABB.ofSize(vec32, xSize, ySize, zSize);
     }
 
-    private double offsetForSize(int width) {
-        return width % 2 == 0 ? 0.5 : 0.0;
+    private static double offsetForSize(int size) {
+        return size % 2 == 0 ? 0.5 : 0.0;
     }
 
     @Override
@@ -143,7 +129,7 @@ public class Photograph extends HangingEntity {
             if (breaker instanceof Player player && player.hasInfiniteMaterials()) {
                 return;
             }
-            this.spawnAtLocation(CameraItems.PHOTOGRAPH);
+            this.spawnAtLocation(this.getPickResult());
         }
     }
 
@@ -180,7 +166,13 @@ public class Photograph extends HangingEntity {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(Items.PAINTING);
+        ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
+        stack.applyComponents(
+                DataComponentPatch.builder()
+                        .set(CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraConstants.id("photographs/" + this.getPhotographName())))
+                        .build()
+        );
+        return stack;
     }
 
     static {

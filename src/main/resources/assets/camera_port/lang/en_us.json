@@ -1,10 +1,11 @@
 {
   "entity.camera_port.camera": "Camera",
   "item.camera_port.camera": "Camera",
-  "item.camera_port.picture": "Picture",
+  "item.camera_port.photograph": "Photograph",
+  "item.camera_port.portfolio": "Portfolio",
   "entity.camera_port.small_camera": "Disc Camera",
   "item.camera_port.disc_camera": "Disc Camera",
-  "item.camera_port.picture_tooltip": "Picture ID: %s",
+  "item.camera_port.photograph_tooltip": "Photograph ID: %s",
   "subtitle.entity.camera.crack": "Camera cracks",
   "subtitle.entity.camera.adjust": "Tripod adjusts",
   "subtitle.entity.camera.snap": "Shutter clicks",

@@ -2,13 +2,16 @@ package net.lunade.camera.menu;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lunade.camera.CameraConstants;
 import net.lunade.camera.CameraPortMain;
+import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.impl.client.PhotographLoader;
 import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.registry.CameraBlocks;
 import net.lunade.camera.registry.CameraItems;
 import net.lunade.camera.registry.CameraMenuTypes;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
@@ -112,10 +115,18 @@ public class PrinterMenu extends AbstractContainerMenu {
     void setupResultSlot() {
         if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().getItem() instanceof PhotographItem) {
             ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
+            String photographName = this.temp.replace("photographs/", "");
+            stack.set(
+                    CameraItems.PHOTO_COMPONENT,
+                    new PhotographComponent(CameraConstants.id("photographs/" + photographName))
+            );
+
             final CompoundTag tag = new CompoundTag();
-            tag.putString(Photograph.PICTURE_NAME_KEY, this.temp.replace("photographs/", ""));
-            tag.putString("id", "photograph");
-            stack.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
+            tag.putString(Photograph.PICTURE_NAME_KEY, photographName);
+            stack.set(
+                    DataComponents.ENTITY_DATA,
+                    CustomData.of(tag)
+            );
             this.resultSlot.set(stack);
         } else {
             this.resultSlot.set(ItemStack.EMPTY);
