@@ -7,7 +7,6 @@ import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.impl.client.PhotographLoader;
-import net.lunade.camera.item.PhotographItem;
 import net.lunade.camera.registry.CameraBlocks;
 import net.lunade.camera.registry.CameraItems;
 import net.lunade.camera.registry.CameraMenuTypes;
@@ -159,7 +158,7 @@ public class PrinterMenu extends AbstractContainerMenu {
     public @NotNull ItemStack quickMoveStack(Player player, int fromIndex) {
         Slot slot = this.slots.get(fromIndex);
         ItemStack itemStack = ItemStack.EMPTY;
-        if(slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemStack1 = slot.getItem();
             Item item = itemStack1.getItem();
             itemStack = itemStack1.copy();
@@ -169,17 +168,17 @@ public class PrinterMenu extends AbstractContainerMenu {
                 slot.onQuickCraft(itemStack1, itemStack);
             } else if (fromIndex == 0) {
                 if (!this.moveItemStackTo(itemStack1, 2, 38, true)) return ItemStack.EMPTY;
-            } else if (itemStack1.getItem() instanceof PhotographItem) {
+            } else if (itemStack1.is(Items.PAPER)) {
                 if (!this.moveItemStackTo(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
             } else if(fromIndex >= 2 && fromIndex < 29) {
                 if (!this.moveItemStackTo(itemStack1, 29, 38, false)) return ItemStack.EMPTY;
             } else if(fromIndex >= 29 && fromIndex < 38 && !this.moveItemStackTo(itemStack1, 2, 29, false)) return ItemStack.EMPTY;
 
-            if(itemStack1.isEmpty())
+            if( itemStack1.isEmpty())
                 slot.set(ItemStack.EMPTY);
 
             slot.setChanged();
-            if(itemStack1.getCount() == itemStack.getCount())
+            if (itemStack1.getCount() == itemStack.getCount())
                 return ItemStack.EMPTY;
 
             slot.onTake(player, itemStack1);
