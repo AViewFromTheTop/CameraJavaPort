@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.impl.ClientCameraManager;
+import net.lunade.camera.impl.client.CameraScreenshotManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -82,7 +82,7 @@ public class LevelRendererMixin {
             @Share("cameraPort$tickRate") LocalFloatRef tickRate,
             @Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef
     ) {
-        if (ClientCameraManager.possessingCamera && !ClientCameraManager.isCameraHandheld && this.minecraft.player != null) {
+        if (CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld && this.minecraft.player != null) {
             Player player = this.minecraft.player;
             Vec3 vec3 = camera.getPosition();
             double d = vec3.x();

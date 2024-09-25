@@ -1,7 +1,7 @@
 package net.lunade.camera.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.lunade.camera.impl.ClientCameraManager;
+import net.lunade.camera.impl.client.CameraScreenshotManager;
 import net.minecraft.client.Camera;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +17,7 @@ public class CameraMixin {
 
     @Unique
     public boolean cameraPort$isUsingSelfRenderingCamera() {
-        return ClientCameraManager.possessingCamera && !ClientCameraManager.isCameraHandheld;
+        return CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld;
     }
 
 }

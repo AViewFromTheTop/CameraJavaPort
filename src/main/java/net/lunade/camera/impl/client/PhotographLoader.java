@@ -1,4 +1,4 @@
-package net.lunade.camera.image_transfer;
+package net.lunade.camera.impl.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

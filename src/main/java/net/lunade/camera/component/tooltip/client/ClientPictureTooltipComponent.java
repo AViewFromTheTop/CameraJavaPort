@@ -1,7 +1,7 @@
 package net.lunade.camera.component.tooltip.client;
 
 import net.lunade.camera.component.tooltip.PictureTooltipComponent;
-import net.lunade.camera.image_transfer.PhotographLoader;
+import net.lunade.camera.impl.client.PhotographLoader;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;

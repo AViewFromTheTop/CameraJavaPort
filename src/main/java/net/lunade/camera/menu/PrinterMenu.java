@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.Photograph;
-import net.lunade.camera.image_transfer.PhotographLoader;
+import net.lunade.camera.impl.client.PhotographLoader;
 import net.lunade.camera.item.PictureItem;
 import net.lunade.camera.registry.CameraBlocks;
 import net.lunade.camera.registry.CameraItems;

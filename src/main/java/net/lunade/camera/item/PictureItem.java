@@ -1,9 +1,9 @@
 package net.lunade.camera.item;
 
 import net.lunade.camera.CameraConstants;
-import net.lunade.camera.registry.CameraEntityTypes;
 import net.lunade.camera.component.tooltip.PictureTooltipComponent;
 import net.lunade.camera.entity.Photograph;
+import net.lunade.camera.registry.CameraEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;

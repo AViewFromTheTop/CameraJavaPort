@@ -2,7 +2,7 @@ package net.lunade.camera.item;
 
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.CameraEntity;
-import net.lunade.camera.impl.ClientCameraManager;
+import net.lunade.camera.impl.client.CameraScreenshotManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -30,10 +30,10 @@ public class CameraItem extends SpawnEggItem {
             if (!player.getCooldowns().isOnCooldown(this)) {
                 player.getCooldowns().addCooldown(this, 10);
                 if (level.isClientSide) {
-                    if (ClientCameraManager.possessingCamera) {
+                    if (CameraScreenshotManager.possessingCamera) {
                         return InteractionResultHolder.fail(itemStack);
                     }
-                    ClientCameraManager.executeScreenshot(null, true);
+                    CameraScreenshotManager.executeScreenshot(null, true);
                 }
                 level.playSound(player, player.getX(), player.getEyeY(), player.getZ(), CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
                 return InteractionResultHolder.success(itemStack);
