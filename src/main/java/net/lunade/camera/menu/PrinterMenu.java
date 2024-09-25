@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,31 +52,42 @@ public class PrinterMenu extends AbstractContainerMenu {
         super(CameraMenuTypes.PRINTER, id);
 
         this.access = context;
-        this.inputSlot = addSlot(new Slot(this.container, 0, 8, 18));
-        this.resultSlot = addSlot(new Slot(this.resultContainer, 1, 152, 18) {
-
-            @Override
-            public boolean mayPlace(ItemStack stack) {return false;}
-
-            @Override
-            public void onTake(Player player, ItemStack stack) {
-                stack.onCraftedBy(player.level(), player, stack.getCount());
-                ItemStack itemStack = PrinterMenu.this.inputSlot.remove(1);
-                if (!itemStack.isEmpty()) {
-                    PrinterMenu.this.setupResultSlot();
+        this.inputSlot = addSlot(
+                new Slot(this.container, 0, 8, 18) {
+                    @Override
+                    public boolean mayPlace(@NotNull ItemStack stack) {
+                        return stack.is(Items.PAPER);
+                    }
                 }
+        );
+        this.resultSlot = addSlot(
+                new Slot(this.resultContainer, 1, 152, 18) {
 
-                PrinterMenu.this.access.execute((level, blockPos) -> {
-                    long l = level.getGameTime();
-                    if (PrinterMenu.this.lastSoundTime != l) {
-                        level.playSound(null, blockPos, CameraPortMain.CAMERA_SNAP, SoundSource.BLOCKS, 1F, 1F);
-                        PrinterMenu.this.lastSoundTime = l;
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onTake(Player player, ItemStack stack) {
+                        stack.onCraftedBy(player.level(), player, stack.getCount());
+                        ItemStack itemStack = PrinterMenu.this.inputSlot.remove(1);
+                        if (!itemStack.isEmpty()) {
+                            PrinterMenu.this.setupResultSlot();
+                        }
+
+                        PrinterMenu.this.access.execute((level, blockPos) -> {
+                            long l = level.getGameTime();
+                            if (PrinterMenu.this.lastSoundTime != l) {
+                                level.playSound(null, blockPos, CameraPortMain.CAMERA_SNAP, SoundSource.BLOCKS, 1F, 1F);
+                                PrinterMenu.this.lastSoundTime = l;
+                            }
+                        });
+                        PhotographLoader.onReceiveItem(PrinterMenu.this.temp, player);
+                        super.onTake(player, stack);
                     }
                 });
-                PhotographLoader.onReceiveItem(PrinterMenu.this.temp, player);
-                super.onTake(player, stack);
-            }
-        });
+        
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 140 + i * 18));
