@@ -174,12 +174,10 @@ public class PrinterMenu extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(itemStack1, 29, 38, false)) return ItemStack.EMPTY;
             } else if(fromIndex >= 29 && fromIndex < 38 && !this.moveItemStackTo(itemStack1, 2, 29, false)) return ItemStack.EMPTY;
 
-            if( itemStack1.isEmpty())
-                slot.set(ItemStack.EMPTY);
+            if (itemStack1.isEmpty()) slot.set(ItemStack.EMPTY);
 
             slot.setChanged();
-            if (itemStack1.getCount() == itemStack.getCount())
-                return ItemStack.EMPTY;
+            if (itemStack1.getCount() == itemStack.getCount()) return ItemStack.EMPTY;
 
             slot.onTake(player, itemStack1);
             this.broadcastChanges();

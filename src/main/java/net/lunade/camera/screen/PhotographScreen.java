@@ -62,6 +62,5 @@ public class PhotographScreen extends Screen {
             final int col = k / rows;
             graphics.blit(texture, i + 7 + row * 49, j + 7 + col * 49, 0, 0, 48, 48, 48, 48);
         }
-
     }
 }

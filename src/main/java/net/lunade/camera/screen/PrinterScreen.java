@@ -25,7 +25,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         super(menu, playerInventory, title);
         final int size = PhotographLoader.loadLocalPhotographs();
         if (PhotographLoader.hasAnyLocalPhotographs()) {
-            final String selected = PhotographLoader.getLocalPhotograph(0).getPath();
+            final String selected = PhotographLoader.getPhotograph(0).getPath();
             send(size, selected);
         } else {
             send(0, "");
@@ -81,12 +81,12 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         if (isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if (this.index == PhotographLoader.getSize() - 1) this.index = 0;
             else this.index++;
-            send(PhotographLoader.getSize(), PhotographLoader.getLocalPhotograph(this.index).getPath());
+            send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
             return true;
         } else if (isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
             if (this.index == 0) this.index = PhotographLoader.getSize() - 1;
             else this.index--;
-            send(PhotographLoader.getSize(), PhotographLoader.getLocalPhotograph(this.index).getPath());
+            send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

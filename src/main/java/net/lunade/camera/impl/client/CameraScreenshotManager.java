@@ -29,6 +29,8 @@ import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class CameraScreenshotManager {
+    private static final String PLAYER_UUID = Minecraft.getInstance().getGameProfile().getId().toString();
+
     public static boolean wasGuiHidden = false;
     public static boolean possessingCamera = false;
     public static boolean isCameraHandheld = false;
@@ -130,13 +132,16 @@ public class CameraScreenshotManager {
                 .resolve(".local")
                 .toFile();
         photographPath.mkdirs();
-        File file2 = Screenshot.getFile(photographPath);
+
+        String normalScreenshotFileName = Screenshot.getFile(photographPath).getName();
+        String fileNameWithUUID = PLAYER_UUID + "_" + normalScreenshotFileName;
+        File photographFile = new File(photographPath, fileNameWithUUID);
 
         Util.ioPool().execute(() -> {
             try {
-                nativeImage.writeToFile(file2);
-                Component component = Component.literal(file2.getName()).withStyle(ChatFormatting.UNDERLINE)
-                        .withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file2.getAbsolutePath())));
+                nativeImage.writeToFile(photographFile);
+                Component component = Component.literal(photographFile.getName()).withStyle(ChatFormatting.UNDERLINE)
+                        .withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, photographFile.getAbsolutePath())));
                 messageReceiver.accept(Component.translatable("screenshot.success", component));
             } catch (Exception var7) {
                 Exception exception = var7;

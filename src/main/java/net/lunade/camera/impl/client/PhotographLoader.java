@@ -6,7 +6,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraConstants;
-import net.minecraft.FileUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -28,16 +27,16 @@ public class PhotographLoader {
         return !LOCAL_PHOTOGRAPHS.isEmpty();
     }
 
-    public static ResourceLocation getLocalPhotograph(int index) {
+    public static ResourceLocation getPhotograph(int index) {
         return LOCAL_PHOTOGRAPHS.get(index);
     }
 
-    public static @NotNull ResourceLocation getLocalPhotograph(String pictureName) {
-        final var location = getPhotographLocation(pictureName);
+    public static @NotNull ResourceLocation getPhotograph(String photographName) {
+        final var location = getPhotographLocation(photographName);
         if (!LOADED_TEXTURES.contains(location)) {
             final var serverTexture = new ServerTexture(
                     "photographs",
-                    pictureName + ".png",
+                    photographName + ".png",
                     CameraConstants.id("photographs/empty"),
                     () -> {}
             );
@@ -55,7 +54,7 @@ public class PhotographLoader {
         if (LOCAL_PHOTOGRAPHS.isEmpty()) return null;
         int size = LOCAL_PHOTOGRAPHS.size();
         int adjustedIndex = ((index % size) + size) % size;
-        return getLocalPhotograph(adjustedIndex);
+        return getPhotograph(adjustedIndex);
     }
 
     private static @NotNull ResourceLocation getPhotographLocation(@NotNull String name) {
@@ -63,7 +62,7 @@ public class PhotographLoader {
     }
 
     public static int loadLocalPhotographs() {
-        final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(".local").toFile();
+        final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(ServerTexture.LOCAL_TEXTURE_SOURCE).toFile();
         File[] fileList = file.listFiles();
         if (fileList == null) return 0;
         final var fileStream = Arrays.stream(fileList)
@@ -71,15 +70,15 @@ public class PhotographLoader {
                 .filter(file1 -> file1.getName().endsWith(".png"));
         LOCAL_PHOTOGRAPHS.clear();
         for (String name : fileStream.map(File::getName).toList()) {
-            name = name.replace(".png", "");
-            LOCAL_PHOTOGRAPHS.add(PhotographLoader.getLocalPhotograph(name));
+            name = name.replace(".png", "").replace(ServerTexture.LOCAL_TEXTURE_SOURCE, "");
+            LOCAL_PHOTOGRAPHS.add(PhotographLoader.getPhotograph(name));
         }
         return LOCAL_PHOTOGRAPHS.size();
     }
 
     /**
-     * Invoked when a picture item is created through the GUI. You might want to check if you're on Client
-     * and then send the texture packet
+     * Invoked when a picture item is created through the GUI.
+     * You might want to check if you're on Client and then send the texture packet.
      * @param imageId The image is a string, I know, but that's how it's stored in the menu
      * */
     public static void onReceiveItem(String imageId, Player player) {

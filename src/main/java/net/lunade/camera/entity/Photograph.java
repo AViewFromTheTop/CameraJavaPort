@@ -11,7 +11,6 @@ import net.lunade.camera.registry.CameraEntityTypes;
 import net.lunade.camera.registry.CameraItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -167,10 +166,8 @@ public class Photograph extends HangingEntity {
     @Override
     public ItemStack getPickResult() {
         ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
-        stack.applyComponents(
-                DataComponentPatch.builder()
-                        .set(CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraConstants.id("photographs/" + this.getPhotographName())))
-                        .build()
+        stack.set(
+                CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraConstants.id("photographs/" + this.getPhotographName()))
         );
         return stack;
     }
