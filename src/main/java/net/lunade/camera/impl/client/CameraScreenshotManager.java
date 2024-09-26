@@ -133,10 +133,7 @@ public class CameraScreenshotManager {
                 .toFile();
         photographPath.mkdirs();
 
-        String normalScreenshotFileName = Screenshot.getFile(photographPath).getName();
-        String fileNameWithUUID = PLAYER_UUID + "_" + normalScreenshotFileName;
-        File photographFile = new File(photographPath, fileNameWithUUID);
-
+        File photographFile = getPhotographFile(photographPath);
         Util.ioPool().execute(() -> {
             try {
                 nativeImage.writeToFile(photographFile);
@@ -152,6 +149,20 @@ public class CameraScreenshotManager {
             }
 
         });
+    }
+
+    public static @NotNull File getPhotographFile(File directory) {
+        String fileName = PLAYER_UUID + "_" + Util.getFilenameFormattedDateTime();
+        int fileIndex = 1;
+
+        while(true) {
+            File file = new File(directory, fileName + (fileIndex == 1 ? "" : "_" + fileIndex) + ".png");
+            if (!file.exists()) {
+                return file;
+            }
+
+            ++fileIndex;
+        }
     }
 
 }
