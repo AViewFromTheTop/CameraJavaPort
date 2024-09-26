@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
@@ -131,9 +130,6 @@ public class CameraScreenshotManager {
         File photographPath = gameDirectory.toPath()
                 .resolve("photographs")
                 .resolve(".local")
-                .resolve(String.valueOf(localDateTime.getYear()))
-                .resolve(String.valueOf(localDateTime.getMonth().getValue()))
-                .resolve(String.valueOf(localDateTime.getDayOfMonth()))
                 .toFile();
         photographPath.mkdirs();
         File file2 = getFile(photographPath, localDateTime);
@@ -156,7 +152,12 @@ public class CameraScreenshotManager {
     }
 
     private static @NotNull File getFile(File directory, @NotNull LocalDateTime localDateTime) {
-        String fileName = localDateTime.getHour() + "_" + localDateTime.getMinute() + "_" + localDateTime.getSecond();
+        String fileName = localDateTime.getYear() + "_"
+                + localDateTime.getMonthValue() + "_"
+                + localDateTime.getDayOfMonth() + "_"
+                + localDateTime.getHour() + "_"
+                + localDateTime.getMinute() + "_"
+                + localDateTime.getSecond();
         int fileIndex = 1;
 
         while (true) {
