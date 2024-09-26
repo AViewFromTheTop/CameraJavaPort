@@ -21,7 +21,7 @@ public class CameraPortClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(CAMERA_MODEL_LAYER, CameraEntityModel::createBodyLayer);
         EntityRendererRegistry.register(CameraEntityTypes.DISC_CAMERA, DiscCameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
-        EntityRendererRegistry.register(CameraEntityTypes.PHOTOGRAPH, PhotographRenderer::new);
+        EntityRendererRegistry.register(CameraEntityTypes.PHOTOGRAPH, PhotographEntityRenderer::new);
 
         CameraClientNetworking.init();
     }

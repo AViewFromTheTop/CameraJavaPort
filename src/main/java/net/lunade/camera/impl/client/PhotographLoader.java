@@ -31,19 +31,22 @@ public class PhotographLoader {
         return LOCAL_PHOTOGRAPHS.get(index);
     }
 
-    public static @NotNull ResourceLocation getPhotograph(String photographName) {
-        final var location = getPhotographLocation(photographName);
-        if (!LOADED_TEXTURES.contains(location)) {
+    public static @NotNull ResourceLocation getAndLoadPhotograph(String photographName) {
+        return getAndLoadPhotograph(getPhotographLocation(photographName));
+    }
+
+    public static @NotNull ResourceLocation getAndLoadPhotograph(ResourceLocation photographLocation) {
+        if (!LOADED_TEXTURES.contains(photographLocation)) {
             final var serverTexture = new ServerTexture(
                     "photographs",
-                    photographName + ".png",
+                    photographLocation.getPath().replace("photographs/", "") + ".png",
                     CameraConstants.id("photographs/empty"),
                     () -> {}
             );
-            TEXTURE_MANAGER.register(location, serverTexture);
-            LOADED_TEXTURES.add(location);
+            TEXTURE_MANAGER.register(photographLocation, serverTexture);
+            LOADED_TEXTURES.add(photographLocation);
         }
-        return location;
+        return photographLocation;
     }
 
     public static int getSize() {
@@ -71,7 +74,7 @@ public class PhotographLoader {
         LOCAL_PHOTOGRAPHS.clear();
         for (String name : fileStream.map(File::getName).toList()) {
             name = name.replace(".png", "").replace(ServerTexture.LOCAL_TEXTURE_SOURCE, "");
-            LOCAL_PHOTOGRAPHS.add(PhotographLoader.getPhotograph(name));
+            LOCAL_PHOTOGRAPHS.add(PhotographLoader.getAndLoadPhotograph(name));
         }
         return LOCAL_PHOTOGRAPHS.size();
     }

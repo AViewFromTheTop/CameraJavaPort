@@ -44,7 +44,7 @@ public class PhotographItem extends Item {
             return InteractionResult.FAIL;
         else {
             Level level = context.getLevel();
-            Photograph hangingEntity = new Photograph(level,blockPos2, direction);
+            Photograph hangingEntity = new Photograph(level, blockPos2, direction);
             CustomData customData = itemStack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
             if (!customData.isEmpty())
                 EntityType.updateCustomEntityTag(level, player, hangingEntity, customData);
@@ -64,7 +64,7 @@ public class PhotographItem extends Item {
         return !side.getAxis().isVertical() && player.mayUseItemAt(pos, side, stack);
     }
 
-    public static @Nullable ResourceLocation getPhoto(@NotNull ItemStack stack) {
+    public static @Nullable ResourceLocation getPhotograph(@NotNull ItemStack stack) {
         final var entityDataComponent = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         AtomicReference<ResourceLocation> re = new AtomicReference<>();
         if (!entityDataComponent.isEmpty()) {
@@ -74,9 +74,11 @@ public class PhotographItem extends Item {
     }
 
     @Override
-    public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        final var a = getPhoto(stack);
-        if(a != null) return Optional.of(new PictureTooltipComponent(a));
+    public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
+        if (!stack.has(DataComponents.HIDE_TOOLTIP)) {
+            final var photographLocation = getPhotograph(stack);
+            if (photographLocation != null) return Optional.of(new PictureTooltipComponent(photographLocation));
+        }
         return Optional.empty();
     }
 }

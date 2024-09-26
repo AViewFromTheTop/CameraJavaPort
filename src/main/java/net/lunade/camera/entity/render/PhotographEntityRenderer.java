@@ -24,9 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class PhotographRenderer extends EntityRenderer<Photograph> {
+public class PhotographEntityRenderer extends EntityRenderer<Photograph> {
 
-    public PhotographRenderer(EntityRendererProvider.Context context) {
+    public PhotographEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
