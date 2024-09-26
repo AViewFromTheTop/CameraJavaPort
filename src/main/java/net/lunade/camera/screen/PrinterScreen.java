@@ -23,7 +23,6 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
     private boolean displayRecipes = false;
     private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer.png");
-    private static final ResourceLocation TEXTURE_FILM = CameraConstants.id("textures/gui/printer_test.png");
     private static final ResourceLocation MOVE_RIGHT = CameraConstants.id("textures/gui/sprites/printer/move_right.png");
     private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraConstants.id("textures/gui/sprites/printer/move_right_highlighted.png");
     private static final ResourceLocation MOVE_LEFT = CameraConstants.id("textures/gui/sprites/printer/move_left.png");
@@ -53,7 +52,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     protected void renderBg(@NotNull GuiGraphics graphics, float delta, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
-        graphics.blit(this.displayRecipes ? TEXTURE_FILM : TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
         if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
             final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
