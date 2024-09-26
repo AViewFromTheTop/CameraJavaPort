@@ -7,10 +7,13 @@ import net.lunade.camera.CameraConstants;
 import net.lunade.camera.impl.client.PhotographLoader;
 import net.lunade.camera.menu.PrinterMenu;
 import net.lunade.camera.networking.PrinterAskForSlotsPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
@@ -50,18 +53,21 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
             final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
-            if (middle != null)
-                graphics.blit(middle, i + 64, j + 53, 0, 0, 48, 48, 48, 48);
+            if (middle != null) graphics.blit(middle, i + 64, j + 53, 0, 0, 48, 48, 48, 48);
             if (size != 1) {
                 final var right = PhotographLoader.getInfiniteLocalPhotograph(index + 1);
                 if (right != null) {
+                    // Render right photograph
                     graphics.blit(right, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
+                    // Render right arrow
                     boolean next = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
                     graphics.blit(TEXTURE, i + 119, j + 61, 208, next ? 32 : 0, 32, 32);
                 }
                 final var left = PhotographLoader.getInfiniteLocalPhotograph(index - 1);
                 if (left != null) {
+                    // Render left photograph
                     graphics.blit(left, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
+                    // Render left arrow
                     boolean next = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
                     graphics.blit(TEXTURE, i + 25, j + 61, 176, next ? 32 : 0, 32, 32);
                 }
@@ -80,14 +86,22 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         int i = this.leftPos;
         int j = this.topPos;
         if (isIn(i + 119, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
-            if (this.index == PhotographLoader.getSize() - 1) this.index = 0;
-            else this.index++;
+            if (this.index == PhotographLoader.getSize() - 1) {
+                this.index = 0;
+            } else {
+                this.index++;
+            }
             send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
             return true;
         } else if (isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
-            if (this.index == 0) this.index = PhotographLoader.getSize() - 1;
-            else this.index--;
+            if (this.index == 0) {
+                this.index = PhotographLoader.getSize() - 1;
+            } else {
+                this.index--;
+            }
             send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
