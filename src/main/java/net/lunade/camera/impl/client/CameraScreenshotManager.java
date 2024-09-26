@@ -128,16 +128,15 @@ public class CameraScreenshotManager {
     private static void _grab(@NotNull File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
         NativeImage nativeImage = Screenshot.takeScreenshot(framebuffer);
         LocalDateTime localDateTime = LocalDateTime.now();
-        Path photographPath = gameDirectory.toPath()
+        File photographPath = gameDirectory.toPath()
                 .resolve("photographs")
                 .resolve(".local")
                 .resolve(String.valueOf(localDateTime.getYear()))
                 .resolve(String.valueOf(localDateTime.getMonth().getValue()))
-                .resolve(String.valueOf(localDateTime.getDayOfMonth()));
-
-        File file = photographPath.toFile();
-        file.mkdir();
-        File file2 = getFile(file, localDateTime);
+                .resolve(String.valueOf(localDateTime.getDayOfMonth()))
+                .toFile();
+        photographPath.mkdirs();
+        File file2 = getFile(photographPath, localDateTime);
 
         Util.ioPool().execute(() -> {
             try {
