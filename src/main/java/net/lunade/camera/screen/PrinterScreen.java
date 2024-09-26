@@ -24,6 +24,10 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     private boolean displayRecipes = false;
     private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer.png");
     private static final ResourceLocation TEXTURE_FILM = CameraConstants.id("textures/gui/printer_test.png");
+    private static final ResourceLocation MOVE_RIGHT = CameraConstants.id("textures/gui/sprites/printer/move_right.png");
+    private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraConstants.id("textures/gui/sprites/printer/move_right_highlighted.png");
+    private static final ResourceLocation MOVE_LEFT = CameraConstants.id("textures/gui/sprites/printer/move_left.png");
+    private static final ResourceLocation MOVE_LEFT_SELECTED = CameraConstants.id("textures/gui/sprites/printer/move_left_highlighted.png");
 
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -60,16 +64,16 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
                     // Render right photograph
                     graphics.blit(right, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
                     // Render right arrow
-                    boolean next = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
-                    graphics.blit(TEXTURE, i + 119, j + 61, 208, next ? 32 : 0, 32, 32);
+                    boolean selected = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
+                    graphics.blit(selected ? MOVE_RIGHT_SELECTED : MOVE_RIGHT, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
                 }
                 final var left = PhotographLoader.getInfiniteLocalPhotograph(index - 1);
                 if (left != null) {
                     // Render left photograph
                     graphics.blit(left, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
                     // Render left arrow
-                    boolean next = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
-                    graphics.blit(TEXTURE, i + 25, j + 61, 176, next ? 32 : 0, 32, 32);
+                    boolean selected = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
+                    graphics.blit(selected ? MOVE_LEFT_SELECTED : MOVE_LEFT, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
                 }
             }
         }
