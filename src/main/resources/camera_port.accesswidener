@@ -1,1 +1,2 @@
 accessWidener    v2    named
+accessible method net/minecraft/client/Screenshot getFile (Ljava/io/File;)Ljava/io/File;

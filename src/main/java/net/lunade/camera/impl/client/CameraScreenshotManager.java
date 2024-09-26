@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
@@ -126,13 +125,12 @@ public class CameraScreenshotManager {
 
     private static void _grab(@NotNull File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
         NativeImage nativeImage = Screenshot.takeScreenshot(framebuffer);
-        LocalDateTime localDateTime = LocalDateTime.now();
         File photographPath = gameDirectory.toPath()
                 .resolve("photographs")
                 .resolve(".local")
                 .toFile();
         photographPath.mkdirs();
-        File file2 = getFile(photographPath, localDateTime);
+        File file2 = Screenshot.getFile(photographPath);
 
         Util.ioPool().execute(() -> {
             try {
@@ -149,25 +147,6 @@ public class CameraScreenshotManager {
             }
 
         });
-    }
-
-    private static @NotNull File getFile(File directory, @NotNull LocalDateTime localDateTime) {
-        String fileName = localDateTime.getYear() + "_"
-                + localDateTime.getMonthValue() + "_"
-                + localDateTime.getDayOfMonth() + "_"
-                + localDateTime.getHour() + "_"
-                + localDateTime.getMinute() + "_"
-                + localDateTime.getSecond();
-        int fileIndex = 1;
-
-        while (true) {
-            File file = new File(directory, fileName + (fileIndex == 1 ? "" : "_" + fileIndex) + ".png");
-            if (!file.exists()) {
-                return file;
-            }
-
-            ++fileIndex;
-        }
     }
 
 }
