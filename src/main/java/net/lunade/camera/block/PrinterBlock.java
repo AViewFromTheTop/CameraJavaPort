@@ -32,7 +32,8 @@ public class PrinterBlock extends HorizontalDirectionalBlock {
         return CODEC;
     }
 
-    protected @NotNull InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player entity, BlockHitResult hitResult) {
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(BlockState state, @NotNull Level world, BlockPos pos, Player entity, BlockHitResult hitResult) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -49,12 +50,12 @@ public class PrinterBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 }
