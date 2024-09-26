@@ -56,7 +56,7 @@ public class PhotographScreen extends Screen {
         super.render(graphics, mouseX, mouseY, delta);
         int i = leftPos;
         int j = topPos;
-        for(int k = 0; k < IMAGES.size(); k++) {
+        for (int k = 0; k < IMAGES.size(); k++) {
             final var texture = IMAGES.get(k);
             final int row = k % rows;
             final int col = k / rows;
