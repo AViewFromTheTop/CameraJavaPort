@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
     private boolean displayRecipes = false;
-    private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer.png");
+    private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer_test.png");
 
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
