@@ -12,7 +12,7 @@ import org.joml.Matrix4f;
 
 public class ClientPictureTooltipComponent implements ClientTooltipComponent {
     private static final int PHOTOGRAPH_RENDER_SIZE = 32;
-    private static final int PHOTOGRAPH_RENDER_OFFSET_X = 6;
+    private static final int PHOTOGRAPH_RENDER_OFFSET_X = 3;
     private static final int TOOLTIP_WIDTH = PHOTOGRAPH_RENDER_SIZE + (PHOTOGRAPH_RENDER_OFFSET_X * 2);
     private final PictureTooltipComponent component;
 
@@ -33,7 +33,7 @@ public class ClientPictureTooltipComponent implements ClientTooltipComponent {
     @Override
     public void renderImage(Font textRenderer, int x, int y, @NotNull GuiGraphics graphics) {
         ResourceLocation photoLocation = this.component.id();
-        PhotographRenderer.render(x, y, PHOTOGRAPH_RENDER_OFFSET_X, 0, graphics, photoLocation, PHOTOGRAPH_RENDER_SIZE);
+        PhotographRenderer.render(x, y, PHOTOGRAPH_RENDER_OFFSET_X, 0, graphics, photoLocation, PHOTOGRAPH_RENDER_SIZE, true);
     }
 
     @Override
