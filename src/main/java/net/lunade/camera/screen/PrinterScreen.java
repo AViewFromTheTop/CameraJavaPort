@@ -19,7 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
     private boolean displayRecipes = false;
-    private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer_test.png");
+    private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer.png");
+    private static final ResourceLocation TEXTURE_FILM = CameraConstants.id("textures/gui/printer_test.png");
 
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -45,7 +46,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     protected void renderBg(@NotNull GuiGraphics graphics, float delta, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
-        graphics.blit(TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
+        graphics.blit(this.displayRecipes ? TEXTURE_FILM : TEXTURE, i, j, 0, 0,this.imageWidth, this.imageHeight);
         if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
             final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
