@@ -12,6 +12,7 @@ import net.lunade.camera.CameraPortMain;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
@@ -113,29 +116,28 @@ public class CameraScreenshotManager {
         }
     }
 
-    public static void grab(File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
-        grab(gameDirectory, null, framebuffer, messageReceiver);
-    }
-
-    private static void grab(File gameDirectory, @Nullable String fileName, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
+    private static void grab(File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
         if (!RenderSystem.isOnRenderThread()) {
-            RenderSystem.recordRenderCall(() -> _grab(gameDirectory, fileName, framebuffer, messageReceiver));
+            RenderSystem.recordRenderCall(() -> _grab(gameDirectory, framebuffer, messageReceiver));
         } else {
-            _grab(gameDirectory, fileName, framebuffer, messageReceiver);
+            _grab(gameDirectory, framebuffer, messageReceiver);
         }
 
     }
 
-    private static void _grab(File gameDirectory, @Nullable String fileName, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
-        NativeImage nativeImage = takeScreenshot(framebuffer);
-        File file = new File(gameDirectory, "photographs/.local");
+    private static void _grab(@NotNull File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
+        NativeImage nativeImage = Screenshot.takeScreenshot(framebuffer);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Path photographPath = gameDirectory.toPath()
+                .resolve("photographs")
+                .resolve(".local")
+                .resolve(String.valueOf(localDateTime.getYear()))
+                .resolve(String.valueOf(localDateTime.getMonth().getValue()))
+                .resolve(String.valueOf(localDateTime.getDayOfMonth()));
+
+        File file = photographPath.toFile();
         file.mkdir();
-        File file2;
-        if (fileName == null) {
-            file2 = getFile(file);
-        } else {
-            file2 = new File(file, fileName);
-        }
+        File file2 = getFile(file, localDateTime);
 
         Util.ioPool().execute(() -> {
             try {
@@ -154,27 +156,17 @@ public class CameraScreenshotManager {
         });
     }
 
-    private static @NotNull NativeImage takeScreenshot(@NotNull RenderTarget framebuffer) {
-        int i = framebuffer.width;
-        int j = framebuffer.height;
-        NativeImage nativeImage = new NativeImage(i, j, false);
-        RenderSystem.bindTexture(framebuffer.getColorTextureId());
-        nativeImage.downloadTexture(0, true);
-        nativeImage.flipY();
-        return nativeImage;
-    }
+    private static @NotNull File getFile(File directory, @NotNull LocalDateTime localDateTime) {
+        String fileName = localDateTime.getHour() + "_" + localDateTime.getMinute() + "_" + localDateTime.getSecond();
+        int fileIndex = 1;
 
-    private static @NotNull File getFile(File directory) {
-        String string = Minecraft.getInstance().getGameProfile().getId().toString();
-        int i = 1;
-
-        while(true) {
-            File file = new File(directory, string + (i == 1 ? "" : "_" + i) + ".png");
+        while (true) {
+            File file = new File(directory, fileName + (fileIndex == 1 ? "" : "_" + fileIndex) + ".png");
             if (!file.exists()) {
                 return file;
             }
 
-            ++i;
+            ++fileIndex;
         }
     }
 

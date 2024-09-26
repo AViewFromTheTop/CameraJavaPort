@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraConstants;
+import net.minecraft.FileUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +63,7 @@ public class PhotographLoader {
     }
 
     public static int loadLocalPhotographs() {
-        final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").toFile();
+        final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(".local").toFile();
         File[] fileList = file.listFiles();
         if (fileList == null) return 0;
         final var fileStream = Arrays.stream(fileList)
