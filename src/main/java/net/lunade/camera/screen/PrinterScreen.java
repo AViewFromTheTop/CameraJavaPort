@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lunade.camera.CameraConstants;
 import net.lunade.camera.impl.client.PhotographLoader;
+import net.lunade.camera.impl.client.PhotographRenderer;
 import net.lunade.camera.menu.PrinterMenu;
 import net.lunade.camera.networking.PrinterAskForSlotsPacket;
 import net.minecraft.client.Minecraft;
@@ -56,12 +57,12 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
         if (this.displayRecipes) {
             final int size = PhotographLoader.getSize();
             final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
-            if (middle != null) graphics.blit(middle, i + 64, j + 53, 0, 0, 48, 48, 48, 48);
+            if (middle != null) PhotographRenderer.render(i, j, 64, 53, graphics, middle, 48, true);
             if (size != 1) {
                 final var right = PhotographLoader.getInfiniteLocalPhotograph(index + 1);
                 if (right != null) {
                     // Render right photograph
-                    graphics.blit(right, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
+                    PhotographRenderer.render(i, j, 119, 61, graphics, right, 32, true);
                     // Render right arrow
                     boolean selected = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
                     graphics.blit(selected ? MOVE_RIGHT_SELECTED : MOVE_RIGHT, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
@@ -69,7 +70,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
                 final var left = PhotographLoader.getInfiniteLocalPhotograph(index - 1);
                 if (left != null) {
                     // Render left photograph
-                    graphics.blit(left, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
+                    PhotographRenderer.render(i, j, 25, 61, graphics, left, 32, true);
                     // Render left arrow
                     boolean selected = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
                     graphics.blit(selected ? MOVE_LEFT_SELECTED : MOVE_LEFT, i + 25, j + 61, 0, 0, 32, 32, 32, 32);

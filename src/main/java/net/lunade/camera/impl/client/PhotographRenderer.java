@@ -33,16 +33,20 @@ public class PhotographRenderer {
         int renderX = x + xOffset;
         int renderY = y + yOffset;
         if (renderFrame) {
+            double frameOffsetScale = renderSize / 80D;
+            int posOffset = (int) (5 * frameOffsetScale);
+            int sizeOffset = (int) (10 * frameOffsetScale);
+            int frameRenderSize = renderSize + sizeOffset;
             graphics.blit(
                     FRAME,
-                    renderX - 2,
-                    renderY - 2,
+                    renderX - posOffset,
+                    renderY - posOffset,
                     0,
                     0,
-                    renderSize + 4,
-                    renderSize + 4,
-                    renderSize + 4,
-                    renderSize + 4
+                    frameRenderSize,
+                    frameRenderSize,
+                    frameRenderSize,
+                    frameRenderSize
             );
         }
         graphics.blit(
