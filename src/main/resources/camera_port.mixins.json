@@ -9,6 +9,7 @@
     "CameraMixin",
     "ClientTooltipComponentMixin",
     "ItemFrameRendererMixin",
+    "ItemInHandRendererMixin",
     "LevelRendererMixin"
   ],
   "injectors": {

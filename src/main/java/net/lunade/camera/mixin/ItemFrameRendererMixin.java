@@ -66,12 +66,10 @@ public class ItemFrameRendererMixin {
     ) {
         PhotographComponent photographComponent = photographComponentRef.get();
         if (photographComponent != null) {
-            matrices.mulPose(Axis.ZP.rotationDegrees(180F));
             // 0.625F
             matrices.scale(1.25F, 1.25F, 1.25F);
-            matrices.translate(-0.5F, -0.5F, 0F);
             matrices.translate(0F, 0F, 0.03125F);
-            PhotographRenderer.render(matrices, vertexConsumers, photographComponent.location(), light);
+            PhotographRenderer.render(matrices, vertexConsumers, photographComponent.location(), light, false);
         } else {
             original.call(instance, stack, modelTransformationMode, light, overlay, matrices, vertexConsumers, world, seed);
         }
