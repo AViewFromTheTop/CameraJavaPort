@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.impl.client.PhotographRenderer;
 import net.lunade.camera.registry.CameraItems;

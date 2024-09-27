@@ -59,6 +59,7 @@ public abstract class ItemInHandRendererMixin {
             PhotographComponent photographComponent = item.get(CameraItems.PHOTO_COMPONENT);
             if (photographComponent != null) {
                 this.cameraPort$renderPhotographInHand(matrices, vertexConsumers, light, equipProgress, humanoidArm, swingProgress, photographComponent);
+                matrices.popPose();
                 info.cancel();
             }
         }
