@@ -10,7 +10,7 @@
       "item": "camera_port:camera"
     },
     "x": {
-      "tag": "minecraft:music_discs"
+      "tag": "c:music_discs"
     }
   },
   "result": {
