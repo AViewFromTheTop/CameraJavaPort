@@ -156,10 +156,9 @@ public class CameraScreenshotManager {
                 Component component = Component.literal(photographFile.getName()).withStyle(ChatFormatting.UNDERLINE)
                         .withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, photographFile.getAbsolutePath())));
                 messageReceiver.accept(Component.translatable("screenshot.success", component));
-            } catch (Exception var7) {
-                Exception exception = var7;
-                CameraPortConstants.warn("Couldn't save screenshot " + exception, true);
-                messageReceiver.accept(Component.translatable("screenshot.failure", exception.getMessage()));
+            } catch (Exception e) {
+                CameraPortConstants.warn("Couldn't save screenshot " + e, true);
+                messageReceiver.accept(Component.translatable("screenshot.failure", e.getMessage()));
             } finally {
                 nativeImage.close();
             }
@@ -184,17 +183,17 @@ public class CameraScreenshotManager {
             nativeImage.resizeSubRectTo(k, l, i, j, nativeImage2);
             nativeImage2.writeToFile(path);
         } catch (IOException e) {
-            CameraPortConstants.LOGGER.warn("Couldn't save photo to world icon", e);
+            CameraPortConstants.LOGGER.warn("Couldn't save photograph to world icon", e);
         } finally {
             nativeImage.close();
         }
     }
 
     public static @NotNull File getPhotographFile(File directory) {
-        String fileName = PLAYER_UUID + "_" + Util.getFilenameFormattedDateTime();
+        String fileName = PLAYER_UUID + "_" + System.currentTimeMillis();
         int fileIndex = 1;
 
-        while(true) {
+        while (true) {
             File file = new File(directory, fileName + (fileIndex == 1 ? "" : "_" + fileIndex) + ".png");
             if (!file.exists()) {
                 return file;
