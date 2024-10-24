@@ -85,6 +85,6 @@ public class PhotographLoader {
      * @param imageId The image is a string, I know, but that's how it's stored in the menu
      * */
     public static void onReceiveItem(String imageId, Player player) {
-        FileTransferPacket.createRequest("photgraphs/", imageId);
+        FileTransferPacket.createRequest("photographs/", imageId);
     }
 }
