@@ -1,6 +1,6 @@
 package net.lunade.camera.item;
 
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.tooltip.PictureTooltipComponent;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.registry.CameraEntityTypes;
@@ -68,7 +68,7 @@ public class PhotographItem extends Item {
         final var entityDataComponent = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         AtomicReference<ResourceLocation> re = new AtomicReference<>();
         if (!entityDataComponent.isEmpty()) {
-            entityDataComponent.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(CameraConstants.id("photographs/" + value)), () -> {});
+            entityDataComponent.read(Photograph.ID_MAP_CODEC).result().ifPresentOrElse(value -> re.set(CameraPortConstants.id("photographs/" + value)), () -> {});
         }
         return re.get();
     }

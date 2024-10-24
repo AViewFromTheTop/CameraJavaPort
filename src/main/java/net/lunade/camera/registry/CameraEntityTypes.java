@@ -1,7 +1,7 @@
 package net.lunade.camera.registry;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.CameraEntity;
 import net.lunade.camera.entity.DiscCameraEntity;
 import net.lunade.camera.entity.Photograph;
@@ -19,7 +19,7 @@ public class CameraEntityTypes {
                     .sized(0.6F, 1.75F)
                     .eyeHeight(1.619999999999999F)
                     .clientTrackingRange(8)
-                    .build(CameraConstants.string("camera"))
+                    .build(CameraPortConstants.string("camera"))
     );
 
     public static final EntityType<DiscCameraEntity> DISC_CAMERA = register(
@@ -28,7 +28,7 @@ public class CameraEntityTypes {
                     .sized(0.55F, 0.9F)
                     .eyeHeight(0.81F)
                     .clientTrackingRange(8)
-                    .build(CameraConstants.string("disc_camera"))
+                    .build(CameraPortConstants.string("disc_camera"))
     );
 
     public static final EntityType<Photograph> PHOTOGRAPH = register(
@@ -38,7 +38,7 @@ public class CameraEntityTypes {
                     .eyeHeight(0.81F)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
-                    .build(CameraConstants.string("photograph"))
+                    .build(CameraPortConstants.string("photograph"))
     );
 
     public static void init() {
@@ -48,6 +48,6 @@ public class CameraEntityTypes {
 
     @NotNull
     private static <E extends Entity, T extends EntityType<E>> T register(@NotNull String path, @NotNull T entityType) {
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, CameraConstants.id(path), entityType);
+        return Registry.register(BuiltInRegistries.ENTITY_TYPE, CameraPortConstants.id(path), entityType);
     }
 }

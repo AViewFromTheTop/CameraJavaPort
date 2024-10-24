@@ -41,8 +41,8 @@ public class DiscCameraEntityModel<A extends DiscCameraEntity> extends EntityMod
 
     @Override
     public void setupAnim(@NotNull A entity, float limbSwing, float limbSwingAmount, float time, float netHeadYaw, float headPitch) {
-        this.disc.yRot = 45 * RAD;
-        this.disc2.yRot = -45 * RAD;
+        this.disc.yRot = 45F * RAD;
+        this.disc2.yRot = -45F * RAD;
 
         this.head.yRot = netHeadYaw * RAD;
         this.head.xRot = headPitch * RAD;

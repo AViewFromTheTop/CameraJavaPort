@@ -11,13 +11,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
 
 public class CameraPortMain implements ModInitializer {
-    public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.break"));
-    public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.fall"));
-    public static final SoundEvent CAMERA_HIT = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.hit"));
-    public static final SoundEvent CAMERA_PLACE = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.place"));
-    public static final SoundEvent CAMERA_PRIME = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.prime"));
-    public static final SoundEvent CAMERA_SNAP = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.snap"));
-    public static final SoundEvent CAMERA_ADJUST = SoundEvent.createVariableRangeEvent(CameraConstants.id("entity.camera.adjust"));
+    public static final SoundEvent CAMERA_BREAK = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.break"));
+    public static final SoundEvent CAMERA_FALL = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.fall"));
+    public static final SoundEvent CAMERA_HIT = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.hit"));
+    public static final SoundEvent CAMERA_PLACE = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.place"));
+    public static final SoundEvent CAMERA_PRIME = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.prime"));
+    public static final SoundEvent CAMERA_SNAP = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.snap"));
+    public static final SoundEvent CAMERA_ADJUST = SoundEvent.createVariableRangeEvent(CameraPortConstants.id("entity.camera.adjust"));
 
     @Override
     public void onInitialize() {

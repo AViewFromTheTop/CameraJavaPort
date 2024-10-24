@@ -3,7 +3,7 @@ package net.lunade.camera.screen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.impl.client.PhotographLoader;
 import net.lunade.camera.impl.client.PhotographRenderer;
 import net.lunade.camera.menu.PrinterMenu;
@@ -23,11 +23,11 @@ import org.jetbrains.annotations.NotNull;
 public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
     int index = 0;
     private boolean displayRecipes = false;
-    private static final ResourceLocation TEXTURE = CameraConstants.id("textures/gui/printer.png");
-    private static final ResourceLocation MOVE_RIGHT = CameraConstants.id("textures/gui/sprites/printer/move_right.png");
-    private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraConstants.id("textures/gui/sprites/printer/move_right_highlighted.png");
-    private static final ResourceLocation MOVE_LEFT = CameraConstants.id("textures/gui/sprites/printer/move_left.png");
-    private static final ResourceLocation MOVE_LEFT_SELECTED = CameraConstants.id("textures/gui/sprites/printer/move_left_highlighted.png");
+    private static final ResourceLocation TEXTURE = CameraPortConstants.id("textures/gui/printer.png");
+    private static final ResourceLocation MOVE_RIGHT = CameraPortConstants.id("textures/gui/sprites/printer/move_right.png");
+    private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraPortConstants.id("textures/gui/sprites/printer/move_right_highlighted.png");
+    private static final ResourceLocation MOVE_LEFT = CameraPortConstants.id("textures/gui/sprites/printer/move_left.png");
+    private static final ResourceLocation MOVE_LEFT_SELECTED = CameraPortConstants.id("textures/gui/sprites/printer/move_left_highlighted.png");
 
     public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);

@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.Photograph;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -38,7 +38,7 @@ public class PhotographEntityRenderer extends EntityRenderer<Photograph> {
             photograph.serverTexture = new ServerTexture(
                     "photographs",
                     photograph.getPhotographName() + ".png",
-                    CameraConstants.id("photographs/empty"),
+                    CameraPortConstants.id("photographs/empty"),
                     () -> {}
             );
             Minecraft.getInstance().getTextureManager().register(photoLocation, photograph.serverTexture);
@@ -71,7 +71,7 @@ public class PhotographEntityRenderer extends EntityRenderer<Photograph> {
     }
 
     public ResourceLocation getPhotographLocation(@NotNull Photograph photograph) {
-        return CameraConstants.id("photographs/" + photograph.getPhotographName());
+        return CameraPortConstants.id("photographs/" + photograph.getPhotographName());
     }
 
     private void renderPhotograph(

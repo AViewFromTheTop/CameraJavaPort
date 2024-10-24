@@ -1,7 +1,7 @@
 package net.lunade.camera.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.block.PrinterBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,8 +18,8 @@ public class CameraBlocks {
     public static final Block PRINTER = new PrinterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LOOM));
 
     public static void register() {
-        Registry.register(BuiltInRegistries.BLOCK, CameraConstants.id("printer"), PRINTER);
-        Registry.register(BuiltInRegistries.ITEM, CameraConstants.id("printer"), new BlockItem(PRINTER, new Item.Properties()));
+        Registry.register(BuiltInRegistries.BLOCK, CameraPortConstants.id("printer"), PRINTER);
+        Registry.register(BuiltInRegistries.ITEM, CameraPortConstants.id("printer"), new BlockItem(PRINTER, new Item.Properties()));
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PRINTER));
     }
 }

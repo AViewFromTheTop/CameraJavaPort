@@ -1,7 +1,7 @@
 package net.lunade.camera.networking;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.CameraEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
     public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            CameraConstants.safeString("camera_possess")
+            CameraPortConstants.safeString("camera_possess")
     );
     public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
             .map(CameraPossessPacket::new, CameraPossessPacket::entityId)

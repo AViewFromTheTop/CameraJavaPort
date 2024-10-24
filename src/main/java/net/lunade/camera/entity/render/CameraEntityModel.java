@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CameraEntityModel<T extends CameraEntity> extends EntityModel<T> {
     private static final float moveBy = 15F / 1.75F;
-    private static final float RAD = (float) (Math.PI / 180);
+    private static final float RAD = (float) (Math.PI / 180F);
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart leg1;
@@ -48,7 +48,7 @@ public class CameraEntityModel<T extends CameraEntity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float time, float netHeadYaw, float headPitch) {
-        float angle = (15 + (((1.75f - entity.getTrackedHeight()) * moveBy) * 6.7F));
+        float angle = (15F + (((1.75F - entity.getTrackedHeight()) * moveBy) * 6.7F));
 
         this.leg1.xRot = angle * RAD;
         this.leg2.xRot = -angle * RAD;

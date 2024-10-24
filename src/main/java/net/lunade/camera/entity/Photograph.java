@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.registry.CameraEntityTypes;
 import net.lunade.camera.registry.CameraItems;
@@ -167,7 +167,7 @@ public class Photograph extends HangingEntity {
     public ItemStack getPickResult() {
         ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
         stack.set(
-                CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraConstants.id("photographs/" + this.getPhotographName()))
+                CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraPortConstants.id("photographs/" + this.getPhotographName()))
         );
         return stack;
     }

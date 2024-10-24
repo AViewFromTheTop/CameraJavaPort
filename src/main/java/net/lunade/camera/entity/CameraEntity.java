@@ -126,7 +126,7 @@ public class CameraEntity extends Mob {
     }
 
     @Override
-    protected InteractionResult mobInteract(@NotNull Player player, InteractionHand hand) {
+    protected @NotNull InteractionResult mobInteract(@NotNull Player player, InteractionHand hand) {
         if (this.level().isClientSide) {
             return InteractionResult.SUCCESS;
         }

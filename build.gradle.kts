@@ -45,8 +45,9 @@ val maven_group: String by project
 val archives_base_name: String by project
 
 val fabric_api_version: String by project
-val modmenu_version: String by project
 val frozenlib_version: String by project
+val modmenu_version: String by project
+val cloth_config_version: String by project
 
 val local_frozenlib = findProject(":FrozenLib") != null
 
@@ -143,7 +144,13 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
 	// Mod Menu
-	modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
+	modImplementation("com.terraformersmc:modmenu:$modmenu_version")
+
+	// Cloth Config
+	modImplementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+		exclude(group = "net.fabricmc.fabric-api")
+		exclude(group = "com.terraformersmc")
+	}
 
 	// FrozenLib
 	if (local_frozenlib) {

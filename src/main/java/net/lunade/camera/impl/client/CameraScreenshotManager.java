@@ -7,14 +7,17 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraConstants;
+import net.frozenblock.lib.networking.FrozenNetworking;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.CameraPortMain;
+import net.lunade.camera.config.CameraPortConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -25,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
@@ -66,8 +71,6 @@ public class CameraScreenshotManager {
                     for (int i = 0; i < smokeCount; i++) {
                         client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
                     }
-                    Vec3 forward = camEntity.getForward();
-                    client.level.addParticle(ParticleTypes.FLASH, camEntity.getX() + forward.z, camEntity.getEyeY() + forward.y, camEntity.getZ() + forward.z, 0, 0, 0);
                 }
             }
         }
@@ -133,16 +136,30 @@ public class CameraScreenshotManager {
                 .toFile();
         photographPath.mkdirs();
 
+        Optional<Path> iconPath = Optional.empty();
+        Minecraft minecraft = Minecraft.getInstance();
+        if (CameraPortConfig.get().useLatestPhotoAsWorldIcon && minecraft.isLocalServer()) {
+            IntegratedServer integratedServer = minecraft.getSingleplayerServer();
+            if (integratedServer != null) {
+                iconPath = minecraft.getSingleplayerServer().getWorldScreenshotFile();
+                iconPath.ifPresent(path -> path.toFile().mkdirs());
+            }
+        }
+
         File photographFile = getPhotographFile(photographPath);
+        Optional<Path> finalIconPath = iconPath;
         Util.ioPool().execute(() -> {
             try {
                 nativeImage.writeToFile(photographFile);
+                if (finalIconPath.isPresent()) {
+                    nativeImage.writeToFile(finalIconPath.get());
+                }
                 Component component = Component.literal(photographFile.getName()).withStyle(ChatFormatting.UNDERLINE)
                         .withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, photographFile.getAbsolutePath())));
                 messageReceiver.accept(Component.translatable("screenshot.success", component));
             } catch (Exception var7) {
                 Exception exception = var7;
-                CameraConstants.warn("Couldn't save screenshot " + exception, true);
+                CameraPortConstants.warn("Couldn't save screenshot " + exception, true);
                 messageReceiver.accept(Component.translatable("screenshot.failure", exception.getMessage()));
             } finally {
                 nativeImage.close();

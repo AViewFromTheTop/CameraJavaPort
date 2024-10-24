@@ -1,12 +1,13 @@
 package net.lunade.camera;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class CameraConstants {
+public final class CameraPortConstants {
     public static final String PROJECT_ID = "Camera Port";
     public static final String MOD_ID = "camera_port";
     public static final Logger LOGGER = LoggerFactory.getLogger(PROJECT_ID);
@@ -65,5 +66,19 @@ public final class CameraConstants {
 
     public static String safeString(String path) {
         return MOD_ID + "_" + path;
+    }
+
+    /**
+     * @return A text component for use in a Config GUI
+     */
+    public static Component text(String key) {
+        return Component.translatable("option." + MOD_ID + "." + key);
+    }
+
+    /**
+     * @return A tooltip component for use in a Config GUI
+     */
+    public static Component tooltip(String key) {
+        return Component.translatable("tooltip." + MOD_ID + "." + key);
     }
 }

@@ -12,8 +12,8 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 
 @Environment(EnvType.CLIENT)
 public class CameraPortClient implements ClientModInitializer {
-    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(CameraConstants.id("camera"), "main");
-    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(CameraConstants.id("disc_camera"), "main");
+    public static ModelLayerLocation CAMERA_MODEL_LAYER = new ModelLayerLocation(CameraPortConstants.id("camera"), "main");
+    public static ModelLayerLocation DISC_CAMERA_MODEL_LAYER = new ModelLayerLocation(CameraPortConstants.id("disc_camera"), "main");
 
     @Override
     public void onInitializeClient() {

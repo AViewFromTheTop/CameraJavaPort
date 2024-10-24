@@ -3,7 +3,7 @@ package net.lunade.camera.networking;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.menu.PrinterMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record PrinterAskForSlotsPacket(int count, String id) implements CustomPacketPayload {
     public static final Type<PrinterAskForSlotsPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            CameraConstants.safeString("printer_ask_for_slots")
+            CameraPortConstants.safeString("printer_ask_for_slots")
     );
     public static final StreamCodec<FriendlyByteBuf, PrinterAskForSlotsPacket> CODEC = StreamCodec.ofMember(PrinterAskForSlotsPacket::write, PrinterAskForSlotsPacket::new);
 

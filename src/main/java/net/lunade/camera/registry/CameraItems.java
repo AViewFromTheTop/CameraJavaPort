@@ -1,7 +1,7 @@
 package net.lunade.camera.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.item.CameraItem;
 import net.lunade.camera.item.PhotographItem;
@@ -27,16 +27,16 @@ public class CameraItems {
 
 
     public static void register() {
-        registerCameraItem(DISC_CAMERA_ITEM, CameraConstants.id("disc_camera"));
-        registerCameraItem(CAMERA_ITEM, CameraConstants.id("camera"));
+        registerCameraItem(DISC_CAMERA_ITEM, CameraPortConstants.id("disc_camera"));
+        registerCameraItem(CAMERA_ITEM, CameraPortConstants.id("camera"));
 
-        Registry.register(BuiltInRegistries.ITEM, CameraConstants.id("photograph"), PHOTOGRAPH);
+        Registry.register(BuiltInRegistries.ITEM, CameraPortConstants.id("photograph"), PHOTOGRAPH);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PHOTOGRAPH));
 
-        Registry.register(BuiltInRegistries.ITEM, CameraConstants.id("portfolio"), PORTFOLIO);
+        Registry.register(BuiltInRegistries.ITEM, CameraPortConstants.id("portfolio"), PORTFOLIO);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PORTFOLIO));
 
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, CameraConstants.id("photograph_component"), PHOTO_COMPONENT);
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, CameraPortConstants.id("photograph_component"), PHOTO_COMPONENT);
     }
 
     public static void registerCameraItem(CameraItem cameraItem, ResourceLocation resourceLocation) {

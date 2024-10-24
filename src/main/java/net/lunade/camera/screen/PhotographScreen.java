@@ -2,7 +2,7 @@ package net.lunade.camera.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressWarnings("all")
 @Environment(EnvType.CLIENT)
 public class PhotographScreen extends Screen {
-    private final ResourceLocation BASE_IMAGE = CameraConstants.id("textures/gui/picture_screen.png");
+    private final ResourceLocation BASE_IMAGE = CameraPortConstants.id("textures/gui/picture_screen.png");
     private final List<ResourceLocation> IMAGES = new ArrayList<>();
 
     private int leftPos;

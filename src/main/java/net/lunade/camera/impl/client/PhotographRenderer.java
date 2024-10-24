@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -15,7 +15,7 @@ import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class PhotographRenderer {
-    private static final ResourceLocation FRAME = CameraConstants.id("textures/gui/sprites/photograph/frame.png");
+    private static final ResourceLocation FRAME = CameraPortConstants.id("textures/gui/sprites/photograph/frame.png");
 
     public static void render(
             @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, ResourceLocation photoLocation, int light, boolean renderFrame

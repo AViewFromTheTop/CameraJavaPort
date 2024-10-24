@@ -2,7 +2,7 @@ package net.lunade.camera.menu;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.entity.Photograph;
@@ -128,7 +128,7 @@ public class PrinterMenu extends AbstractContainerMenu {
             String photographName = this.temp.replace("photographs/", "");
             stack.set(
                     CameraItems.PHOTO_COMPONENT,
-                    new PhotographComponent(CameraConstants.id("photographs/" + photographName))
+                    new PhotographComponent(CameraPortConstants.id("photographs/" + photographName))
             );
 
             final CompoundTag tag = new CompoundTag();

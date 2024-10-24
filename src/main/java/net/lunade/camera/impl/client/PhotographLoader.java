@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
-import net.lunade.camera.CameraConstants;
+import net.lunade.camera.CameraPortConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +40,7 @@ public class PhotographLoader {
             final var serverTexture = new ServerTexture(
                     "photographs",
                     photographLocation.getPath().replace("photographs/", "") + ".png",
-                    CameraConstants.id("photographs/empty"),
+                    CameraPortConstants.id("photographs/empty"),
                     () -> {}
             );
             TEXTURE_MANAGER.register(photographLocation, serverTexture);
@@ -61,7 +61,7 @@ public class PhotographLoader {
     }
 
     private static @NotNull ResourceLocation getPhotographLocation(@NotNull String name) {
-        return CameraConstants.id("photographs/" + name);
+        return CameraPortConstants.id("photographs/" + name);
     }
 
     public static int loadLocalPhotographs() {
