@@ -5,9 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.frozenblock.lib.image_transfer.client.ServerTexture;
-import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.Photograph;
+import net.lunade.camera.impl.client.PhotographLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,18 +30,9 @@ public class PhotographEntityRenderer extends EntityRenderer<Photograph> {
     }
 
     @Override
-    public void render(Photograph photograph, float f, float g, @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, int i) {
+    public void render(@NotNull Photograph photograph, float f, float g, @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, int i) {
         String photographName = photograph.getPhotographName();
-        ResourceLocation photoLocation = this.getPhotographLocation(photograph);
-        if (photograph.serverTexture == null && !photographName.isEmpty()) {
-            photograph.serverTexture = new ServerTexture(
-                    "photographs",
-                    photograph.getPhotographName() + ".png",
-                    CameraPortConstants.id("photographs/empty"),
-                    () -> {}
-            );
-            Minecraft.getInstance().getTextureManager().register(photoLocation, photograph.serverTexture);
-        }
+        ResourceLocation photoLocation = PhotographLoader.getAndLoadPhotograph(photographName);
         matrices.pushPose();
         matrices.mulPose(Axis.YP.rotationDegrees(180F - f));
         this.renderPhotograph(
@@ -68,10 +58,6 @@ public class PhotographEntityRenderer extends EntityRenderer<Photograph> {
     @Override
     public @NotNull ResourceLocation getTextureLocation(Photograph photograph) {
         return Minecraft.getInstance().getPaintingTextures().getBackSprite().atlasLocation();
-    }
-
-    public ResourceLocation getPhotographLocation(@NotNull Photograph photograph) {
-        return CameraPortConstants.id("photographs/" + photograph.getPhotographName());
     }
 
     private void renderPhotograph(
