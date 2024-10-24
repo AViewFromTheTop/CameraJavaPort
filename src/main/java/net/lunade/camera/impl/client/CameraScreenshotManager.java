@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -151,9 +152,7 @@ public class CameraScreenshotManager {
         Util.ioPool().execute(() -> {
             try {
                 nativeImage.writeToFile(photographFile);
-                if (finalIconPath.isPresent()) {
-                    nativeImage.writeToFile(finalIconPath.get());
-                }
+                finalIconPath.ifPresent(path -> copyPhotographToFileWithSize(nativeImage, path, 64, 64));
                 Component component = Component.literal(photographFile.getName()).withStyle(ChatFormatting.UNDERLINE)
                         .withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, photographFile.getAbsolutePath())));
                 messageReceiver.accept(Component.translatable("screenshot.success", component));
@@ -166,6 +165,29 @@ public class CameraScreenshotManager {
             }
 
         });
+    }
+
+    private static void copyPhotographToFileWithSize(NativeImage nativeImage, Path path, int width, int height) {
+        int i = nativeImage.getWidth();
+        int j = nativeImage.getHeight();
+        int k = 0;
+        int l = 0;
+        if (i > j) {
+            k = (i - j) / 2;
+            i = j;
+        } else {
+            l = (j - i) / 2;
+            j = i;
+        }
+
+        try (NativeImage nativeImage2 = new NativeImage(64, 64, false)) {
+            nativeImage.resizeSubRectTo(k, l, i, j, nativeImage2);
+            nativeImage2.writeToFile(path);
+        } catch (IOException e) {
+            CameraPortConstants.LOGGER.warn("Couldn't save photo to world icon", e);
+        } finally {
+            nativeImage.close();
+        }
     }
 
     public static @NotNull File getPhotographFile(File directory) {
