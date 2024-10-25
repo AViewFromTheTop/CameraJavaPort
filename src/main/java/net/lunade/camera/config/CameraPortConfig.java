@@ -54,6 +54,6 @@ public class CameraPortConfig {
 
     @Contract(pure = true)
     private static @NotNull Path configPath(boolean json5) {
-        return Path.of("./" + CameraPortConstants.MOD_ID + "." + (json5 ? "json5" : "json"));
+        return Path.of("./config/" + CameraPortConstants.MOD_ID + "." + (json5 ? "json5" : "json"));
     }
 }
