@@ -3,7 +3,7 @@ package net.lunade.camera.item;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.tooltip.PictureTooltipComponent;
 import net.lunade.camera.entity.Photograph;
-import net.lunade.camera.registry.CameraEntityTypes;
+import net.lunade.camera.registry.CameraPortEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -30,7 +30,7 @@ public class PhotographItem extends Item {
 
     public PhotographItem(Properties settings) {
         super(settings);
-        this.type = CameraEntityTypes.PHOTOGRAPH;
+        this.type = CameraPortEntityTypes.PHOTOGRAPH;
     }
 
     @Override

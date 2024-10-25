@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public class CameraBlocks {
+public class CameraPortBlocks {
 
     public static final Block PRINTER = new PrinterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LOOM));
 

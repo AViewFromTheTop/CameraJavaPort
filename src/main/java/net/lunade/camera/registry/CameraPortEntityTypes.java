@@ -12,7 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import org.jetbrains.annotations.NotNull;
 
-public class CameraEntityTypes {
+public class CameraPortEntityTypes {
     public static final EntityType<CameraEntity> CAMERA = register(
             "camera",
             EntityType.Builder.of(CameraEntity::new, MobCategory.MISC)

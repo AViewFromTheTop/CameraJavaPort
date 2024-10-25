@@ -9,7 +9,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.impl.client.PhotographRenderer;
-import net.lunade.camera.registry.CameraItems;
+import net.lunade.camera.registry.CameraPortItems;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemFrameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -35,7 +35,7 @@ public class ItemFrameRendererMixin {
             @Local ItemStack itemStack,
             @Share("cameraPort$photographComponent") LocalRef<PhotographComponent> photographComponentRef
     ) {
-        PhotographComponent photographComponent = itemStack.get(CameraItems.PHOTO_COMPONENT);
+        PhotographComponent photographComponent = itemStack.get(CameraPortItems.PHOTO_COMPONENT);
         if (photographComponent != null) {
             photographComponentRef.set(photographComponent);
             return original % 4 * 2;

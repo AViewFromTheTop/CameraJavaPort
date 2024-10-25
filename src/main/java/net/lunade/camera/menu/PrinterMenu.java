@@ -7,9 +7,9 @@ import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.impl.client.PhotographLoader;
-import net.lunade.camera.registry.CameraBlocks;
-import net.lunade.camera.registry.CameraItems;
-import net.lunade.camera.registry.CameraMenuTypes;
+import net.lunade.camera.registry.CameraPortBlocks;
+import net.lunade.camera.registry.CameraPortItems;
+import net.lunade.camera.registry.CameraPortMenuTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
@@ -48,7 +48,7 @@ public class PrinterMenu extends AbstractContainerMenu {
     }
 
     public PrinterMenu(int id, Inventory playerInventory, ContainerLevelAccess context) {
-        super(CameraMenuTypes.PRINTER, id);
+        super(CameraPortMenuTypes.PRINTER, id);
 
         this.access = context;
         this.inputSlot = addSlot(
@@ -110,7 +110,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, CameraBlocks.PRINTER);
+        return stillValid(this.access, player, CameraPortBlocks.PRINTER);
     }
 
     @Override
@@ -124,10 +124,10 @@ public class PrinterMenu extends AbstractContainerMenu {
 
     void setupResultSlot() {
         if (pictureSlotsSize.get() != 0 && this.inputSlot.getItem().is(Items.PAPER)) {
-            ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
+            ItemStack stack = new ItemStack(CameraPortItems.PHOTOGRAPH);
             String photographName = this.temp.replace("photographs/", "");
             stack.set(
-                    CameraItems.PHOTO_COMPONENT,
+                    CameraPortItems.PHOTO_COMPONENT,
                     new PhotographComponent(CameraPortConstants.id("photographs/" + photographName))
             );
 

@@ -2,10 +2,10 @@ package net.lunade.camera;
 
 import net.fabricmc.api.ModInitializer;
 import net.lunade.camera.networking.CameraNetworking;
-import net.lunade.camera.registry.CameraBlocks;
-import net.lunade.camera.registry.CameraEntityTypes;
-import net.lunade.camera.registry.CameraItems;
-import net.lunade.camera.registry.CameraMenuTypes;
+import net.lunade.camera.registry.CameraPortBlocks;
+import net.lunade.camera.registry.CameraPortEntityTypes;
+import net.lunade.camera.registry.CameraPortItems;
+import net.lunade.camera.registry.CameraPortMenuTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
@@ -21,16 +21,16 @@ public class CameraPortMain implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CameraEntityTypes.init();
+        CameraPortEntityTypes.init();
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_BREAK.getLocation(), CAMERA_BREAK);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_HIT.getLocation(), CAMERA_HIT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PLACE.getLocation(), CAMERA_PLACE);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PRIME.getLocation(), CAMERA_PRIME);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_SNAP.getLocation(), CAMERA_SNAP);
         Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.getLocation(), CAMERA_ADJUST);
-        CameraBlocks.register();
-        CameraItems.register();
-        CameraMenuTypes.register();
+        CameraPortBlocks.register();
+        CameraPortItems.register();
+        CameraPortMenuTypes.register();
 
         CameraNetworking.init();
     }

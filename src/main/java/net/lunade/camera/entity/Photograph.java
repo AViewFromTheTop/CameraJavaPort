@@ -7,8 +7,8 @@ import net.fabricmc.api.Environment;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.PhotographComponent;
-import net.lunade.camera.registry.CameraEntityTypes;
-import net.lunade.camera.registry.CameraItems;
+import net.lunade.camera.registry.CameraPortEntityTypes;
+import net.lunade.camera.registry.CameraPortItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -49,7 +49,7 @@ public class Photograph extends HangingEntity {
     }
 
     private Photograph(Level world, BlockPos pos) {
-        super(CameraEntityTypes.PHOTOGRAPH, world, pos);
+        super(CameraPortEntityTypes.PHOTOGRAPH, world, pos);
     }
 
     public Photograph(Level world, BlockPos pos, Direction direction) {
@@ -165,9 +165,9 @@ public class Photograph extends HangingEntity {
 
     @Override
     public ItemStack getPickResult() {
-        ItemStack stack = new ItemStack(CameraItems.PHOTOGRAPH);
+        ItemStack stack = new ItemStack(CameraPortItems.PHOTOGRAPH);
         stack.set(
-                CameraItems.PHOTO_COMPONENT, new PhotographComponent(CameraPortConstants.id("photographs/" + this.getPhotographName()))
+                CameraPortItems.PHOTO_COMPONENT, new PhotographComponent(CameraPortConstants.id("photographs/" + this.getPhotographName()))
         );
         return stack;
     }

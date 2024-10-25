@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.impl.client.PhotographRenderer;
-import net.lunade.camera.registry.CameraItems;
+import net.lunade.camera.registry.CameraPortItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -55,8 +55,8 @@ public abstract class ItemInHandRendererMixin {
             CallbackInfo info,
             @Local HumanoidArm humanoidArm
     ) {
-        if (item.is(CameraItems.PHOTOGRAPH)) {
-            PhotographComponent photographComponent = item.get(CameraItems.PHOTO_COMPONENT);
+        if (item.is(CameraPortItems.PHOTOGRAPH)) {
+            PhotographComponent photographComponent = item.get(CameraPortItems.PHOTO_COMPONENT);
             if (photographComponent != null) {
                 this.cameraPort$renderPhotographInHand(matrices, vertexConsumers, light, equipProgress, humanoidArm, swingProgress, photographComponent);
                 matrices.popPose();
