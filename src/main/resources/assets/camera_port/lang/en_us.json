@@ -16,10 +16,8 @@
   "subtitle.entity.camera.break": "Tripod breaks",
   "container.printer": "Printer",
   "block.camera_port.printer": "Printer",
-
   "option.camera_port.component.title": "Camera Port Options",
   "option.camera_port.config": "Config",
-
   "option.camera_port.use_as_world_icon": "Use Photos As World Icons",
   "tooltip.camera_port.use_as_world_icon": "Whether the latest-taken Photo in a world should replace the world icon."
 }

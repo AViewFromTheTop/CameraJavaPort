@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 @Environment(EnvType.CLIENT)
 public final class CameraPortMainConfigGui {
 
-    public static Screen buildScreen(@NotNull Screen parent) {
-        var configBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(CameraPortConstants.text("component.title"));
-        configBuilder.setSavingRunnable(CameraPortConfig.INSTANCE::save);
+	public static Screen buildScreen(@NotNull Screen parent) {
+		var configBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(CameraPortConstants.text("component.title"));
+		configBuilder.setSavingRunnable(CameraPortConfig.INSTANCE::save);
 
-        ConfigEntryBuilder entryBuilder = configBuilder.entryBuilder();
+		ConfigEntryBuilder entryBuilder = configBuilder.entryBuilder();
 
-        var block = configBuilder.getOrCreateCategory(CameraPortConstants.text("config"));
-        CameraPortConfigGui.setupEntries(block, entryBuilder);
-        return configBuilder.build();
-    }
+		var block = configBuilder.getOrCreateCategory(CameraPortConstants.text("config"));
+		CameraPortConfigGui.setupEntries(block, entryBuilder);
+		return configBuilder.build();
+	}
 }

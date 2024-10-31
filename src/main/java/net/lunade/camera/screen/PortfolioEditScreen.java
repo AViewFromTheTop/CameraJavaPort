@@ -2,12 +2,8 @@ package net.lunade.camera.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.camera.component.WritablePortfolioContent;
-import net.lunade.camera.registry.CameraPortItems;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,10 +11,10 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class PortfolioEditScreen extends Screen {
 
-    // TODO: [Liuk, Treetrain1] please implement
+	// TODO: [Liuk, Treetrain1] please implement
 
-    public PortfolioEditScreen(Player player, ItemStack portfolio, InteractionHand hand) {
-        super(GameNarrator.NO_TITLE);
+	public PortfolioEditScreen(Player player, ItemStack portfolio, InteractionHand hand) {
+		super(GameNarrator.NO_TITLE);
         /*
         this.owner = player;
         this.portfolio = portfolio;
@@ -34,5 +30,5 @@ public class PortfolioEditScreen extends Screen {
 
         this.ownerText = Component.translatable("book.byAuthor", player.getName()).withStyle(ChatFormatting.DARK_GRAY);
          */
-    }
+	}
 }

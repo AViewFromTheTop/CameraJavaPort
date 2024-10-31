@@ -10,15 +10,15 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class PortfolioItem extends Item {
-    public PortfolioItem(Item.Properties properties) {
-        super(properties);
-    }
+	public PortfolioItem(Item.Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, @NotNull Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getItemInHand(hand);
-        user.openItemGui(itemStack, hand);
-        user.awardStat(Stats.ITEM_USED.get(this));
-        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
-    }
+	@Override
+	public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, @NotNull Player user, InteractionHand hand) {
+		ItemStack itemStack = user.getItemInHand(hand);
+		user.openItemGui(itemStack, hand);
+		user.awardStat(Stats.ITEM_USED.get(this));
+		return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+	}
 }

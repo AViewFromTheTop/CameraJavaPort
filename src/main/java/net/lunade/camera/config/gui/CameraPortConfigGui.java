@@ -42,16 +42,16 @@ public final class CameraPortConfigGui {
 		var defaultConfig = CameraPortConfig.INSTANCE.defaultInstance();
 
 		var useLatestPhotoAsWorldIcon = category.addEntry(
-				FrozenClothConfig.syncedEntry(
-						entryBuilder.startBooleanToggle(CameraPortConstants.text("use_as_world_icon"), modifiedConfig.useLatestPhotoAsWorldIcon)
-								.setDefaultValue(defaultConfig.useLatestPhotoAsWorldIcon)
-								.setSaveConsumer(newValue -> config.useLatestPhotoAsWorldIcon = newValue)
-								.setTooltip(CameraPortConstants.tooltip("use_as_world_icon"))
-								.build(),
-						clazz,
-						"useLatestPhotoAsWorldIcon",
-						configInstance
-				)
+			FrozenClothConfig.syncedEntry(
+				entryBuilder.startBooleanToggle(CameraPortConstants.text("use_as_world_icon"), modifiedConfig.useLatestPhotoAsWorldIcon)
+					.setDefaultValue(defaultConfig.useLatestPhotoAsWorldIcon)
+					.setSaveConsumer(newValue -> config.useLatestPhotoAsWorldIcon = newValue)
+					.setTooltip(CameraPortConstants.tooltip("use_as_world_icon"))
+					.build(),
+				clazz,
+				"useLatestPhotoAsWorldIcon",
+				configInstance
+			)
 		);
 	}
 }

@@ -15,11 +15,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CameraPortBlocks {
 
-    public static final Block PRINTER = new PrinterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LOOM));
+	public static final Block PRINTER = new PrinterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LOOM));
 
-    public static void register() {
-        Registry.register(BuiltInRegistries.BLOCK, CameraPortConstants.id("printer"), PRINTER);
-        Registry.register(BuiltInRegistries.ITEM, CameraPortConstants.id("printer"), new BlockItem(PRINTER, new Item.Properties()));
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PRINTER));
-    }
+	public static void register() {
+		Registry.register(BuiltInRegistries.BLOCK, CameraPortConstants.id("printer"), PRINTER);
+		Registry.register(BuiltInRegistries.ITEM, CameraPortConstants.id("printer"), new BlockItem(PRINTER, new Item.Properties()));
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entries) -> entries.addAfter(Items.LODESTONE, PRINTER));
+	}
 }

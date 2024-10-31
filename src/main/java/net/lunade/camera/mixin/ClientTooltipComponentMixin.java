@@ -12,12 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientTooltipComponent.class)
 public interface ClientTooltipComponentMixin {
 
-    @Inject(
-            at = @At("HEAD"),
-            method = "create(Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent;",
-            cancellable = true
-    )
-    private static void cameraPort$create(TooltipComponent data, CallbackInfoReturnable<ClientTooltipComponent> info) {
-        if (data instanceof PictureTooltipComponent tooltip) info.setReturnValue(new ClientPictureTooltipComponent(tooltip));
-    }
+	@Inject(
+		at = @At("HEAD"),
+		method = "create(Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent;",
+		cancellable = true
+	)
+	private static void cameraPort$create(TooltipComponent data, CallbackInfoReturnable<ClientTooltipComponent> info) {
+		if (data instanceof PictureTooltipComponent tooltip)
+			info.setReturnValue(new ClientPictureTooltipComponent(tooltip));
+	}
 }

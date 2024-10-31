@@ -20,42 +20,42 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PrinterBlock extends HorizontalDirectionalBlock {
-    public static final MapCodec<PrinterBlock> CODEC = simpleCodec(PrinterBlock::new);
-    private static final Component CONTAINER_TITLE = Component.translatable("container.printer");
+	public static final MapCodec<PrinterBlock> CODEC = simpleCodec(PrinterBlock::new);
+	private static final Component CONTAINER_TITLE = Component.translatable("container.printer");
 
-    public PrinterBlock(Properties properties) {
-        super(properties);
-    }
+	public PrinterBlock(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
-    }
+	@Override
+	protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+		return CODEC;
+	}
 
-    @Override
-    protected @NotNull InteractionResult useWithoutItem(BlockState state, @NotNull Level world, BlockPos pos, Player entity, BlockHitResult hitResult) {
-        if (world.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            entity.openMenu(state.getMenuProvider(world, pos));
-            //entity.awardStat(Stats.INTERACT_WITH_LOOM);
-            //TODO: Might want to add an award?
-            return InteractionResult.CONSUME;
-        }
-    }
+	@Override
+	protected @NotNull InteractionResult useWithoutItem(BlockState state, @NotNull Level world, BlockPos pos, Player entity, BlockHitResult hitResult) {
+		if (world.isClientSide) {
+			return InteractionResult.SUCCESS;
+		} else {
+			entity.openMenu(state.getMenuProvider(world, pos));
+			//entity.awardStat(Stats.INTERACT_WITH_LOOM);
+			//TODO: Might want to add an award?
+			return InteractionResult.CONSUME;
+		}
+	}
 
-    @Override
-    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level world, BlockPos pos) {
-        return new SimpleMenuProvider((id, inventory, player) -> new PrinterMenu(id, inventory, ContainerLevelAccess.create(world, pos)), CONTAINER_TITLE);
-    }
+	@Override
+	protected @Nullable MenuProvider getMenuProvider(BlockState state, Level world, BlockPos pos) {
+		return new SimpleMenuProvider((id, inventory, player) -> new PrinterMenu(id, inventory, ContainerLevelAccess.create(world, pos)), CONTAINER_TITLE);
+	}
 
-    @Override
-    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
-        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
-    }
+	@Override
+	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
+		return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+		builder.add(FACING);
+	}
 }

@@ -10,31 +10,31 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public record PrinterAskForSlotsPacket(int count, String id) implements CustomPacketPayload {
-    public static final Type<PrinterAskForSlotsPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            CameraPortConstants.safeString("printer_ask_for_slots")
-    );
-    public static final StreamCodec<FriendlyByteBuf, PrinterAskForSlotsPacket> CODEC = StreamCodec.ofMember(PrinterAskForSlotsPacket::write, PrinterAskForSlotsPacket::new);
+	public static final Type<PrinterAskForSlotsPacket> PACKET_TYPE = CustomPacketPayload.createType(
+		CameraPortConstants.safeString("printer_ask_for_slots")
+	);
+	public static final StreamCodec<FriendlyByteBuf, PrinterAskForSlotsPacket> CODEC = StreamCodec.ofMember(PrinterAskForSlotsPacket::write, PrinterAskForSlotsPacket::new);
 
-    public PrinterAskForSlotsPacket(@NotNull FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readUtf());
-    }
+	public PrinterAskForSlotsPacket(@NotNull FriendlyByteBuf buf) {
+		this(buf.readInt(), buf.readUtf());
+	}
 
-    public void write(@NotNull FriendlyByteBuf buf) {
-        buf.writeInt(count);
-        buf.writeUtf(id);
-    }
+	public void write(@NotNull FriendlyByteBuf buf) {
+		buf.writeInt(count);
+		buf.writeUtf(id);
+	}
 
-    @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return PACKET_TYPE;
-    }
+	@Override
+	public @NotNull Type<? extends CustomPacketPayload> type() {
+		return PACKET_TYPE;
+	}
 
-    public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
-        ServerPlayer player = context.player();
-        if (player != null) {
-            if (player.containerMenu instanceof PrinterMenu printer) {
-                printer.setupData(packet.count, packet.id);
-            }
-        }
-    }
+	public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
+		ServerPlayer player = context.player();
+		if (player != null) {
+			if (player.containerMenu instanceof PrinterMenu printer) {
+				printer.setupData(packet.count, packet.id);
+			}
+		}
+	}
 }

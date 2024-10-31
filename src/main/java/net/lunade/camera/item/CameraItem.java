@@ -18,30 +18,30 @@ import org.jetbrains.annotations.NotNull;
 
 public class CameraItem extends SpawnEggItem {
 
-    public CameraItem(EntityType<? extends CameraEntity> entityType, int i, int j, Properties properties) {
-        super(entityType, i, j, properties);
-    }
+	public CameraItem(EntityType<? extends CameraEntity> entityType, int i, int j, Properties properties) {
+		super(entityType, i, j, properties);
+	}
 
-    @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand interactionHand) {
-        ItemStack itemStack = player.getItemInHand(interactionHand);
-        BlockHitResult blockHitResult = SpawnEggItem.getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-        if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            if (!player.getCooldowns().isOnCooldown(this)) {
-                player.getCooldowns().addCooldown(this, 10);
-                if (level.isClientSide) {
-                    if (CameraScreenshotManager.possessingCamera) {
-                        return InteractionResultHolder.fail(itemStack);
-                    }
-                    CameraScreenshotManager.executeScreenshot(null, true);
-                }
-                level.playSound(player, player.getX(), player.getEyeY(), player.getZ(), CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
-                return InteractionResultHolder.success(itemStack);
-            } else {
-                return InteractionResultHolder.fail(itemStack);
-            }
-        }
-        return super.use(level, player, interactionHand);
-    }
+	@Override
+	public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand interactionHand) {
+		ItemStack itemStack = player.getItemInHand(interactionHand);
+		BlockHitResult blockHitResult = SpawnEggItem.getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+		if (blockHitResult.getType() != HitResult.Type.BLOCK) {
+			if (!player.getCooldowns().isOnCooldown(this)) {
+				player.getCooldowns().addCooldown(this, 10);
+				if (level.isClientSide) {
+					if (CameraScreenshotManager.possessingCamera) {
+						return InteractionResultHolder.fail(itemStack);
+					}
+					CameraScreenshotManager.executeScreenshot(null, true);
+				}
+				level.playSound(player, player.getX(), player.getEyeY(), player.getZ(), CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
+				return InteractionResultHolder.success(itemStack);
+			} else {
+				return InteractionResultHolder.fail(itemStack);
+			}
+		}
+		return super.use(level, player, interactionHand);
+	}
 
 }

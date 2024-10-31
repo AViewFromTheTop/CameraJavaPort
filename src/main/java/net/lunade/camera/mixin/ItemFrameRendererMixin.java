@@ -22,55 +22,55 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ItemFrameRenderer.class)
 public class ItemFrameRendererMixin {
 
-    @ModifyExpressionValue(
-            method = "render(Lnet/minecraft/world/entity/decoration/ItemFrame;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/decoration/ItemFrame;getRotation()I",
-                    ordinal = 1
-            )
-    )
-    public int cameraPort$fixRotationAndCapturePhotographComponent(
-            int original,
-            @Local ItemStack itemStack,
-            @Share("cameraPort$photographComponent") LocalRef<PhotographComponent> photographComponentRef
-    ) {
-        PhotographComponent photographComponent = itemStack.get(CameraPortItems.PHOTO_COMPONENT);
-        if (photographComponent != null) {
-            photographComponentRef.set(photographComponent);
-            return original % 4 * 2;
-        }
-        return original;
-    }
+	@ModifyExpressionValue(
+		method = "render(Lnet/minecraft/world/entity/decoration/ItemFrame;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/entity/decoration/ItemFrame;getRotation()I",
+			ordinal = 1
+		)
+	)
+	public int cameraPort$fixRotationAndCapturePhotographComponent(
+		int original,
+		@Local ItemStack itemStack,
+		@Share("cameraPort$photographComponent") LocalRef<PhotographComponent> photographComponentRef
+	) {
+		PhotographComponent photographComponent = itemStack.get(CameraPortItems.PHOTO_COMPONENT);
+		if (photographComponent != null) {
+			photographComponentRef.set(photographComponent);
+			return original % 4 * 2;
+		}
+		return original;
+	}
 
-    @WrapOperation(
-            method = "render(Lnet/minecraft/world/entity/decoration/ItemFrame;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V"
-            )
-    )
-    public void cameraPort$render(
-            ItemRenderer instance,
-            ItemStack stack,
-            ItemDisplayContext modelTransformationMode,
-            int light,
-            int overlay,
-            PoseStack matrices,
-            MultiBufferSource vertexConsumers,
-            Level world,
-            int seed,
-            Operation<Void> original,
-            @Share("cameraPort$photographComponent") LocalRef<PhotographComponent> photographComponentRef
-    ) {
-        PhotographComponent photographComponent = photographComponentRef.get();
-        if (photographComponent != null) {
-            // 0.625F
-            matrices.scale(1.25F, 1.25F, 1.25F);
-            matrices.translate(0F, 0F, 0.03125F);
-            PhotographRenderer.render(matrices, vertexConsumers, photographComponent.location(), light, false);
-        } else {
-            original.call(instance, stack, modelTransformationMode, light, overlay, matrices, vertexConsumers, world, seed);
-        }
-    }
+	@WrapOperation(
+		method = "render(Lnet/minecraft/world/entity/decoration/ItemFrame;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V"
+		)
+	)
+	public void cameraPort$render(
+		ItemRenderer instance,
+		ItemStack stack,
+		ItemDisplayContext modelTransformationMode,
+		int light,
+		int overlay,
+		PoseStack matrices,
+		MultiBufferSource vertexConsumers,
+		Level world,
+		int seed,
+		Operation<Void> original,
+		@Share("cameraPort$photographComponent") LocalRef<PhotographComponent> photographComponentRef
+	) {
+		PhotographComponent photographComponent = photographComponentRef.get();
+		if (photographComponent != null) {
+			// 0.625F
+			matrices.scale(1.25F, 1.25F, 1.25F);
+			matrices.translate(0F, 0F, 0.03125F);
+			PhotographRenderer.render(matrices, vertexConsumers, photographComponent.location(), light, false);
+		} else {
+			original.call(instance, stack, modelTransformationMode, light, overlay, matrices, vertexConsumers, world, seed);
+		}
+	}
 }

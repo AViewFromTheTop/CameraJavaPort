@@ -10,14 +10,14 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Camera.class)
 public class CameraMixin {
 
-    @ModifyReturnValue(method = "isDetached", at = @At("RETURN"))
-    public boolean cameraPort$isDetached(boolean original) {
-        return original && !this.cameraPort$isUsingSelfRenderingCamera();
-    }
+	@ModifyReturnValue(method = "isDetached", at = @At("RETURN"))
+	public boolean cameraPort$isDetached(boolean original) {
+		return original && !this.cameraPort$isUsingSelfRenderingCamera();
+	}
 
-    @Unique
-    public boolean cameraPort$isUsingSelfRenderingCamera() {
-        return CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld;
-    }
+	@Unique
+	public boolean cameraPort$isUsingSelfRenderingCamera() {
+		return CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld;
+	}
 
 }

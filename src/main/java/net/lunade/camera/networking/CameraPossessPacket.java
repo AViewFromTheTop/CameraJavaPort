@@ -11,33 +11,33 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public record CameraPossessPacket(int entityId) implements CustomPacketPayload {
-    public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
-            CameraPortConstants.safeString("camera_possess")
-    );
-    public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
-            .map(CameraPossessPacket::new, CameraPossessPacket::entityId)
-            .cast();
+	public static final Type<CameraPossessPacket> PACKET_TYPE = CustomPacketPayload.createType(
+		CameraPortConstants.safeString("camera_possess")
+	);
+	public static final StreamCodec<FriendlyByteBuf, CameraPossessPacket> CODEC = ByteBufCodecs.VAR_INT
+		.map(CameraPossessPacket::new, CameraPossessPacket::entityId)
+		.cast();
 
-    public CameraPossessPacket(@NotNull FriendlyByteBuf buf) {
-        this(buf.readVarInt());
-    }
+	public CameraPossessPacket(@NotNull FriendlyByteBuf buf) {
+		this(buf.readVarInt());
+	}
 
-    public static void sendTo(ServerPlayer serverPlayer, int entityId) {
-        ServerPlayNetworking.send(serverPlayer, new CameraPossessPacket(entityId));
-    }
+	public static void sendTo(ServerPlayer serverPlayer, int entityId) {
+		ServerPlayNetworking.send(serverPlayer, new CameraPossessPacket(entityId));
+	}
 
-    public static void sendTo(@NotNull ServerPlayer serverPlayer, @NotNull CameraEntity cameraEntity) {
-        CameraPossessPacket cameraPossessPacket = new CameraPossessPacket(cameraEntity.getId());
-        ServerPlayNetworking.send(serverPlayer, cameraPossessPacket);
-    }
+	public static void sendTo(@NotNull ServerPlayer serverPlayer, @NotNull CameraEntity cameraEntity) {
+		CameraPossessPacket cameraPossessPacket = new CameraPossessPacket(cameraEntity.getId());
+		ServerPlayNetworking.send(serverPlayer, cameraPossessPacket);
+	}
 
-    public void write(@NotNull FriendlyByteBuf buf) {
-        buf.writeVarInt(this.entityId());
-    }
+	public void write(@NotNull FriendlyByteBuf buf) {
+		buf.writeVarInt(this.entityId());
+	}
 
-    @NotNull
-    @Override
-    public Type<?> type() {
-        return PACKET_TYPE;
-    }
+	@NotNull
+	@Override
+	public Type<?> type() {
+		return PACKET_TYPE;
+	}
 }

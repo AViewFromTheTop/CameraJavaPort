@@ -13,41 +13,41 @@ import net.minecraft.world.entity.MobCategory;
 import org.jetbrains.annotations.NotNull;
 
 public class CameraPortEntityTypes {
-    public static final EntityType<CameraEntity> CAMERA = register(
-            "camera",
-            EntityType.Builder.of(CameraEntity::new, MobCategory.MISC)
-                    .sized(0.6F, 1.75F)
-                    .eyeHeight(1.619999999999999F)
-                    .clientTrackingRange(8)
-                    .build(CameraPortConstants.string("camera"))
-    );
+	public static final EntityType<CameraEntity> CAMERA = register(
+		"camera",
+		EntityType.Builder.of(CameraEntity::new, MobCategory.MISC)
+			.sized(0.6F, 1.75F)
+			.eyeHeight(1.619999999999999F)
+			.clientTrackingRange(8)
+			.build(CameraPortConstants.string("camera"))
+	);
 
-    public static final EntityType<DiscCameraEntity> DISC_CAMERA = register(
-            "disc_camera",
-            EntityType.Builder.of(DiscCameraEntity::new, MobCategory.MISC)
-                    .sized(0.55F, 0.9F)
-                    .eyeHeight(0.81F)
-                    .clientTrackingRange(8)
-                    .build(CameraPortConstants.string("disc_camera"))
-    );
+	public static final EntityType<DiscCameraEntity> DISC_CAMERA = register(
+		"disc_camera",
+		EntityType.Builder.of(DiscCameraEntity::new, MobCategory.MISC)
+			.sized(0.55F, 0.9F)
+			.eyeHeight(0.81F)
+			.clientTrackingRange(8)
+			.build(CameraPortConstants.string("disc_camera"))
+	);
 
-    public static final EntityType<Photograph> PHOTOGRAPH = register(
-            "photograph",
-            EntityType.Builder.<Photograph>of(Photograph::new, MobCategory.MISC)
-                    .sized(0.5F, 0.5F)
-                    .eyeHeight(0.81F)
-                    .clientTrackingRange(10)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .build(CameraPortConstants.string("photograph"))
-    );
+	public static final EntityType<Photograph> PHOTOGRAPH = register(
+		"photograph",
+		EntityType.Builder.<Photograph>of(Photograph::new, MobCategory.MISC)
+			.sized(0.5F, 0.5F)
+			.eyeHeight(0.81F)
+			.clientTrackingRange(10)
+			.updateInterval(Integer.MAX_VALUE)
+			.build(CameraPortConstants.string("photograph"))
+	);
 
-    public static void init() {
-        FabricDefaultAttributeRegistry.register(CAMERA, CameraEntity.addAttributes());
-        FabricDefaultAttributeRegistry.register(DISC_CAMERA, DiscCameraEntity.addAttributes());
-    }
+	public static void init() {
+		FabricDefaultAttributeRegistry.register(CAMERA, CameraEntity.addAttributes());
+		FabricDefaultAttributeRegistry.register(DISC_CAMERA, DiscCameraEntity.addAttributes());
+	}
 
-    @NotNull
-    private static <E extends Entity, T extends EntityType<E>> T register(@NotNull String path, @NotNull T entityType) {
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, CameraPortConstants.id(path), entityType);
-    }
+	@NotNull
+	private static <E extends Entity, T extends EntityType<E>> T register(@NotNull String path, @NotNull T entityType) {
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, CameraPortConstants.id(path), entityType);
+	}
 }

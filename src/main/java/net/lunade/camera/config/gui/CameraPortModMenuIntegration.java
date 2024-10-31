@@ -10,12 +10,12 @@ import net.minecraft.client.gui.screens.Screen;
 @Environment(EnvType.CLIENT)
 public class CameraPortModMenuIntegration implements ModMenuApi {
 
-    @Override
-    public ConfigScreenFactory<Screen> getModConfigScreenFactory() {
-        if (FrozenBools.HAS_CLOTH_CONFIG) {
-            return CameraPortMainConfigGui::buildScreen;
-        }
-        return (screen -> null);
-    }
+	@Override
+	public ConfigScreenFactory<Screen> getModConfigScreenFactory() {
+		if (FrozenBools.HAS_CLOTH_CONFIG) {
+			return CameraPortMainConfigGui::buildScreen;
+		}
+		return (screen -> null);
+	}
 
 }
