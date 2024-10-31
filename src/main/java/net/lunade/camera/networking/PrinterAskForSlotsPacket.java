@@ -30,8 +30,7 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return PACKET_TYPE;
     }
-
-    @Environment(EnvType.CLIENT)
+    
     public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
         ServerPlayer player = context.player();
         if (player != null) {
