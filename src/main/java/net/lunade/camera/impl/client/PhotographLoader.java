@@ -4,14 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.frozenblock.lib.image_transfer.client.ServerTexture;
 import net.lunade.camera.CameraPortConstants;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,15 +81,6 @@ public class PhotographLoader {
 
         localPhotographs.stream().sorted(Comparator.comparing(Pair::getSecond)).forEach(LOCAL_PHOTOGRAPHS::add);
         return LOCAL_PHOTOGRAPHS.size();
-    }
-
-    /**
-     * Invoked when a picture item is created through the GUI.
-     * You might want to check if you're on Client and then send the texture packet.
-     * @param imageId The image is a string, I know, but that's how it's stored in the menu
-     * */
-    public static void onReceiveItem(String imageId, Player player) {
-        FileTransferPacket.createRequest("photographs/", imageId);
     }
 
     public static Optional<Date> parseDate(@NotNull String fileName) {

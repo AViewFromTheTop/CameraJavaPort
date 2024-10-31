@@ -2,16 +2,18 @@ package net.lunade.camera.menu;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.frozenblock.lib.image_transfer.FileTransferPacket;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.component.PhotographComponent;
 import net.lunade.camera.entity.Photograph;
-import net.lunade.camera.impl.client.PhotographLoader;
 import net.lunade.camera.registry.CameraPortBlocks;
 import net.lunade.camera.registry.CameraPortItems;
 import net.lunade.camera.registry.CameraPortMenuTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -82,7 +84,15 @@ public class PrinterMenu extends AbstractContainerMenu {
                                 PrinterMenu.this.lastSoundTime = l;
                             }
                         });
-                        PhotographLoader.onReceiveItem(PrinterMenu.this.temp, player);
+                        if (player instanceof ServerPlayer serverPlayer) {
+                            serverPlayer.connection.send(
+                                    new ClientboundCustomPayloadPacket(
+                                            FileTransferPacket.createRequest(
+                                                    "photographs/.local/", PrinterMenu.this.temp.replace("photographs/", "") + ".png"
+                                            )
+                                    )
+                            );
+                        }
                         super.onTake(player, stack);
                     }
                 });
