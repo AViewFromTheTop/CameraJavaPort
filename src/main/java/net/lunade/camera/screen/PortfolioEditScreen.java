@@ -19,6 +19,7 @@ public class PortfolioEditScreen extends Screen {
 
     public PortfolioEditScreen(Player player, ItemStack portfolio, InteractionHand hand) {
         super(GameNarrator.NO_TITLE);
+        /*
         this.owner = player;
         this.portfolio = portfolio;
         this.hand = hand;
@@ -32,5 +33,6 @@ public class PortfolioEditScreen extends Screen {
         }
 
         this.ownerText = Component.translatable("book.byAuthor", player.getName()).withStyle(ChatFormatting.DARK_GRAY);
+         */
     }
 }
