@@ -1,7 +1,5 @@
 package net.lunade.camera.networking;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.menu.PrinterMenu;
@@ -30,7 +28,7 @@ public record PrinterAskForSlotsPacket(int count, String id) implements CustomPa
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return PACKET_TYPE;
     }
-    
+
     public static void handle(PrinterAskForSlotsPacket packet, ServerPlayNetworking.@NotNull Context context) {
         ServerPlayer player = context.player();
         if (player != null) {
