@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.lunade.camera.entity.render.*;
 import net.lunade.camera.networking.CameraClientNetworking;
 import net.lunade.camera.registry.CameraPortEntityTypes;
+import net.lunade.camera.registry.CameraPortScreens;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 
 @Environment(EnvType.CLIENT)
@@ -22,6 +23,8 @@ public class CameraPortClient implements ClientModInitializer {
         EntityRendererRegistry.register(CameraPortEntityTypes.DISC_CAMERA, DiscCameraEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
         EntityRendererRegistry.register(CameraPortEntityTypes.PHOTOGRAPH, PhotographEntityRenderer::new);
+
+        CameraPortScreens.init();
 
         CameraClientNetworking.init();
     }

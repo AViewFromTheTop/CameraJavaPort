@@ -11,8 +11,8 @@ import net.minecraft.world.inventory.MenuType;
 
 public class CameraPortMenuTypes {
     public static final MenuType<PrinterMenu> PRINTER = new MenuType<>(PrinterMenu::new, FeatureFlags.DEFAULT_FLAGS);
+
     public static void register() {
         Registry.register(BuiltInRegistries.MENU, CameraPortConstants.id("printer"), PRINTER);
-        MenuScreens.register(PRINTER, PrinterScreen::new);
     }
 }
