@@ -67,7 +67,7 @@ public class CameraScreenshotManager {
 				if (camEntity != null) {
 					int smokeCount = client.level.getRandom().nextInt(1, 5);
 					for (int i = 0; i < smokeCount; i++) {
-						client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0, 0.15, 0);
+						client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0D, 0.15D, 0D);
 					}
 				}
 			}
@@ -163,7 +163,7 @@ public class CameraScreenshotManager {
 		});
 	}
 
-	private static void copyPhotographToFileWithSize(NativeImage nativeImage, Path path, int width, int height) {
+	private static void copyPhotographToFileWithSize(@NotNull NativeImage nativeImage, Path path, int width, int height) {
 		int i = nativeImage.getWidth();
 		int j = nativeImage.getHeight();
 		int k = 0;

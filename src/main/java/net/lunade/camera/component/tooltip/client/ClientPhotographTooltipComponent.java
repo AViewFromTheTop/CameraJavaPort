@@ -1,6 +1,6 @@
 package net.lunade.camera.component.tooltip.client;
 
-import net.lunade.camera.component.tooltip.PictureTooltipComponent;
+import net.lunade.camera.component.tooltip.PhotographTooltipComponent;
 import net.lunade.camera.impl.client.PhotographRenderer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,13 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
-public class ClientPictureTooltipComponent implements ClientTooltipComponent {
+public class ClientPhotographTooltipComponent implements ClientTooltipComponent {
 	private static final int PHOTOGRAPH_RENDER_SIZE = 32;
 	private static final int PHOTOGRAPH_RENDER_OFFSET_X = 3;
 	private static final int TOOLTIP_WIDTH = PHOTOGRAPH_RENDER_SIZE + (PHOTOGRAPH_RENDER_OFFSET_X * 2);
-	private final PictureTooltipComponent component;
+	private final PhotographTooltipComponent component;
 
-	public ClientPictureTooltipComponent(PictureTooltipComponent component) {
+	public ClientPhotographTooltipComponent(PhotographTooltipComponent component) {
 		this.component = component;
 	}
 

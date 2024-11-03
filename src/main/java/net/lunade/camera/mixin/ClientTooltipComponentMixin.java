@@ -1,7 +1,7 @@
 package net.lunade.camera.mixin;
 
-import net.lunade.camera.component.tooltip.PictureTooltipComponent;
-import net.lunade.camera.component.tooltip.client.ClientPictureTooltipComponent;
+import net.lunade.camera.component.tooltip.PhotographTooltipComponent;
+import net.lunade.camera.component.tooltip.client.ClientPhotographTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +18,7 @@ public interface ClientTooltipComponentMixin {
 		cancellable = true
 	)
 	private static void cameraPort$create(TooltipComponent data, CallbackInfoReturnable<ClientTooltipComponent> info) {
-		if (data instanceof PictureTooltipComponent tooltip)
-			info.setReturnValue(new ClientPictureTooltipComponent(tooltip));
+		if (data instanceof PhotographTooltipComponent tooltip)
+			info.setReturnValue(new ClientPhotographTooltipComponent(tooltip));
 	}
 }

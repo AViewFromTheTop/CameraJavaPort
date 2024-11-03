@@ -3,7 +3,7 @@ package net.lunade.camera.item;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lunade.camera.CameraPortConstants;
-import net.lunade.camera.component.tooltip.PictureTooltipComponent;
+import net.lunade.camera.component.tooltip.PhotographTooltipComponent;
 import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.registry.CameraPortEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -77,7 +77,7 @@ public class PhotographItem extends Item {
 	public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
 		if (!stack.has(DataComponents.HIDE_TOOLTIP)) {
 			final var photographLocation = getPhotograph(stack);
-			if (photographLocation != null) return Optional.of(new PictureTooltipComponent(photographLocation));
+			if (photographLocation != null) return Optional.of(new PhotographTooltipComponent(photographLocation));
 		}
 		return Optional.empty();
 	}
