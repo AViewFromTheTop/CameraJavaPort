@@ -27,7 +27,7 @@ pluginManagement {
 
 rootProject.name = "Camera Java Port"
 
-localRepository("FrozenLib", "maven.modrinth:frozenlib", true, false)
+localRepository("FrozenLib", "maven.modrinth:frozenlib", true, true)
 
 
 fun localRepository(repo: String, dependencySub: String, kotlin: Boolean, enabled: Boolean) {

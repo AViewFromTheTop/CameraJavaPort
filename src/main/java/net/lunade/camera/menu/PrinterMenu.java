@@ -88,7 +88,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 						serverPlayer.connection.send(
 							new ClientboundCustomPayloadPacket(
 								FileTransferPacket.createRequest(
-									"photographs/.local/", PrinterMenu.this.temp.replace("photographs/", "") + ".png"
+									"photographs", PrinterMenu.this.temp.replace("photographs/", "") + ".png"
 								)
 							)
 						);
