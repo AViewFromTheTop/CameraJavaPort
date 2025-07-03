@@ -1,5 +1,7 @@
 package net.lunade.camera.registry;
 
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.component.PhotographComponent;
@@ -15,8 +17,6 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 public class CameraPortItems {
 	public static final CameraItem CAMERA = register(

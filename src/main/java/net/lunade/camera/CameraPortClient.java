@@ -5,10 +5,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.lunade.camera.entity.render.model.CameraEntityModel;
-import net.lunade.camera.entity.render.renderer.CameraEntityRenderer;
-import net.lunade.camera.entity.render.model.DiscCameraEntityModel;
-import net.lunade.camera.entity.render.renderer.DiscCameraEntityRenderer;
+import net.lunade.camera.entity.render.model.CameraModel;
+import net.lunade.camera.entity.render.model.DiscCameraModel;
+import net.lunade.camera.entity.render.renderer.CameraRenderer;
+import net.lunade.camera.entity.render.renderer.DiscCameraRenderer;
 import net.lunade.camera.networking.CameraClientNetworking;
 import net.lunade.camera.registry.CameraPortEntityTypes;
 import net.lunade.camera.registry.CameraPortScreens;
@@ -21,10 +21,10 @@ public class CameraPortClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		EntityRendererRegistry.register(CameraPortEntityTypes.CAMERA, CameraEntityRenderer::new);
-		EntityModelLayerRegistry.registerModelLayer(CAMERA_MODEL_LAYER, CameraEntityModel::createBodyLayer);
-		EntityRendererRegistry.register(CameraPortEntityTypes.DISC_CAMERA, DiscCameraEntityRenderer::new);
-		EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraEntityModel::getTexturedModelData);
+		EntityRendererRegistry.register(CameraPortEntityTypes.CAMERA, CameraRenderer::new);
+		EntityModelLayerRegistry.registerModelLayer(CAMERA_MODEL_LAYER, CameraModel::createBodyLayer);
+		EntityRendererRegistry.register(CameraPortEntityTypes.DISC_CAMERA, DiscCameraRenderer::new);
+		EntityModelLayerRegistry.registerModelLayer(DISC_CAMERA_MODEL_LAYER, DiscCameraModel::getTexturedModelData);
 
 		CameraPortScreens.init();
 

@@ -1,5 +1,7 @@
 package net.lunade.camera.registry;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.block.PrinterBlock;
@@ -18,8 +20,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class CameraPortBlocks {
 

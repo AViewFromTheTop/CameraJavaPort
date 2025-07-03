@@ -13,8 +13,6 @@ import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.config.CameraPortConfig;
-import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
@@ -27,6 +25,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 
 @Environment(EnvType.CLIENT)
 public class CameraScreenshotManager {

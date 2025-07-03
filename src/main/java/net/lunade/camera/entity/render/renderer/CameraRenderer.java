@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortClient;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.CameraEntity;
-import net.lunade.camera.entity.render.model.CameraEntityModel;
+import net.lunade.camera.entity.render.model.CameraModel;
 import net.lunade.camera.entity.render.state.CameraRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -13,11 +13,11 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
-public class CameraEntityRenderer extends MobRenderer<CameraEntity, CameraRenderState, CameraEntityModel> {
+public class CameraRenderer extends MobRenderer<CameraEntity, CameraRenderState, CameraModel> {
 	private static final ResourceLocation TEXTURE = CameraPortConstants.id("textures/entity/camera.png");
 
-	public CameraEntityRenderer(EntityRendererProvider.Context context) {
-		super(context, new CameraEntityModel(context.bakeLayer(CameraPortClient.CAMERA_MODEL_LAYER)), 0.5F);
+	public CameraRenderer(EntityRendererProvider.Context context) {
+		super(context, new CameraModel(context.bakeLayer(CameraPortClient.CAMERA_MODEL_LAYER)), 0.5F);
 	}
 
 	@Override
