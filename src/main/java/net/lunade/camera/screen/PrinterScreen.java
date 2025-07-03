@@ -25,10 +25,10 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 	int index = 0;
 	private boolean displayRecipes = false;
 	private static final ResourceLocation TEXTURE = CameraPortConstants.id("textures/gui/printer.png");
-	private static final ResourceLocation MOVE_RIGHT = CameraPortConstants.id("textures/gui/sprites/printer/move_right.png");
-	private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraPortConstants.id("textures/gui/sprites/printer/move_right_highlighted.png");
-	private static final ResourceLocation MOVE_LEFT = CameraPortConstants.id("textures/gui/sprites/printer/move_left.png");
-	private static final ResourceLocation MOVE_LEFT_SELECTED = CameraPortConstants.id("textures/gui/sprites/printer/move_left_highlighted.png");
+	private static final ResourceLocation MOVE_RIGHT = CameraPortConstants.id("printer/move_right");
+	private static final ResourceLocation MOVE_RIGHT_SELECTED = CameraPortConstants.id("printer/move_right_highlighted");
+	private static final ResourceLocation MOVE_LEFT = CameraPortConstants.id("printer/move_left");
+	private static final ResourceLocation MOVE_LEFT_SELECTED = CameraPortConstants.id("printer/move_left_highlighted");
 
 	public PrinterScreen(PrinterMenu menu, Inventory playerInventory, Component title) {
 		super(menu, playerInventory, title);
@@ -57,24 +57,24 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0F, 0F, this.imageWidth, this.imageHeight, 256, 256);
 		if (this.displayRecipes) {
 			final int size = PhotographLoader.getSize();
-			final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);
+			ResourceLocation middle = PhotographLoader.getInfiniteLocalPhotograph(this.index);
 			if (middle != null) PhotographRenderer.render(i, j, 64, 53, graphics, middle, 48, true);
 			if (size != 1) {
-				final var right = PhotographLoader.getInfiniteLocalPhotograph(index + 1);
+				ResourceLocation right = PhotographLoader.getInfiniteLocalPhotograph(this.index + 1);
 				if (right != null) {
 					// Render right photograph
 					PhotographRenderer.render(i, j, 119, 61, graphics, right, 32, true);
 					// Render right arrow
 					boolean selected = isIn(i + 119, j + 61, 32, 32, mouseX, mouseY);
-					graphics.blit(selected ? MOVE_RIGHT_SELECTED : MOVE_RIGHT, i + 119, j + 61, 0, 0, 32, 32, 32, 32);
+					graphics.blitSprite(RenderPipelines.GUI_TEXTURED, selected ? MOVE_RIGHT_SELECTED : MOVE_RIGHT, i + 119, j + 61, 32, 32);
 				}
-				final var left = PhotographLoader.getInfiniteLocalPhotograph(index - 1);
+				ResourceLocation left = PhotographLoader.getInfiniteLocalPhotograph(this.index - 1);
 				if (left != null) {
 					// Render left photograph
 					PhotographRenderer.render(i, j, 25, 61, graphics, left, 32, true);
 					// Render left arrow
 					boolean selected = isIn(i + 25, j + 61, 32, 32, mouseX, mouseY);
-					graphics.blit(selected ? MOVE_LEFT_SELECTED : MOVE_LEFT, i + 25, j + 61, 0, 0, 32, 32, 32, 32);
+					graphics.blitSprite(RenderPipelines.GUI_TEXTURED, selected ? MOVE_LEFT_SELECTED : MOVE_LEFT, i + 25, j + 61, 32, 32);
 				}
 			}
 		}
