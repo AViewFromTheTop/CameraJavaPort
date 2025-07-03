@@ -27,6 +27,18 @@ public class ScreenEffectRendererMixin {
 	}
 
 	@ModifyExpressionValue(
+		method = "renderScreenEffect",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/entity/player/Player;noPhysics:Z"
+		)
+	)
+	private static boolean cameraPort$fixNoPhysicsCheck(boolean original) {
+		if (CameraScreenshotManager.isUsingSelfRenderingCamera()) return false;
+		return original;
+	}
+
+	@ModifyExpressionValue(
 		method = "getViewBlockingState",
 		at = @At(
 			value = "INVOKE",
