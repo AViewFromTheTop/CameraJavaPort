@@ -30,12 +30,11 @@ public class LevelRendererMixin {
 	@Final
 	private List<Entity> visibleEntities;
 
-	/*
 	@ModifyExpressionValue(
 		method = "renderLevel",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/client/renderer/LevelRenderer;collectVisibleEntities(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Ljava/util/List;)Z",
+			target = "Lnet/minecraft/client/renderer/LevelRenderer;collectVisibleEntities(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Ljava/util/List;)Z"
 		)
 	)
 	public boolean cameraPort$renderPlayer(
@@ -51,7 +50,5 @@ public class LevelRendererMixin {
 		}
 		return original;
 	}
-	 */
-
 
 }

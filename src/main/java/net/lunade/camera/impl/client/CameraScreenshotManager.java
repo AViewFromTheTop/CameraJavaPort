@@ -54,16 +54,13 @@ public class CameraScreenshotManager {
 		}
 
 		grabCameraScreenshot(client.gameDirectory, 256, 256);
-		isCameraHandheld = false;
 
 		if (client.level != null) {
 			Entity camEntity = client.getCameraEntity();
-			if (!isCameraHandheld) {
-				if (camEntity != null) {
-					int smokeCount = client.level.getRandom().nextInt(1, 5);
-					for (int i = 0; i < smokeCount; i++) {
-						client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0D, 0.15D, 0D);
-					}
+			if (camEntity != null) {
+				int smokeCount = client.level.getRandom().nextInt(1, 5);
+				for (int i = 0; i < smokeCount; i++) {
+					client.level.addParticle(ParticleTypes.LARGE_SMOKE, camEntity.getX(), camEntity.getEyeY(), camEntity.getZ(), 0D, 0.15D, 0D);
 				}
 			}
 		}
@@ -75,6 +72,7 @@ public class CameraScreenshotManager {
 
 		client.options.hideGui = wasGuiHidden;
 		possessingCamera = false;
+		isCameraHandheld = false;
 	}
 
 	public static void grabCameraScreenshot(File gameDirectory, int width, int height) {
