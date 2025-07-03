@@ -8,10 +8,12 @@
   "client": [
     "CameraMixin",
     "ClientTooltipComponentMixin",
+    "GuiMixin",
     "ItemFrameRendererMixin",
     "ItemFrameRenderStateMixin",
     "ItemInHandRendererMixin",
-    "LevelRendererMixin"
+    "LevelRendererMixin",
+    "ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -38,6 +38,10 @@ public class CameraScreenshotManager {
 	@Nullable
 	public static Entity previousCameraEntity = null;
 
+	public static boolean isUsingSelfRenderingCamera() {
+		return CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld;
+	}
+
 	public static void executeScreenshot(@Nullable Entity entity, boolean handheld) {
 		Minecraft client = Minecraft.getInstance();
 		isCameraHandheld = handheld;
