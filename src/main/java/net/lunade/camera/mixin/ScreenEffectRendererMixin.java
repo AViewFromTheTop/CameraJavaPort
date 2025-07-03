@@ -102,7 +102,7 @@ public class ScreenEffectRendererMixin {
 		@Share("cameraPort$cameraEntity") LocalRef<Entity> entityLocalRef
 	) {
 		Entity cameraEntity = entityLocalRef.get();
-		if (cameraEntity instanceof LivingEntity livingEntity) return livingEntity.getScale();
+		if (cameraEntity != null) return (cameraEntity instanceof LivingEntity livingEntity) ? livingEntity.getScale() : 1F;
 		return original;
 	}
 
