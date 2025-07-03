@@ -26,7 +26,7 @@ public class PhotographRenderer {
 		matrices.mulPose(Axis.ZP.rotationDegrees(180F));
 		matrices.translate(-0.5F, -0.5F, 0F);
 
-		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation);
+		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation, false);
 		if (renderFrame) {
 			VertexConsumer frameConsumer = vertexConsumers.getBuffer(RenderType.text(FRAME));
 			frameConsumer.addVertex(matrix4f, -0.0625F, 1.0625F, 0F).setColor(-1).setUv(0F, 1F).setLight(light);
@@ -44,7 +44,7 @@ public class PhotographRenderer {
 	public static void render(
 		int x, int y, int xOffset, int yOffset, @NotNull GuiGraphics graphics, ResourceLocation photoLocation, int renderSize, boolean renderFrame
 	) {
-		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation);
+		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation, false);
 		int renderX = x + xOffset;
 		int renderY = y + yOffset;
 		if (renderFrame) {
@@ -61,11 +61,15 @@ public class PhotographRenderer {
 				frameRenderSize
 			);
 		}
-		graphics.blitSprite(
+		graphics.blit(
 			RenderPipelines.GUI_TEXTURED,
 			loadedPhotoLocation,
 			renderX,
 			renderY,
+			0F,
+			0F,
+			renderSize,
+			renderSize,
 			renderSize,
 			renderSize
 		);

@@ -110,7 +110,7 @@ public class CameraScreenshotManager {
 	}
 
 	private static void grab(@NotNull File gameDirectory, RenderTarget renderTarget, Consumer<Component> messageReceiver) {
-		Screenshot.takeScreenshot(renderTarget, 4, nativeImage -> {
+		Screenshot.takeScreenshot(renderTarget, 1, nativeImage -> {
 			File photographPath = gameDirectory.toPath()
 				.resolve("photographs")
 				.resolve(".local")

@@ -35,9 +35,9 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 		final int size = PhotographLoader.loadLocalPhotographs();
 		if (PhotographLoader.hasAnyLocalPhotographs()) {
 			final String selected = PhotographLoader.getPhotograph(0).getPath();
-			send(size, selected);
+			this.send(size, selected);
 		} else {
-			send(0, "");
+			this.send(0, "");
 		}
 		menu.registerUpdateListener(this::containerChanged);
 		--this.titleLabelY;
@@ -96,7 +96,8 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 			} else {
 				this.index++;
 			}
-			send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
+
+			this.send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
 			Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
 			return true;
 		} else if (isIn(i + 25, j + 61, 32, 32, (int) mouseX, (int) mouseY)) {
@@ -105,7 +106,8 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 			} else {
 				this.index--;
 			}
-			send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
+
+			this.send(PhotographLoader.getSize(), PhotographLoader.getPhotograph(this.index).getPath());
 			Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
 			return true;
 		}
@@ -119,8 +121,6 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 
 	private void containerChanged() {
 		this.displayRecipes = this.menu.hasInputItem() && this.menu.getInputItem().is(Items.PAPER);
-		if (!this.displayRecipes) {
-			this.index = 0;
-		}
+		if (!this.displayRecipes) this.index = 0;
 	}
 }

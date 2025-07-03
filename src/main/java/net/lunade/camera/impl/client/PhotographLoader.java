@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Stream;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -29,19 +30,22 @@ public class PhotographLoader {
 		return LOCAL_PHOTOGRAPHS.get(index).getFirst();
 	}
 
-	public static @NotNull ResourceLocation getAndLoadPhotograph(String photographName) {
-		return getAndLoadPhotograph(getPhotographLocation(photographName));
+	public static @NotNull ResourceLocation getAndLoadPhotograph(String photographName, boolean local) {
+		return getAndLoadPhotograph(getPhotographLocation(photographName), local);
 	}
 
-	public static @NotNull ResourceLocation getAndLoadPhotograph(@NotNull ResourceLocation photographLocation) {
+	public static @NotNull ResourceLocation getAndLoadPhotograph(@NotNull ResourceLocation photographLocation, boolean local) {
 		String filename = photographLocation.getPath().replace("photographs/", "");
 		if (!filename.endsWith(".png")) filename += ".png";
-		return ServerTextureDownloader.getOrLoadServerTexture(
+
+		ResourceLocation downloaderLocation = ServerTextureDownloader.getOrLoadServerTexture(
 			photographLocation,
 			"photographs",
 			filename,
 			FALLBACK
 		);
+		if (local) return photographLocation;
+		return downloaderLocation;
 	}
 
 	public static int getSize() {
@@ -63,16 +67,16 @@ public class PhotographLoader {
 		final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(ServerTextureDownloader.LOCAL_TEXTURE_SOURCE).toFile();
 		File[] fileList = file.listFiles();
 		if (fileList == null) return 0;
-		final var fileStream = Arrays.stream(fileList)
+		Stream<File> fileStream = Arrays.stream(fileList)
 			.filter(File::isFile)
 			.filter(file1 -> file1.getName().endsWith(".png"));
 		LOCAL_PHOTOGRAPHS.clear();
 
 		ArrayList<Pair<ResourceLocation, Date>> localPhotographs = new ArrayList<>();
 		for (String name : fileStream.map(File::getName).toList()) {
-			String strippedFileName = name.replace(".png", "").replace(ServerTextureDownloader.LOCAL_TEXTURE_SOURCE, "");
+			String strippedFileName = name.replace(".png", "");
 			parseDate(strippedFileName).ifPresent(date -> {
-				localPhotographs.add(Pair.of(PhotographLoader.getAndLoadPhotograph(strippedFileName), date));
+				localPhotographs.add(Pair.of(PhotographLoader.getAndLoadPhotograph(strippedFileName, true), date));
 			});
 		}
 
