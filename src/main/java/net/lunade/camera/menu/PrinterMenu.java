@@ -2,16 +2,13 @@ package net.lunade.camera.menu;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.frozenblock.lib.image_transfer.FileTransferPacket;
+import net.frozenblock.lib.file.transfer.FileTransferPacket;
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.component.PhotographComponent;
-import net.lunade.camera.entity.Photograph;
 import net.lunade.camera.registry.CameraPortBlocks;
 import net.lunade.camera.registry.CameraPortItems;
 import net.lunade.camera.registry.CameraPortMenuTypes;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -27,7 +24,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 
 public class PrinterMenu extends AbstractContainerMenu {
@@ -38,8 +34,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 	long lastSoundTime;
 	final Slot inputSlot;
 	final Slot resultSlot;
-	Runnable slotUpdateListener = () -> {
-	};
+	Runnable slotUpdateListener = () -> {};
 	public final Container container = new SimpleContainer(1) {
 		@Override
 		public void setChanged() {
@@ -76,7 +71,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 
 				@Override
 				public void onTake(Player player, ItemStack stack) {
-					stack.onCraftedBy(player.level(), player, stack.getCount());
+					stack.onCraftedBy( player, stack.getCount());
 					ItemStack itemStack = PrinterMenu.this.inputSlot.remove(1);
 					if (!itemStack.isEmpty()) {
 						PrinterMenu.this.setupResultSlot();
@@ -145,14 +140,6 @@ public class PrinterMenu extends AbstractContainerMenu {
 				CameraPortItems.PHOTO_COMPONENT,
 				new PhotographComponent(CameraPortConstants.id("photographs/" + photographName))
 			);
-
-			final CompoundTag tag = new CompoundTag();
-			tag.putString(Photograph.PICTURE_NAME_KEY, photographName);
-			tag.putString("id", "photograph");
-			stack.set(
-				DataComponents.ENTITY_DATA,
-				CustomData.of(tag)
-			);
 			this.resultSlot.set(stack);
 		} else {
 			this.resultSlot.set(ItemStack.EMPTY);
@@ -178,7 +165,7 @@ public class PrinterMenu extends AbstractContainerMenu {
 			Item item = itemStack1.getItem();
 			itemStack = itemStack1.copy();
 			if (fromIndex == 1) {
-				item.onCraftedBy(itemStack1, player.level(), player);
+				item.onCraftedBy(itemStack1, player);
 				if (!this.moveItemStackTo(itemStack1, 2, 38, false)) return ItemStack.EMPTY;
 				slot.onQuickCraft(itemStack1, itemStack);
 			} else if (fromIndex == 0) {

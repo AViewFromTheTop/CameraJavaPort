@@ -1,10 +1,8 @@
 package net.lunade.camera.impl.client;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,10 +15,10 @@ import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.config.CameraPortConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.ClickEvent;
@@ -44,18 +42,15 @@ public class CameraScreenshotManager {
 		Minecraft client = Minecraft.getInstance();
 		isCameraHandheld = handheld;
 		previousCameraEntity = client.getCameraEntity();
-		if (entity != null) {
-			client.setCameraEntity(entity);
-		}
+		if (entity != null) client.setCameraEntity(entity);
+
 		wasGuiHidden = client.options.hideGui;
 		client.options.hideGui = true;
 		possessingCamera = true;
 
 		if (client.level != null) {
 			Entity camEntity = client.getCameraEntity();
-			if (camEntity != null) {
-				client.level.playLocalSound(client.player, CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
-			}
+			if (camEntity != null) client.level.playLocalSound(client.player, CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
 		}
 
 		grabCameraScreenshot(client.gameDirectory, 256, 256);
@@ -77,6 +72,7 @@ public class CameraScreenshotManager {
 			client.setCameraEntity(previousCameraEntity);
 			previousCameraEntity = null;
 		}
+
 		client.options.hideGui = wasGuiHidden;
 		possessingCamera = false;
 	}
@@ -86,18 +82,16 @@ public class CameraScreenshotManager {
 		Window window = minecraft.getWindow();
 		int prevWidth = window.getWidth();
 		int prevHeight = window.getHeight();
-		RenderTarget renderTarget = new TextureTarget(width, height, true, Minecraft.ON_OSX);
-		LevelRenderer levelRenderer = minecraft.levelRenderer;
+		RenderTarget renderTarget = minecraft.getMainRenderTarget();
 		GameRenderer gameRenderer = minecraft.gameRenderer;
 		gameRenderer.setRenderBlockOutline(false);
 
 		try {
 			gameRenderer.setPanoramicMode(true);
-			levelRenderer.graphicsChanged();
 			window.setWidth(width);
 			window.setHeight(height);
-			renderTarget.bindWrite(true);
-			gameRenderer.renderLevel(minecraft.getTimer());
+			renderTarget.resize(width, height);
+			minecraft.gameRenderer.renderLevel(DeltaTracker.ONE);
 
 			try {
 				Thread.sleep(10L);
@@ -110,56 +104,49 @@ public class CameraScreenshotManager {
 			gameRenderer.setRenderBlockOutline(true);
 			window.setWidth(prevWidth);
 			window.setHeight(prevHeight);
-			renderTarget.destroyBuffers();
+			renderTarget.resize(prevWidth, prevHeight);
 			gameRenderer.setPanoramicMode(false);
-			levelRenderer.graphicsChanged();
-			minecraft.getMainRenderTarget().bindWrite(true);
 		}
 	}
 
-	private static void grab(File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
-		if (!RenderSystem.isOnRenderThread()) {
-			RenderSystem.recordRenderCall(() -> _grab(gameDirectory, framebuffer, messageReceiver));
-		} else {
-			_grab(gameDirectory, framebuffer, messageReceiver);
-		}
+	private static void grab(@NotNull File gameDirectory, RenderTarget renderTarget, Consumer<Component> messageReceiver) {
+		Screenshot.takeScreenshot(renderTarget, 4, nativeImage -> {
+			File photographPath = gameDirectory.toPath()
+				.resolve("photographs")
+				.resolve(".local")
+				.toFile();
+			photographPath.mkdirs();
 
-	}
-
-	private static void _grab(@NotNull File gameDirectory, RenderTarget framebuffer, Consumer<Component> messageReceiver) {
-		NativeImage nativeImage = Screenshot.takeScreenshot(framebuffer);
-		File photographPath = gameDirectory.toPath()
-			.resolve("photographs")
-			.resolve(".local")
-			.toFile();
-		photographPath.mkdirs();
-
-		Optional<Path> iconPath = Optional.empty();
-		Minecraft minecraft = Minecraft.getInstance();
-		if (CameraPortConfig.get().useLatestPhotoAsWorldIcon && minecraft.isLocalServer()) {
-			IntegratedServer integratedServer = minecraft.getSingleplayerServer();
-			if (integratedServer != null) {
-				iconPath = minecraft.getSingleplayerServer().getWorldScreenshotFile();
-				iconPath.ifPresent(path -> path.toFile().mkdirs());
-			}
-		}
-
-		File photographFile = getPhotographFile(photographPath);
-		Optional<Path> finalIconPath = iconPath;
-		Util.ioPool().execute(() -> {
-			try {
-				nativeImage.writeToFile(photographFile);
-				finalIconPath.ifPresent(path -> copyPhotographToFileWithSize(nativeImage, path, 64, 64));
-				Component component = Component.literal(photographFile.getName()).withStyle(ChatFormatting.UNDERLINE)
-					.withStyle((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, photographFile.getAbsolutePath())));
-				messageReceiver.accept(Component.translatable("screenshot.success", component));
-			} catch (Exception e) {
-				CameraPortConstants.warn("Couldn't save screenshot " + e, true);
-				messageReceiver.accept(Component.translatable("screenshot.failure", e.getMessage()));
-			} finally {
-				nativeImage.close();
+			Optional<Path> iconPath = Optional.empty();
+			Minecraft minecraft = Minecraft.getInstance();
+			if (CameraPortConfig.get().useLatestPhotoAsWorldIcon && minecraft.isLocalServer()) {
+				IntegratedServer integratedServer = minecraft.getSingleplayerServer();
+				if (integratedServer != null) {
+					iconPath = minecraft.getSingleplayerServer().getWorldScreenshotFile();
+					iconPath.ifPresent(path -> path.toFile().mkdirs());
+				}
 			}
 
+			File photographFile = getPhotographFile(photographPath);
+			Optional<Path> finalIconPath = iconPath;
+
+			Util.ioPool().execute(() -> {
+				try {
+					nativeImage.writeToFile(photographFile);
+					finalIconPath.ifPresent(path -> copyPhotographToFileWithSize(nativeImage, path, 64, 64));
+
+					Component component = Component.literal(photographFile.getName())
+						.withStyle(ChatFormatting.UNDERLINE)
+						.withStyle(style -> style.withClickEvent(new ClickEvent.OpenFile(photographFile.getAbsoluteFile())));
+
+					messageReceiver.accept(Component.translatable("screenshot.success", component));
+				} catch (Exception e) {
+					CameraPortConstants.warn("Couldn't save screenshot " + e, true);
+					messageReceiver.accept(Component.translatable("screenshot.failure", e.getMessage()));
+				} finally {
+					nativeImage.close();
+				}
+			});
 		});
 	}
 
@@ -192,10 +179,7 @@ public class CameraScreenshotManager {
 
 		while (true) {
 			File file = new File(directory, fileName + (fileIndex == 1 ? "" : "_" + fileIndex) + ".png");
-			if (!file.exists()) {
-				return file;
-			}
-
+			if (!file.exists()) return file;
 			++fileIndex;
 		}
 	}

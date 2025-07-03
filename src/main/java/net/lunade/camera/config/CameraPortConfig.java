@@ -17,9 +17,7 @@ public class CameraPortConfig {
 			CameraPortConstants.MOD_ID,
 			CameraPortConfig.class,
 			configPath(true),
-			JsonType.JSON5,
-			null,
-			null
+			JsonType.JSON5
 		) {
 			@Override
 			public void onSave() throws Exception {

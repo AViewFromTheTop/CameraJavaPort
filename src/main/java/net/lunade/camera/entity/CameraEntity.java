@@ -1,9 +1,11 @@
 package net.lunade.camera.entity;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.networking.CameraPossessPacket;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,6 +27,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -34,9 +37,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public class CameraEntity extends Mob {
@@ -85,9 +91,7 @@ public class CameraEntity extends Mob {
 				this.setTimer(this.getTimer() - 1);
 				if (!this.queuedUUIDS.isEmpty()) {
 					Player chosen = this.level().getPlayerByUUID(this.queuedUUIDS.get(0));
-					if (chosen != null) {
-						this.getLookControl().setLookAt(chosen);
-					}
+					if (chosen != null) this.getLookControl().setLookAt(chosen);
 				}
 				if (this.getTimer() == 1) {
 					if (this.level() instanceof ServerLevel serverLevel) {
@@ -131,12 +135,11 @@ public class CameraEntity extends Mob {
 
 	@Override
 	protected @NotNull InteractionResult mobInteract(@NotNull Player player, InteractionHand hand) {
-		if (this.level().isClientSide) {
-			return InteractionResult.SUCCESS;
-		}
+		if (this.level().isClientSide) return InteractionResult.SUCCESS;
+
 		if (player.isShiftKeyDown()) {
 			if (this.canBeAdjusted()) {
-				float change = this.goingUp ? 0.095F : -0.095f;
+				float change = this.goingUp ? 0.095F : -0.095F;
 				float newHeight = (this.getTrackedHeight() + change);
 				if (newHeight >= getMaxHeight()) {
 					this.goingUp = false;
@@ -182,58 +185,58 @@ public class CameraEntity extends Mob {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (this.level().isClientSide || this.isRemoved()) {
+	public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float f) {
+		if (this.isRemoved()) return false;
+		if (!serverLevel.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && damageSource.getEntity() instanceof Mob) return false;
+		if (damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+			this.kill(serverLevel);
 			return false;
-		} else if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-			this.kill();
-			return false;
-		} else if (this.isInvulnerableTo(source)) {
-			return false;
-		} else if (source.is(DamageTypeTags.IS_EXPLOSION)) {
-			this.brokenByAnything(source);
-			this.kill();
-			return false;
-		} else if (source.is(DamageTypeTags.IGNITES_ARMOR_STANDS)) {
-			if (this.isOnFire()) {
-				this.causeDamage(source, 0.15F);
-			} else {
-				this.igniteForSeconds(5);
-			}
-
-			return false;
-		} else if (source.is(DamageTypeTags.BURNS_ARMOR_STANDS) && this.getHealth() > 0.5F) {
-			this.causeDamage(source, 4F);
-			return false;
-		} else {
-			boolean bl = source.is(DamageTypeTags.CAN_BREAK_ARMOR_STAND);
-			boolean bl2 = source.is(DamageTypeTags.ALWAYS_KILLS_ARMOR_STANDS);
-			if (!bl && !bl2) {
-				return false;
-			} else {
-				if (source.getEntity() instanceof Player player && !player.getAbilities().mayBuild) {
-					return false;
-				}
-
-				if (source.isCreativePlayer()) {
-					this.playBrokenSound();
-					this.showBreakingParticles();
-					this.kill();
-				} else {
-					long l = this.level().getGameTime();
-					if (l - this.lastHit > 5L && !bl2) {
-						this.level().broadcastEntityEvent(this, (byte) 32);
-						this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
-						this.lastHit = l;
-					} else {
-						this.brokenByPlayer(source);
-						this.showBreakingParticles();
-						this.kill();
-					}
-				}
-				return true;
-			}
 		}
+		if (this.isInvulnerableTo(serverLevel, damageSource)) return false;
+		if (damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
+			this.brokenByAnything(serverLevel, damageSource);
+			this.kill(serverLevel);
+			return false;
+		}
+		if (damageSource.is(DamageTypeTags.IGNITES_ARMOR_STANDS)) {
+			if (this.isOnFire()) {
+				this.causeDamage(serverLevel, damageSource, 0.15F);
+			} else {
+				this.igniteForSeconds(5F);
+			}
+			return false;
+		}
+
+		if (damageSource.is(DamageTypeTags.BURNS_ARMOR_STANDS) && this.getHealth() > 0.5F) {
+			this.causeDamage(serverLevel, damageSource, 4F);
+			return false;
+		}
+
+		boolean canBreak = damageSource.is(DamageTypeTags.CAN_BREAK_ARMOR_STAND);
+		boolean alwaysKills = damageSource.is(DamageTypeTags.ALWAYS_KILLS_ARMOR_STANDS);
+		if (!canBreak && !alwaysKills) return false;
+
+		if (damageSource.getEntity() instanceof Player player && !player.getAbilities().mayBuild) return false;
+
+		if (damageSource.isCreativePlayer()) {
+			this.playBrokenSound();
+			this.showBreakingParticles();
+			this.kill(serverLevel);
+			return true;
+		}
+
+		long gameTime = serverLevel.getGameTime();
+		if (gameTime - this.lastHit > 5L && !alwaysKills) {
+			serverLevel.broadcastEntityEvent(this, EntityEvent.ARMORSTAND_WOBBLE);
+			this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+			this.lastHit = gameTime;
+		} else {
+			this.brokenByPlayer(serverLevel, damageSource);
+			this.showBreakingParticles();
+			this.kill(serverLevel);
+		}
+
+		return true;
 	}
 
 	private void showBreakingParticles() {
@@ -251,34 +254,32 @@ public class CameraEntity extends Mob {
 		}
 	}
 
-	private void causeDamage(DamageSource damageSource, float amount) {
-		float f = this.getHealth();
-		f -= amount;
-		if (f <= 0.5F) {
-			this.brokenByAnything(damageSource);
-			this.kill();
+	private void causeDamage(ServerLevel serverLevel, DamageSource damageSource, float amount) {
+		float g = this.getHealth();
+		g -= amount;
+		if (g <= 0.5F) {
+			this.brokenByAnything(serverLevel, damageSource);
+			this.kill(serverLevel);
 		} else {
-			this.setHealth(f);
+			this.setHealth(g);
 			this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
 		}
 	}
 
-	private void brokenByPlayer(DamageSource damageSource) {
+	private void brokenByPlayer(ServerLevel serverLevel, DamageSource damageSource) {
 		ItemStack itemStack = this.getPickResult();
 		itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
 		Block.popResource(this.level(), this.blockPosition(), itemStack);
-		this.brokenByAnything(damageSource);
+		this.brokenByAnything(serverLevel, damageSource);
 	}
 
-	private void brokenByAnything(DamageSource damageSource) {
+	private void brokenByAnything(ServerLevel serverLevel, DamageSource damageSource) {
 		this.playBrokenSound();
-		if (this.level() instanceof ServerLevel serverLevel) {
-			this.dropAllDeathLoot(serverLevel, damageSource);
-		}
+		this.dropAllDeathLoot(serverLevel, damageSource);
 	}
 
 	private void playBrokenSound() {
-		this.level().playSound(null, this.getX(), this.getY(), this.getZ(), CameraPortMain.CAMERA_BREAK, this.getSoundSource(), 1.0F, 1.0F);
+		this.level().playSound(null, this.getX(), this.getY(), this.getZ(), CameraPortMain.CAMERA_BREAK, this.getSoundSource(), 1F, 1F);
 	}
 
 	public boolean addPlayerToQueue(@NotNull Player player) {
@@ -292,7 +293,7 @@ public class CameraEntity extends Mob {
 
 	@Override
 	public void handleEntityEvent(byte id) {
-		if (id == 32) {
+		if (id == EntityEvent.ARMORSTAND_WOBBLE) {
 			if (this.level().isClientSide) {
 				this.level().playLocalSound(
 					this.getX(),
@@ -312,7 +313,7 @@ public class CameraEntity extends Mob {
 	}
 
 	@Override
-	public void kill() {
+	public void kill(ServerLevel serverLevel) {
 		this.remove(Entity.RemovalReason.KILLED);
 		this.gameEvent(GameEvent.ENTITY_DIE);
 	}
@@ -348,11 +349,6 @@ public class CameraEntity extends Mob {
 	}
 
 	@Override
-	public boolean canTakeItem(ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
 	public boolean canBeSeenAsEnemy() {
 		return false;
 	}
@@ -363,39 +359,41 @@ public class CameraEntity extends Mob {
 	}
 
 	@Override
-	protected void customServerAiStep() {
-		super.customServerAiStep();
+	protected void customServerAiStep(ServerLevel serverLevel) {
+		super.customServerAiStep(serverLevel);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compoundTag) {
-		super.addAdditionalSaveData(compoundTag);
-		compoundTag.putInt("ticksToPhoto", this.getTimer());
+	public void addAdditionalSaveData(ValueOutput valueOutput) {
+		super.addAdditionalSaveData(valueOutput);
+		valueOutput.putInt("ticksToPhoto", this.getTimer());
 		if (!this.queuedUUIDS.isEmpty()) {
 			for (UUID uuid : this.queuedUUIDS) {
 				int index = this.queuedUUIDS.indexOf(uuid);
 				String uuidTag = "queuedUUID" + index;
-				compoundTag.putUUID(uuidTag, uuid);
+				valueOutput.store(uuidTag, UUIDUtil.CODEC, uuid);
 			}
 		}
-		compoundTag.putFloat("currentHeight", this.getTrackedHeight());
-		compoundTag.putBoolean("goingUp", this.goingUp);
+		valueOutput.putFloat("currentHeight", this.getTrackedHeight());
+		valueOutput.putBoolean("goingUp", this.goingUp);
 	}
 
 	@Override
-	public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
-		super.readAdditionalSaveData(compoundTag);
-		this.setTimer(compoundTag.getInt("ticksToPhoto"));
+	public void readAdditionalSaveData(ValueInput valueInput) {
+		super.readAdditionalSaveData(valueInput);
+		this.setTimer(valueInput.getIntOr("ticksToPhoto", 0));
+
 		for (int i = 0; true; i++) {
 			String uuidTag = "queuedUUID" + i;
-			if (compoundTag.contains(uuidTag)) {
-				this.queuedUUIDS.add(compoundTag.getUUID(uuidTag));
+			Optional<UUID> optionalUUID = valueInput.read(uuidTag, UUIDUtil.CODEC);
+			if (optionalUUID.isPresent()) {
+				this.queuedUUIDS.add(optionalUUID.get());
 			} else {
 				break;
 			}
 		}
-		this.setTrackedHeight(compoundTag.getFloat("currentHeight"));
-		this.goingUp = compoundTag.getBoolean("goingUp");
+		this.setTrackedHeight(valueInput.getFloatOr("currentHeight", 1.75F));
+		this.goingUp = valueInput.getBooleanOr("goingUp", false);
 	}
 
 	public float getLerpedTimer(float tickDelta) {

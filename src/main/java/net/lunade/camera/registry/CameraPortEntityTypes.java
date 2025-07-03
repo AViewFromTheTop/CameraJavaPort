@@ -4,9 +4,10 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.lunade.camera.CameraPortConstants;
 import net.lunade.camera.entity.CameraEntity;
 import net.lunade.camera.entity.DiscCameraEntity;
-import net.lunade.camera.entity.Photograph;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -19,7 +20,6 @@ public class CameraPortEntityTypes {
 			.sized(0.6F, 1.75F)
 			.eyeHeight(1.619999999999999F)
 			.clientTrackingRange(8)
-			.build(CameraPortConstants.string("camera"))
 	);
 
 	public static final EntityType<DiscCameraEntity> DISC_CAMERA = register(
@@ -28,17 +28,6 @@ public class CameraPortEntityTypes {
 			.sized(0.55F, 0.9F)
 			.eyeHeight(0.81F)
 			.clientTrackingRange(8)
-			.build(CameraPortConstants.string("disc_camera"))
-	);
-
-	public static final EntityType<Photograph> PHOTOGRAPH = register(
-		"photograph",
-		EntityType.Builder.<Photograph>of(Photograph::new, MobCategory.MISC)
-			.sized(0.5F, 0.5F)
-			.eyeHeight(0.81F)
-			.clientTrackingRange(10)
-			.updateInterval(Integer.MAX_VALUE)
-			.build(CameraPortConstants.string("photograph"))
 	);
 
 	public static void init() {
@@ -46,8 +35,8 @@ public class CameraPortEntityTypes {
 		FabricDefaultAttributeRegistry.register(DISC_CAMERA, DiscCameraEntity.addAttributes());
 	}
 
-	@NotNull
-	private static <E extends Entity, T extends EntityType<E>> T register(@NotNull String path, @NotNull T entityType) {
-		return Registry.register(BuiltInRegistries.ENTITY_TYPE, CameraPortConstants.id(path), entityType);
+	private static <T extends Entity> @NotNull EntityType<T> register(String string, EntityType.@NotNull Builder<T> builder) {
+		ResourceKey<EntityType<?>> resourceKey = ResourceKey.create(Registries.ENTITY_TYPE, CameraPortConstants.id(string));
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, resourceKey, builder.build(resourceKey));
 	}
 }

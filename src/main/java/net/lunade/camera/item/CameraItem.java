@@ -5,7 +5,7 @@ import net.lunade.camera.entity.CameraEntity;
 import net.lunade.camera.impl.client.CameraScreenshotManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,28 +18,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class CameraItem extends SpawnEggItem {
 
-	public CameraItem(EntityType<? extends CameraEntity> entityType, int i, int j, Properties properties) {
-		super(entityType, i, j, properties);
+	public CameraItem(EntityType<? extends CameraEntity> entityType, Properties properties) {
+		super(entityType, properties);
 	}
 
 	@Override
-	public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand interactionHand) {
+	public @NotNull InteractionResult use(Level level, @NotNull Player player, InteractionHand interactionHand) {
 		ItemStack itemStack = player.getItemInHand(interactionHand);
 		BlockHitResult blockHitResult = SpawnEggItem.getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
 		if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-			if (!player.getCooldowns().isOnCooldown(this)) {
-				player.getCooldowns().addCooldown(this, 10);
+			if (!player.getCooldowns().isOnCooldown(itemStack)) {
+				player.getCooldowns().addCooldown(itemStack, 10);
 				if (level.isClientSide) {
-					if (CameraScreenshotManager.possessingCamera) {
-						return InteractionResultHolder.fail(itemStack);
-					}
+					if (CameraScreenshotManager.possessingCamera) return InteractionResult.FAIL;
 					CameraScreenshotManager.executeScreenshot(null, true);
 				}
 				level.playSound(player, player.getX(), player.getEyeY(), player.getZ(), CameraPortMain.CAMERA_SNAP, SoundSource.PLAYERS, 0.5F, 1F);
-				return InteractionResultHolder.success(itemStack);
-			} else {
-				return InteractionResultHolder.fail(itemStack);
+				return InteractionResult.SUCCESS;
 			}
+			return InteractionResult.FAIL;
 		}
 		return super.use(level, player, interactionHand);
 	}

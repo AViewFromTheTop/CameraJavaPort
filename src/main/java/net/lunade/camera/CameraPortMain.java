@@ -22,12 +22,12 @@ public class CameraPortMain implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		CameraPortEntityTypes.init();
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_BREAK.getLocation(), CAMERA_BREAK);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_HIT.getLocation(), CAMERA_HIT);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PLACE.getLocation(), CAMERA_PLACE);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PRIME.getLocation(), CAMERA_PRIME);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_SNAP.getLocation(), CAMERA_SNAP);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.getLocation(), CAMERA_ADJUST);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_BREAK.location(), CAMERA_BREAK);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_HIT.location(), CAMERA_HIT);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PLACE.location(), CAMERA_PLACE);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_PRIME.location(), CAMERA_PRIME);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_SNAP.location(), CAMERA_SNAP);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, CAMERA_ADJUST.location(), CAMERA_ADJUST);
 		CameraPortBlocks.register();
 		CameraPortItems.register();
 		CameraPortMenuTypes.register();

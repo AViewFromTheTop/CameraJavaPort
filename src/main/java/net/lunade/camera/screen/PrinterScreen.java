@@ -11,6 +11,7 @@ import net.lunade.camera.networking.PrinterAskForSlotsPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +54,7 @@ public class PrinterScreen extends AbstractContainerScreen<PrinterMenu> {
 	protected void renderBg(@NotNull GuiGraphics graphics, float delta, int mouseX, int mouseY) {
 		int i = this.leftPos;
 		int j = this.topPos;
-		graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0F, 0F, this.imageWidth, this.imageHeight, 256, 256);
 		if (this.displayRecipes) {
 			final int size = PhotographLoader.getSize();
 			final var middle = PhotographLoader.getInfiniteLocalPhotograph(index);

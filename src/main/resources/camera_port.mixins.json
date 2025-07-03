@@ -9,6 +9,7 @@
     "CameraMixin",
     "ClientTooltipComponentMixin",
     "ItemFrameRendererMixin",
+    "ItemFrameRenderStateMixin",
     "ItemInHandRendererMixin",
     "LevelRendererMixin"
   ],

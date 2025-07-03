@@ -18,7 +18,6 @@ public interface ClientTooltipComponentMixin {
 		cancellable = true
 	)
 	private static void cameraPort$create(TooltipComponent data, CallbackInfoReturnable<ClientTooltipComponent> info) {
-		if (data instanceof PhotographTooltipComponent tooltip)
-			info.setReturnValue(new ClientPhotographTooltipComponent(tooltip));
+		if (data instanceof PhotographTooltipComponent tooltip) info.setReturnValue(new ClientPhotographTooltipComponent(tooltip));
 	}
 }

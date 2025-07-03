@@ -10,18 +10,15 @@ import java.util.Optional;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.frozenblock.lib.image_transfer.client.ServerTexture;
+import net.frozenblock.lib.texture.client.api.ServerTextureDownloader;
 import net.lunade.camera.CameraPortConstants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class PhotographLoader {
-	private static final TextureManager TEXTURE_MANAGER = Minecraft.getInstance().getTextureManager();
-	private static final ArrayList<ResourceLocation> LOADED_TEXTURES = new ArrayList<>();
+	private static final ResourceLocation FALLBACK = CameraPortConstants.id("textures/photographs/empty.png");
 	private static final ArrayList<Pair<ResourceLocation, Date>> LOCAL_PHOTOGRAPHS = new ArrayList<>();
 
 	public static boolean hasAnyLocalPhotographs() {
@@ -36,19 +33,15 @@ public class PhotographLoader {
 		return getAndLoadPhotograph(getPhotographLocation(photographName));
 	}
 
-	public static @NotNull ResourceLocation getAndLoadPhotograph(ResourceLocation photographLocation) {
-		if (!LOADED_TEXTURES.contains(photographLocation)) {
-			final var serverTexture = new ServerTexture(
-				"photographs",
-				photographLocation.getPath().replace("photographs/", "") + ".png",
-				CameraPortConstants.id("textures/photographs/empty.png"),
-				() -> {
-				}
-			);
-			TEXTURE_MANAGER.register(photographLocation, serverTexture);
-			LOADED_TEXTURES.add(photographLocation);
-		}
-		return photographLocation;
+	public static @NotNull ResourceLocation getAndLoadPhotograph(@NotNull ResourceLocation photographLocation) {
+		String filename = photographLocation.getPath().replace("photographs/", "");
+		if (!filename.endsWith(".png")) filename += ".png";
+		return ServerTextureDownloader.getOrLoadServerTexture(
+			photographLocation,
+			"photographs",
+			filename,
+			FALLBACK
+		);
 	}
 
 	public static int getSize() {
@@ -67,7 +60,7 @@ public class PhotographLoader {
 	}
 
 	public static int loadLocalPhotographs() {
-		final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(ServerTexture.LOCAL_TEXTURE_SOURCE).toFile();
+		final File file = FabricLoader.getInstance().getGameDir().resolve("photographs").resolve(ServerTextureDownloader.LOCAL_TEXTURE_SOURCE).toFile();
 		File[] fileList = file.listFiles();
 		if (fileList == null) return 0;
 		final var fileStream = Arrays.stream(fileList)
@@ -77,7 +70,7 @@ public class PhotographLoader {
 
 		ArrayList<Pair<ResourceLocation, Date>> localPhotographs = new ArrayList<>();
 		for (String name : fileStream.map(File::getName).toList()) {
-			String strippedFileName = name.replace(".png", "").replace(ServerTexture.LOCAL_TEXTURE_SOURCE, "");
+			String strippedFileName = name.replace(".png", "").replace(ServerTextureDownloader.LOCAL_TEXTURE_SOURCE, "");
 			parseDate(strippedFileName).ifPresent(date -> {
 				localPhotographs.add(Pair.of(PhotographLoader.getAndLoadPhotograph(strippedFileName), date));
 			});

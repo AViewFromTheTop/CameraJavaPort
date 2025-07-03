@@ -5,39 +5,38 @@ import net.lunade.camera.impl.client.PhotographRenderer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 public class ClientPhotographTooltipComponent implements ClientTooltipComponent {
 	private static final int PHOTOGRAPH_RENDER_SIZE = 32;
 	private static final int PHOTOGRAPH_RENDER_OFFSET_X = 3;
 	private static final int TOOLTIP_WIDTH = PHOTOGRAPH_RENDER_SIZE + (PHOTOGRAPH_RENDER_OFFSET_X * 2);
-	private final PhotographTooltipComponent component;
+	private final ResourceLocation photoLocation;
 
-	public ClientPhotographTooltipComponent(PhotographTooltipComponent component) {
-		this.component = component;
+	@Contract(pure = true)
+	public ClientPhotographTooltipComponent(@NotNull PhotographTooltipComponent component) {
+		this.photoLocation = component.id();
 	}
 
 	@Override
-	public int getHeight() {
+	public int getHeight(Font font) {
 		return PHOTOGRAPH_RENDER_SIZE + 6;
 	}
 
 	@Override
-	public int getWidth(Font textRenderer) {
+	public int getWidth(Font font) {
 		return TOOLTIP_WIDTH;
 	}
 
 	@Override
-	public void renderImage(Font textRenderer, int x, int y, @NotNull GuiGraphics graphics) {
-		ResourceLocation photoLocation = this.component.id();
-		PhotographRenderer.render(x, y, PHOTOGRAPH_RENDER_OFFSET_X, 0, graphics, photoLocation, PHOTOGRAPH_RENDER_SIZE, true);
+	public void renderImage(Font font, int x, int y, int k, int l, GuiGraphics guiGraphics) {
+		PhotographRenderer.render(x, y, PHOTOGRAPH_RENDER_OFFSET_X, 0, guiGraphics, this.photoLocation, PHOTOGRAPH_RENDER_SIZE, true);
 	}
 
 	@Override
-	public void renderText(@NotNull Font textRenderer, int x, int y, Matrix4f modelMatrix, MultiBufferSource.BufferSource vertexConsumer) {
-		//  textRenderer.drawInBatch(this.text, (float)x, (float)y, -1, true, modelMatrix, vertexConsumer, Font.DisplayMode.NORMAL, 0, 15728880);
+	public void renderText(GuiGraphics guiGraphics, Font font, int i, int j) {
+		//guiGraphics.drawString(font, this.text, i, j, -1, true);
 	}
 }

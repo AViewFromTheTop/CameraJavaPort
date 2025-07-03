@@ -8,6 +8,7 @@ import net.fabricmc.api.Environment;
 import net.lunade.camera.CameraPortConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import org.joml.Matrix4f;
 @Environment(EnvType.CLIENT)
 public class PhotographRenderer {
 	private static final ResourceLocation FRAME = CameraPortConstants.id("textures/gui/sprites/photograph/frame.png");
+	private static final ResourceLocation GUI_FRAME = CameraPortConstants.id("photograph/frame");
 
 	public static void render(
 		@NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, ResourceLocation photoLocation, int light, boolean renderFrame
@@ -24,7 +26,7 @@ public class PhotographRenderer {
 		matrices.mulPose(Axis.ZP.rotationDegrees(180F));
 		matrices.translate(-0.5F, -0.5F, 0F);
 
-		PhotographLoader.getAndLoadPhotograph(photoLocation);
+		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation);
 		if (renderFrame) {
 			VertexConsumer frameConsumer = vertexConsumers.getBuffer(RenderType.text(FRAME));
 			frameConsumer.addVertex(matrix4f, -0.0625F, 1.0625F, 0F).setColor(-1).setUv(0F, 1F).setLight(light);
@@ -32,7 +34,7 @@ public class PhotographRenderer {
 			frameConsumer.addVertex(matrix4f, 1.0625F, -0.0625F, 0F).setColor(-1).setUv(1F, 0F).setLight(light);
 			frameConsumer.addVertex(matrix4f, -0.0625F, -0.0625F, 0F).setColor(-1).setUv(0F, 0F).setLight(light);
 		}
-		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.text(photoLocation));
+		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.text(loadedPhotoLocation));
 		vertexConsumer.addVertex(matrix4f, 0F, 1F, -0.00007812F).setColor(-1).setUv(0F, 1F).setLight(light);
 		vertexConsumer.addVertex(matrix4f, 1F, 1F, -0.00007812F).setColor(-1).setUv(1F, 1F).setLight(light);
 		vertexConsumer.addVertex(matrix4f, 1F, 0F, -0.00007812F).setColor(-1).setUv(1F, 0F).setLight(light);
@@ -42,7 +44,7 @@ public class PhotographRenderer {
 	public static void render(
 		int x, int y, int xOffset, int yOffset, @NotNull GuiGraphics graphics, ResourceLocation photoLocation, int renderSize, boolean renderFrame
 	) {
-		PhotographLoader.getAndLoadPhotograph(photoLocation);
+		ResourceLocation loadedPhotoLocation = PhotographLoader.getAndLoadPhotograph(photoLocation);
 		int renderX = x + xOffset;
 		int renderY = y + yOffset;
 		if (renderFrame) {
@@ -50,26 +52,20 @@ public class PhotographRenderer {
 			int posOffset = (int) (5 * frameOffsetScale);
 			int sizeOffset = (int) (10 * frameOffsetScale);
 			int frameRenderSize = renderSize + sizeOffset;
-			graphics.blit(
-				FRAME,
+			graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED,
+				GUI_FRAME,
 				renderX - posOffset,
 				renderY - posOffset,
-				0,
-				0,
-				frameRenderSize,
-				frameRenderSize,
 				frameRenderSize,
 				frameRenderSize
 			);
 		}
-		graphics.blit(
-			photoLocation,
+		graphics.blitSprite(
+			RenderPipelines.GUI_TEXTURED,
+			loadedPhotoLocation,
 			renderX,
 			renderY,
-			0,
-			0,
-			renderSize,
-			renderSize,
 			renderSize,
 			renderSize
 		);

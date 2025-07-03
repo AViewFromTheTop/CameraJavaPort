@@ -9,14 +9,13 @@ import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
-
 
 /**
  * UNUSED SCREEN
  */
 
-@SuppressWarnings("all")
 @Environment(EnvType.CLIENT)
 public class PhotographScreen extends Screen {
 	private final ResourceLocation BASE_IMAGE = CameraPortConstants.id("textures/gui/picture_screen.png");
@@ -47,7 +46,7 @@ public class PhotographScreen extends Screen {
 		super.renderBackground(graphics, mouseX, mouseY, delta);
 		int i = leftPos;
 		int j = topPos;
-		graphics.blit(BASE_IMAGE, i, j, 0, 0, 176, 166);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, BASE_IMAGE, i, j, 0, 0, 176, 176, 166, 166);
 	}
 
 	@Override
