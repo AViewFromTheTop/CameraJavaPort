@@ -44,7 +44,11 @@ public class LevelRendererMixin {
 		@Share("cameraPort$tickRate") LocalFloatRef tickRate,
 		@Share("cameraPort$poseStack") LocalRef<PoseStack> poseStackRef
 	) {
-		if (CameraScreenshotManager.possessingCamera && !CameraScreenshotManager.isCameraHandheld && this.minecraft.player != null) {
+		if (CameraScreenshotManager.possessingCamera
+			&& !CameraScreenshotManager.isCameraHandheld
+			&& this.minecraft.player != null
+			&& !this.visibleEntities.contains(this.minecraft.player)
+		) {
 			this.visibleEntities.add(this.minecraft.player);
 			return true;
 		}
