@@ -31,6 +31,9 @@ public class CameraPortEntityTypes {
 	);
 
 	public static void init() {
+	}
+
+	static {
 		FabricDefaultAttributeRegistry.register(CAMERA, CameraEntity.addAttributes());
 		FabricDefaultAttributeRegistry.register(DISC_CAMERA, DiscCameraEntity.addAttributes());
 	}
