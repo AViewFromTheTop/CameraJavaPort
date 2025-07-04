@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "camera",
+  "key": {
+    "#": "#minecraft:planks",
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "S#S",
+    "#A#",
+    "S#S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "camera_port:camera"
+  }
+}

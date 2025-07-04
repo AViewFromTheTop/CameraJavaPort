@@ -23,6 +23,9 @@
     ],
     "modmenu": [
       "net.lunade.camera.config.gui.CameraPortModMenuIntegration"
+    ],
+    "fabric-datagen": [
+      "net.lunade.camera.datagen.CameraPortDataGenerator"
     ]
   },
   "mixins": [

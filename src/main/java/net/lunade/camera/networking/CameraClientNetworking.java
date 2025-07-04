@@ -1,7 +1,7 @@
 package net.lunade.camera.networking;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.lunade.camera.impl.client.CameraScreenshotManager;
+import net.lunade.camera.client.camera.CameraScreenshotManager;
 
 public class CameraClientNetworking {
 

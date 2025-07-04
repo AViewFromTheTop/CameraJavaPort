@@ -2,7 +2,7 @@ package net.lunade.camera.item;
 
 import net.lunade.camera.CameraPortMain;
 import net.lunade.camera.entity.CameraEntity;
-import net.lunade.camera.impl.client.CameraScreenshotManager;
+import net.lunade.camera.client.camera.CameraScreenshotManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

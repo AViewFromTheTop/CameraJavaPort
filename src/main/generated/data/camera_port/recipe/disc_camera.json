@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "camera",
+  "key": {
+    "#": "camera_port:camera",
+    "X": "#c:music_discs"
+  },
+  "pattern": [
+    "#",
+    "X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "camera_port:disc_camera"
+  }
+}
