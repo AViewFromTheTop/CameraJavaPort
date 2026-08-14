@@ -41,7 +41,7 @@ import net.frozenblock.freezeframe.networking.packet.DeletePhotographPacket;
 import net.frozenblock.freezeframe.registry.FFAttachmentTypes;
 import net.frozenblock.freezeframe.registry.FFDataComponents;
 import net.frozenblock.lib.file.transfer.FileTransferPacket;
-import net.frozenblock.lib.networking.FrozenNetworking;
+import net.frozenblock.lib.networking.api.NetworkingHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -71,13 +71,13 @@ public record PhotographTracker(Map<String, Integer> photographCounts, List<Stri
 	public static void notifyOfAllDeletedPhotographs(ServerPlayer player) {
 		final PhotographTracker tracker = get(player.server);
 		if (tracker.deletedPhotographs.isEmpty()) return;
-		if (FrozenNetworking.isLocalPlayer(player)) return;
+		if (NetworkingHelper.isLocalPlayer(player)) return;
 		ServerPlayNetworking.send(player, new DeletePhotographPacket(tracker.deletedPhotographs));
 	}
 
 	public static void notifyOfDeletedPhotograph(MinecraftServer server, List<String> photographNames) {
 		for (ServerPlayer player : PlayerLookup.all(server)) {
-			if (FrozenNetworking.isLocalPlayer(player)) continue;
+			if (NetworkingHelper.isLocalPlayer(player)) continue;
 			ServerPlayNetworking.send(player, new DeletePhotographPacket(photographNames));
 		}
 	}

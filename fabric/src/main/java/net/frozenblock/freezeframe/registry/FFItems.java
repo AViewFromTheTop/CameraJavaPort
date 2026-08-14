@@ -62,7 +62,7 @@ public class FFItems {
 			.component(FFDataComponents.FILM_CONTENTS, FilmContents.EMPTY)
 			.component(FFDataComponents.FILM_FILTER, FilmFilter.EMPTY)
 			.component(FFDataComponents.FILM_MAX_PHOTOGRAPHS, FilmContents.BASE_MAX_PHOTOGRAPHS)
-			.component(FrozenLibDataComponents.BUNDLE_WEIGHT_OVERRIDE, new BundleWeightOverride(1, 16))
+			.component(FrozenLibDataComponents.BUNDLE_WEIGHT_OVERRIDE.get(), new BundleWeightOverride(1, 16))
 	);
 	public static final Item PHOTOGRAPH = Items.registerItem(
 		FFItemIds.PHOTOGRAPH,

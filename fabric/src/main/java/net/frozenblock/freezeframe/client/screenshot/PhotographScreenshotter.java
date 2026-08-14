@@ -29,7 +29,7 @@ import net.frozenblock.freezeframe.FFConstants;
 import net.frozenblock.freezeframe.component.filter.FilmFilter;
 import net.frozenblock.freezeframe.config.FFConfig;
 import net.frozenblock.lib.file.transfer.FileTransferPacket;
-import net.frozenblock.lib.networking.FrozenNetworking;
+import net.frozenblock.lib.networking.api.NetworkingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.particles.ParticleTypes;
@@ -76,7 +76,7 @@ public class PhotographScreenshotter {
 		}
 
 		Optional<Path> iconPath = Optional.empty();
-		if (FFConfig.USE_LATEST_PHOTO_AS_WORLD_ICON.get() && FrozenNetworking.connectedToIntegratedServer()) {
+		if (FFConfig.USE_LATEST_PHOTO_AS_WORLD_ICON.get() && NetworkingHelper.connectedToIntegratedServer()) {
 			iconPath = minecraft.getSingleplayerServer().getWorldScreenshotFile();
 			iconPath.ifPresent(path -> path.toFile().mkdirs());
 		}
@@ -95,7 +95,7 @@ public class PhotographScreenshotter {
 						.withStyle(style -> style.withClickEvent(new ClickEvent.OpenFile(photographFile.getAbsoluteFile())))
 				);
 				sendToServer:{
-					if (StringUtil.isNullOrEmpty(fileName) || FrozenNetworking.connectedToIntegratedServer()) break sendToServer;
+					if (StringUtil.isNullOrEmpty(fileName) || NetworkingHelper.connectedToIntegratedServer()) break sendToServer;
 
 					final ClientPacketListener connection = minecraft.getConnection();
 					if (connection == null) break sendToServer;
